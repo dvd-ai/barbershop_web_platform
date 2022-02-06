@@ -1,4 +1,4 @@
-CREATE TABLE user_ (
+CREATE TABLE users (
     user_id serial,
     first_name char(30),
     last_name char(40),

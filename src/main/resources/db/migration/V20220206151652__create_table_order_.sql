@@ -1,4 +1,4 @@
-CREATE TABLE order_(
+CREATE TABLE orders(
     order_id serial,
     registration_date date,
     implementation_date date,
