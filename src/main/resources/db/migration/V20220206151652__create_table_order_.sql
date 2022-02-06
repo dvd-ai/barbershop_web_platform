@@ -1,9 +1,9 @@
 CREATE TABLE orders(
     order_id serial,
-    registration_date date,
-    implementation_date date,
-    barber_customer_slot_id int,
-    status bool,
+    registration_date date NOT NULL ,
+    implementation_date date NOT NULL ,
+    barber_customer_slot_id int NOT NULL ,
+    status bool NOT NULL ,
 
     PRIMARY KEY (order_id),
     UNIQUE(barber_customer_slot_id),
