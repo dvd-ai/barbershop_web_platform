@@ -1,4 +1,4 @@
-CREATE TABLE user__staff_info(
+CREATE TABLE users_staff_info(
   user_id int,
   staff_info_id int,
 
