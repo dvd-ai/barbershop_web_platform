@@ -1,8 +1,8 @@
 CREATE TABLE staff_info(
   staff_info_id serial,
-  job_position_name char(30),
-  barbershop_id int,
-  active bool,
+  job_position_name char(30) NOT NULL ,
+  barbershop_id int NOT NULL ,
+  active bool NOT NULL ,
   hour_experience int,
 
   PRIMARY KEY (staff_info_id),
