@@ -1,4 +1,4 @@
-package com.app.barbershop;
+package com.app.barbershopweb;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
