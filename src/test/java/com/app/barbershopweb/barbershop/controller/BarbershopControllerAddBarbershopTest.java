@@ -66,11 +66,7 @@ class BarbershopControllerAddBarbershopTest {
         );
 
         String json = objectMapper.writeValueAsString(
-                new Barbershop(
-                        1L, "a1",
-                        "name1", "+38091",
-                        "1@gmail.com"
-                )
+                barbershop
         );
 
         when(barbershopConverter.mapToEntity(any())).thenReturn(barbershop);

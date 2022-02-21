@@ -61,7 +61,7 @@ class BarbershopControllerGetBarbershopByIdTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
-                .andExpect(jsonPath("$.errors[0]", is("Barbershop with id " + barbershopId+ " not found.")));
+                .andExpect(jsonPath("$.errors[0]", is("Barbershop with id " + barbershopId + " not found.")));
     }
 
     @DisplayName("returns corresponding barbershop dto")
