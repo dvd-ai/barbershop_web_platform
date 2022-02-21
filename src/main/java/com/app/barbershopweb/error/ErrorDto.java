@@ -1,4 +1,6 @@
 package com.app.barbershopweb.error;
 
-public record ErrorDto(String message) {
+import java.util.List;
+
+public record ErrorDto(List<String> errors) {
 }

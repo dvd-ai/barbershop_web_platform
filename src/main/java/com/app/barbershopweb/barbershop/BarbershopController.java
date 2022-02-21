@@ -3,6 +3,7 @@ package com.app.barbershopweb.barbershop;
 import com.app.barbershopweb.barbershop.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/barbershops")
+@Validated
 public class BarbershopController {
 
     private final BarbershopService barbershopService;
