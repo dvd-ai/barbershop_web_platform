@@ -34,7 +34,7 @@ class BarbershopControllerGetBarbershopByIdTest {
 
     private long barbershopId;
 
-    @DisplayName("When request param input 'barbershopId' isn't valid" +
+    @DisplayName("When path variable input 'barbershopId' isn't valid" +
             " returns status code 400 (BAD_REQUEST) & error dto")
     @Test
     void whenBarbershopIdNotValid() throws Exception {
