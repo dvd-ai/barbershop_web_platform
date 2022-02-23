@@ -32,7 +32,7 @@ class BarbershopIT extends AbstractIT{
     private BarbershopConverter barbershopConverter;
 
     private final String suffix = "/barbershops";
-    private final String URL = "http://localhost:" + port + "/barbershops";
+    private final String URL = "http://localhost:" + port + suffix;
 
     @Autowired
     private TestRestTemplate restTemplate;
