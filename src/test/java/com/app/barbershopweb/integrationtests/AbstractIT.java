@@ -1,4 +1,4 @@
-package com.app.barbershopweb.barbershop.integrationtests;
+package com.app.barbershopweb.integrationtests;
 
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
