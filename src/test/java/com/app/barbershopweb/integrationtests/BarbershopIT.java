@@ -34,7 +34,8 @@ class BarbershopIT extends AbstractIT{
     private final String suffix = "/barbershops";
     private final String URL = "http://localhost:" + port + "/barbershops";
 
-    private final TestRestTemplate restTemplate = new TestRestTemplate();
+    @Autowired
+    private TestRestTemplate restTemplate;
 
     @DisplayName("POST: " + suffix +
             " when barbershop dto isn't valid " +
