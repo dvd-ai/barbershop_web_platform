@@ -3,6 +3,7 @@ package com.app.barbershopweb.barbershop;
 import com.app.barbershopweb.barbershop.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/barbershops")
+@Validated
 public class BarbershopController {
 
     private final BarbershopService barbershopService;
@@ -43,10 +45,10 @@ public class BarbershopController {
     }
 
     @PutMapping
-    public ResponseEntity<Barbershop> updateBarbershop(@RequestBody @Valid BarbershopDto barbershopDto) {
+    public ResponseEntity<BarbershopDto> updateBarbershop(@RequestBody @Valid BarbershopDto barbershopDto) {
         Barbershop entity = barbershopService.updateBarbershop(barbershopConverter.mapToEntity(barbershopDto))
                 .orElseThrow(() -> new NotFoundException("Barbershop with id '" + barbershopDto.id() + "' not found."));
-        return new ResponseEntity<>(entity, HttpStatus.OK);
+        return new ResponseEntity<>(barbershopConverter.mapToDto(entity), HttpStatus.OK);
     }
 
     @DeleteMapping("/{barbershopId}")
