@@ -31,7 +31,8 @@ class BarbershopIT extends AbstractIT{
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @DisplayName("gives empty Barbershop List(array) when they're no added barbershops yet")
+    @DisplayName("GET: " + url +
+            " gives empty Barbershop List(array) when they're no added barbershops yet")
     @Test
     @Order(1)
     void shouldReturnEmptyBarbershopList() {
