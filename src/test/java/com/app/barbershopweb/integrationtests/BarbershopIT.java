@@ -43,7 +43,7 @@ class BarbershopIT extends AbstractIT{
     }
 
     @DisplayName("POST: " + url +
-            "after saving barbershop entity returns its id and status code 201")
+            " after saving barbershop entity returns its id and status code 201")
     @Test
     @Order(2)
     void shouldAddBarbershop() {
@@ -60,7 +60,7 @@ class BarbershopIT extends AbstractIT{
     }
 
     @DisplayName("GET: " + url + "/{barbershopId}" +
-            "returns corresponding barbershop dto")
+            " returns corresponding barbershop dto")
     @Test
     @Order(3)
     void shouldReturnBarbershop() {
