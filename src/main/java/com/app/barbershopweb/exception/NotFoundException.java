@@ -1,4 +1,4 @@
-package com.app.barbershopweb.barbershop.exception;
+package com.app.barbershopweb.exception;
 
 public class NotFoundException extends RuntimeException{
 
