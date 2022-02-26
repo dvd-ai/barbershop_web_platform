@@ -25,12 +25,6 @@ public final class BarbershopTestConstants {
             "1@gmail.com", TIME_FROM, TIME_TO
     );
 
-    public final Barbershop INVALID_BARBERSHOP_ENTITY = new Barbershop(
-            VALID_BARBERSHOP_ID, "a1",
-            "", "",
-            "1@gmail.com", TIME_FROM, TIME_TO
-    );
-
     public final Barbershop BARBERSHOP_ENTITY_NOT_EXISTED_ID = new Barbershop(
             NOT_EXISTED_BARBERSHOP_ID, "a1",
             "", "",
