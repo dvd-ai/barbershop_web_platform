@@ -12,10 +12,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static com.app.barbershopweb.barbershop.controller.BarbershopTestConstants.BARBERSHOPS_URL;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BarbershopController.class)
-@DisplayName("Testing PUT: /barbershops")
+@DisplayName("Testing PUT: " + BARBERSHOPS_URL)
 class BarbershopControllerUpdateBarbershopTest {
 
     @Autowired
@@ -40,20 +41,21 @@ class BarbershopControllerUpdateBarbershopTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    BarbershopTestConstants btc = new BarbershopTestConstants();
+
+
     @DisplayName("when barbershop dto isn't valid " +
             "returns status code 400")
     @Test
     void whenBarbershopDtoNotValid() throws Exception {
+
+
         String json = objectMapper.writeValueAsString(
-                new Barbershop(
-                        1L, "",
-                        "", "+38091",
-                        "1@gmail.com"
-                )
+                btc.INVALID_BARBERSHOP_DTO
         );
 
         mockMvc
-                .perform(put("/barbershops")
+                .perform(put(BARBERSHOPS_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest());
@@ -64,65 +66,67 @@ class BarbershopControllerUpdateBarbershopTest {
     @DisplayName("when entity with 'id' in barbershopDto doesn't exist " +
             "returns status code 404 and error dto")
     void whenNotFoundBarbershopId() throws Exception {
-        Barbershop barbershop = new Barbershop(
-                100_000L, "a1",
-                "name1", "+38091",
-                "1@gmail.com"
-        );
-
         String json = objectMapper.writeValueAsString(
-                barbershop
+                btc.BARBERSHOP_DTO_NOT_EXISTED_ID
         );
 
-        when(barbershopConverter.mapToEntity(any())).thenReturn(barbershop);
+        when(barbershopConverter.mapToEntity(any())).thenReturn(
+                btc.BARBERSHOP_ENTITY_NOT_EXISTED_ID
+        );
         when(barbershopService.updateBarbershop(any())).thenReturn(Optional.empty());
 
         mockMvc
-                .perform(put("/barbershops")
+                .perform(put(BARBERSHOPS_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                 )
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
-                .andExpect(jsonPath("$.errors[0]", is("Barbershop with id '" + barbershop.getId() + "' not found.")));
+                .andExpect(jsonPath("$.errors[0]", is(
+                        "Barbershop with id '" + btc.NOT_EXISTED_BARBERSHOP_ID + "' not found."
+                )))
+                .andExpect(jsonPath("$", aMapWithSize(1)));
     }
 
     @Test
     @DisplayName("should return updated barbershop (dto)")
     void shouldReturnUpdatedBarbershop() throws Exception {
-        Barbershop barbershop = new Barbershop(
-                1L, "a1",
-                "name1", "+38091",
-                "1@gmail.com"
-        );
-
         String json = objectMapper.writeValueAsString(
-                barbershop
+                btc.VALID_BARBERSHOP_DTO
         );
 
-        when(barbershopConverter.mapToEntity(any())).thenReturn(barbershop);
-        when(barbershopService.updateBarbershop(any())).thenReturn(Optional.of(barbershop));
+        when(barbershopConverter.mapToEntity(any())).thenReturn(
+                btc.VALID_BARBERSHOP_ENTITY
+        );
+        when(barbershopService.updateBarbershop(any())).thenReturn(
+                Optional.of(btc.VALID_BARBERSHOP_ENTITY)
+        );
         when(barbershopConverter.mapToDto(any())).thenReturn(
-                new BarbershopDto(
-                        1L, "a1",
-                        "name1", "+38091",
-                        "1@gmail.com"
-                )
+                btc.VALID_BARBERSHOP_DTO
         );
 
         mockMvc
-                .perform(put("/barbershops")
+                .perform(put(BARBERSHOPS_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id",  is(1)))
-                .andExpect(jsonPath("$.address", is("a1")))
-                .andExpect(jsonPath("$.name", is("name1")))
-                .andExpect(jsonPath("$.phoneNumber", is("+38091")))
-                .andExpect(jsonPath("$.email", is("1@gmail.com")));
+                .andExpect(jsonPath("$.id",  is(btc.VALID_BARBERSHOP_DTO.id().intValue())))
+                .andExpect(jsonPath("$.address", is(btc.VALID_BARBERSHOP_DTO.address())))
+                .andExpect(jsonPath("$.name", is(btc.VALID_BARBERSHOP_DTO.name())))
+                .andExpect(jsonPath("$.phoneNumber", is(btc.VALID_BARBERSHOP_DTO.phoneNumber())))
+                .andExpect(jsonPath("$.email", is(btc.VALID_BARBERSHOP_DTO.email())))
+                .andExpect(jsonPath("$.workTimeFrom", is(
+                        btc.VALID_BARBERSHOP_DTO.workTimeFrom().format(DateTimeFormatter.ISO_LOCAL_TIME)
+                        ))
+                )
+                .andExpect(jsonPath("$.workTimeTo", is(
+                        btc.VALID_BARBERSHOP_DTO.workTimeTo().format(DateTimeFormatter.ISO_LOCAL_TIME)
+                        ))
+                )
+                .andExpect(jsonPath("$", aMapWithSize(btc.BARBERSHOP_FIELD_AMOUNT)));
 
     }
 }

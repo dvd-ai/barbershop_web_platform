@@ -15,7 +15,9 @@ public class BarbershopRowMapper implements RowMapper<Barbershop> {
                 rs.getString("address"),
                 rs.getString("name"),
                 rs.getString("phone_number"),
-                rs.getString("email")
+                rs.getString("email"),
+                rs.getTime("work_time_from").toLocalTime(),
+                rs.getTime("work_time_to").toLocalTime()
         );
     }
 }

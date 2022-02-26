@@ -25,7 +25,9 @@ public class BarbershopConverter {
                 dto.address(),
                 dto.name(),
                 dto.phoneNumber(),
-                dto.email()
+                dto.email(),
+                dto.workTimeFrom(),
+                dto.workTimeTo()
         );
     }
 
@@ -35,7 +37,9 @@ public class BarbershopConverter {
                 entity.getAddress(),
                 entity.getName(),
                 entity.getPhoneNumber(),
-                entity.getEmail()
+                entity.getEmail(),
+                entity.getWorkTimeFrom(),
+                entity.getWorkTimeTo()
         );
     }
 }

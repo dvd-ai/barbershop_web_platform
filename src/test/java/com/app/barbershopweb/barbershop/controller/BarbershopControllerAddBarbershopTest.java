@@ -1,6 +1,5 @@
 package com.app.barbershopweb.barbershop.controller;
 
-import com.app.barbershopweb.barbershop.Barbershop;
 import com.app.barbershopweb.barbershop.BarbershopController;
 import com.app.barbershopweb.barbershop.BarbershopConverter;
 import com.app.barbershopweb.barbershop.BarbershopService;
@@ -14,6 +13,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+
+import static com.app.barbershopweb.barbershop.controller.BarbershopTestConstants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -22,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BarbershopController.class)
-@DisplayName("Testing POST: /barbershops")
+@DisplayName("Testing POST: " + BARBERSHOPS_URL)
 class BarbershopControllerAddBarbershopTest {
 
     @Autowired
@@ -37,20 +38,18 @@ class BarbershopControllerAddBarbershopTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    private final BarbershopTestConstants btc = new BarbershopTestConstants();
+
     @DisplayName("when barbershop dto isn't valid " +
             "returns status code 400")
     @Test
     void whenBarbershopDtoNotValid() throws Exception {
         String json = objectMapper.writeValueAsString(
-                new Barbershop(
-                1L, "a1",
-                "", "+38091",
-                "1@gmail.com"
-                )
+                btc.INVALID_BARBERSHOP_DTO
         );
 
         mockMvc
-                .perform(post("/barbershops")
+                .perform(post(BARBERSHOPS_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest());
@@ -59,26 +58,24 @@ class BarbershopControllerAddBarbershopTest {
     @DisplayName("after saving barbershop entity returns its id and status code 201")
     @Test
     void shouldAddBarbershop() throws Exception {
-        Barbershop barbershop = new Barbershop(
-                1L, "a1",
-                "name1", "+38091",
-                "1@gmail.com"
-        );
-
         String json = objectMapper.writeValueAsString(
-                barbershop
+                btc.VALID_BARBERSHOP_ENTITY
         );
 
-        when(barbershopConverter.mapToEntity(any())).thenReturn(barbershop);
-        when(barbershopService.addBarbershop(any())).thenReturn(1L);
+        when(barbershopConverter.mapToEntity(any())).thenReturn(
+                btc.VALID_BARBERSHOP_ENTITY
+        );
+        when(barbershopService.addBarbershop(any())).thenReturn(
+                btc.VALID_BARBERSHOP_ID
+        );
 
         mockMvc
-                .perform(post("/barbershops")
+                .perform(post(BARBERSHOPS_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(content().string("1"));
+                .andExpect(content().string(String.valueOf(btc.VALID_BARBERSHOP_ID)));
     }
 }
