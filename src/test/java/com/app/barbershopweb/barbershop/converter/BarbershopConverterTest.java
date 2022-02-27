@@ -75,4 +75,9 @@ class BarbershopConverterTest {
                 barbershopConverter.mapToDto(btc.VALID_BARBERSHOP_ENTITY)
         );
     }
+
+    @Test
+    void actualFieldAmount() {
+        assertEquals(Barbershop.class.getFields().length, btc.BARBERSHOP_FIELD_AMOUNT);
+    }
 }

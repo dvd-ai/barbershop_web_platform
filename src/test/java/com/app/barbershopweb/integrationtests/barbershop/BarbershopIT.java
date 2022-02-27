@@ -1,10 +1,11 @@
-package com.app.barbershopweb.integrationtests;
+package com.app.barbershopweb.integrationtests.barbershop;
 
 
 import com.app.barbershopweb.barbershop.BarbershopConverter;
 import com.app.barbershopweb.barbershop.BarbershopDto;
 import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
+import com.app.barbershopweb.integrationtests.AbstractIT;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Barbershop IT without error handling")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class BarbershopIT extends AbstractIT{
+class BarbershopIT extends AbstractIT {
     
     @Autowired
     private JdbcBarbershopRepository barbershopRepository;

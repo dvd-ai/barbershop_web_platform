@@ -1,8 +1,9 @@
-package com.app.barbershopweb.integrationtests;
+package com.app.barbershopweb.integrationtests.barbershop;
 
 import com.app.barbershopweb.barbershop.BarbershopDto;
 import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import com.app.barbershopweb.error.ErrorDto;
+import com.app.barbershopweb.integrationtests.AbstractIT;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 @DisplayName("barbershop error handling IT")
-class BarbershopErrorHandlerIT extends AbstractIT{
+class BarbershopErrorHandlerIT extends AbstractIT {
 
     private final String BARBERSHOPS_URL = "/barbershops";
 

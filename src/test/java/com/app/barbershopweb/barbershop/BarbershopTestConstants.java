@@ -23,41 +23,41 @@ public final class BarbershopTestConstants {
     );
 
     public final Barbershop BARBERSHOP_ENTITY_NOT_EXISTED_ID = new Barbershop(
-            NOT_EXISTED_BARBERSHOP_ID, "a1",
-            "", "",
-            "1@gmail.com", TIME_FROM, TIME_TO
+            NOT_EXISTED_BARBERSHOP_ID, VALID_BARBERSHOP_ENTITY.getAddress(),
+            VALID_BARBERSHOP_ENTITY.getName(), VALID_BARBERSHOP_ENTITY.getPhoneNumber(),
+            VALID_BARBERSHOP_ENTITY.getEmail(), TIME_FROM, TIME_TO
     );
 
     public final BarbershopDto VALID_BARBERSHOP_DTO = new BarbershopDto(
-            VALID_BARBERSHOP_ID, "a1",
-            "name1", "+38091",
-            "1@gmail.com", TIME_FROM, TIME_TO
+            VALID_BARBERSHOP_ID, VALID_BARBERSHOP_ENTITY.getAddress(),
+            VALID_BARBERSHOP_ENTITY.getName(), VALID_BARBERSHOP_ENTITY.getPhoneNumber(),
+            VALID_BARBERSHOP_ENTITY.getEmail(), TIME_FROM, TIME_TO
     );
 
     public final BarbershopDto INVALID_BARBERSHOP_DTO = new BarbershopDto(
-            INVALID_BARBERSHOP_ID, "a1",
+            INVALID_BARBERSHOP_ID, VALID_BARBERSHOP_DTO.address(),
             "", "",
-            "1@gmail.com", TIME_FROM, TIME_TO
+            VALID_BARBERSHOP_DTO.email(), TIME_FROM, TIME_TO
     );
 
     public final BarbershopDto BARBERSHOP_DTO_NOT_EXISTED_ID = new BarbershopDto(
-            NOT_EXISTED_BARBERSHOP_ID, "a1",
-            "name1", "+38091",
-            "1@gmail.com", TIME_FROM, TIME_TO
+            NOT_EXISTED_BARBERSHOP_ID, VALID_BARBERSHOP_DTO.address(),
+            VALID_BARBERSHOP_DTO.name(), VALID_BARBERSHOP_DTO.phoneNumber(),
+            VALID_BARBERSHOP_DTO.email(), TIME_FROM, TIME_TO
     );
 
     public final BarbershopDto VALID_UPDATED_BARBERSHOP_DTO = new BarbershopDto(
-            1L, "A1",
-            "Barbershop1", "+38091",
-            "1@gmail.com", TIME_FROM, TIME_TO
+            VALID_BARBERSHOP_ID, "A1",
+            "Barbershop1", VALID_BARBERSHOP_DTO.phoneNumber(),
+            VALID_BARBERSHOP_DTO.email(), TIME_FROM, TIME_TO
     );
 
 
     public final List<Barbershop>VALID_BARBERSHOP_ENTITY_LIST = List.of(
             new Barbershop(
-                    VALID_BARBERSHOP_ID, "a1",
-                    "name1", "+38091",
-                    "1@gmail.com", TIME_FROM, TIME_TO
+                    VALID_BARBERSHOP_ID, VALID_BARBERSHOP_DTO.address(),
+                    VALID_BARBERSHOP_DTO.name(), VALID_BARBERSHOP_DTO.phoneNumber(),
+                    VALID_BARBERSHOP_DTO.email(), TIME_FROM, TIME_TO
             ),
             new Barbershop(
                     VALID_BARBERSHOP_ID + 1, "a2",
