@@ -3,7 +3,7 @@ package com.app.barbershopweb.integrationtests;
 
 import com.app.barbershopweb.barbershop.BarbershopConverter;
 import com.app.barbershopweb.barbershop.BarbershopDto;
-import com.app.barbershopweb.barbershop.controller.BarbershopTestConstants;
+import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.http.*;
 
 import java.util.Objects;
 
-import static com.app.barbershopweb.barbershop.controller.BarbershopTestConstants.*;
+import static com.app.barbershopweb.barbershop.BarbershopTestConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 

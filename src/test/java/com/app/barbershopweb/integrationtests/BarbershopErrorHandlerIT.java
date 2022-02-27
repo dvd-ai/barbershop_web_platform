@@ -1,7 +1,7 @@
 package com.app.barbershopweb.integrationtests;
 
 import com.app.barbershopweb.barbershop.BarbershopDto;
-import com.app.barbershopweb.barbershop.controller.BarbershopTestConstants;
+import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import com.app.barbershopweb.error.ErrorDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -4,6 +4,7 @@ import com.app.barbershopweb.barbershop.BarbershopController;
 import com.app.barbershopweb.barbershop.BarbershopConverter;
 import com.app.barbershopweb.barbershop.BarbershopService;
 
+import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-import static com.app.barbershopweb.barbershop.controller.BarbershopTestConstants.*;
+import static com.app.barbershopweb.barbershop.BarbershopTestConstants.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;

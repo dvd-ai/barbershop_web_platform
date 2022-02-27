@@ -1,7 +1,4 @@
-package com.app.barbershopweb.barbershop.controller;
-
-import com.app.barbershopweb.barbershop.Barbershop;
-import com.app.barbershopweb.barbershop.BarbershopDto;
+package com.app.barbershopweb.barbershop;
 
 import java.time.LocalTime;
 import java.util.List;

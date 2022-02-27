@@ -3,7 +3,7 @@ package com.app.barbershopweb.barbershop.converter;
 import com.app.barbershopweb.barbershop.Barbershop;
 import com.app.barbershopweb.barbershop.BarbershopConverter;
 import com.app.barbershopweb.barbershop.BarbershopDto;
-import com.app.barbershopweb.barbershop.controller.BarbershopTestConstants;
+import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

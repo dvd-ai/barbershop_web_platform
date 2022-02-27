@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import static com.app.barbershopweb.barbershop.controller.BarbershopTestConstants.BARBERSHOPS_URL;
+import static com.app.barbershopweb.barbershop.BarbershopTestConstants.BARBERSHOPS_URL;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;

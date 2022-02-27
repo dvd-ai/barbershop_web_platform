@@ -3,6 +3,7 @@ package com.app.barbershopweb.barbershop.controller;
 import com.app.barbershopweb.barbershop.BarbershopController;
 import com.app.barbershopweb.barbershop.BarbershopConverter;
 import com.app.barbershopweb.barbershop.BarbershopService;
+import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.app.barbershopweb.barbershop.controller.BarbershopTestConstants.BARBERSHOPS_URL;
+import static com.app.barbershopweb.barbershop.BarbershopTestConstants.BARBERSHOPS_URL;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
