@@ -15,12 +15,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 
 import static com.app.barbershopweb.barbershop.controller.BarbershopTestConstants.*;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BarbershopController.class)
 @DisplayName("Testing POST: " + BARBERSHOPS_URL)
@@ -52,7 +52,12 @@ class BarbershopControllerAddBarbershopTest {
                 .perform(post(BARBERSHOPS_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors").isArray())
+                .andExpect(jsonPath("$.errors", hasSize(3)))
+                .andExpect(jsonPath("$.errors", hasItem(btc.DTO_CV_ID_ERR_MSG)))
+                .andExpect(jsonPath("$.errors", hasItem(btc.DTO_CV_PHONE_NUMBER_ERR_MSG)))
+                .andExpect(jsonPath("$.errors", hasItem(btc.DTO_CV_NAME_ERR_MSG)));
     }
 
     @DisplayName("after saving barbershop entity returns its id and status code 201")

@@ -30,9 +30,13 @@ class BarbershopErrorHandlerIT extends AbstractIT{
             "returns status code 400")
     @Test
     void whenBarbershopDtoNotValidPost() {
-        final ResponseEntity<?> response = restTemplate.postForEntity(BARBERSHOPS_URL, btc.INVALID_BARBERSHOP_DTO, Object.class);
+        final ResponseEntity<ErrorDto> response = restTemplate.postForEntity(BARBERSHOPS_URL, btc.INVALID_BARBERSHOP_DTO, ErrorDto.class);
+        ErrorDto body = response.getBody();
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertNull(response.getBody());
+        assertEquals(3, Objects.requireNonNull(body).errors().size());
+        assertEquals(btc.DTO_CV_ID_ERR_MSG, body.errors().get(0));
+        assertEquals(btc.DTO_CV_PHONE_NUMBER_ERR_MSG, body.errors().get(1));
+        assertEquals(btc.DTO_CV_NAME_ERR_MSG, body.errors().get(2));
     }
 
     @DisplayName("GET: " + BARBERSHOPS_URL + "/{barbershopId} " +
