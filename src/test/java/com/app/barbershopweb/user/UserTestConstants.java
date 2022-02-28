@@ -1,7 +1,4 @@
-package com.app.barbershopweb.users;
-
-import com.app.barbershopweb.user.Users;
-import com.app.barbershopweb.user.UsersDto;
+package com.app.barbershopweb.user;
 
 import java.time.LocalDateTime;
 import java.util.List;

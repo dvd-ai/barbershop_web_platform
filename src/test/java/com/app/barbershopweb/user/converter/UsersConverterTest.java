@@ -1,9 +1,9 @@
-package com.app.barbershopweb.users.converter;
+package com.app.barbershopweb.user.converter;
 
 import com.app.barbershopweb.user.UserConverter;
 import com.app.barbershopweb.user.Users;
 import com.app.barbershopweb.user.UsersDto;
-import com.app.barbershopweb.users.UserTestConstants;
+import com.app.barbershopweb.user.UserTestConstants;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
