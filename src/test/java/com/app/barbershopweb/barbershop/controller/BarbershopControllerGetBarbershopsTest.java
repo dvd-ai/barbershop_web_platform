@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(BarbershopController.class)
 @DisplayName("Testing GET: " + BARBERSHOPS_URL)
-class BarbershopGetBarbershopsTest {
+class BarbershopControllerGetBarbershopsTest {
 
     @Autowired
     MockMvc mockMvc;

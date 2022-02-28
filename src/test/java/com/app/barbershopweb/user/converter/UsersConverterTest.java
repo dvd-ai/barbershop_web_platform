@@ -78,6 +78,6 @@ class UsersConverterTest {
 
     @Test
     void actualFieldAmount() {
-        assertEquals(Users.class.getFields().length, utc.USERS_FIELD_AMOUNT);
+        assertEquals(Users.class.getDeclaredFields().length, utc.USERS_FIELD_AMOUNT);
     }
 }

@@ -45,7 +45,7 @@ class BarbershopControllerUpdateBarbershopTest {
 
 
     @DisplayName("when barbershop dto isn't valid " +
-            "returns status code 400")
+            "returns status code 400 & returns erro dto")
     @Test
     void whenBarbershopDtoNotValid() throws Exception {
 

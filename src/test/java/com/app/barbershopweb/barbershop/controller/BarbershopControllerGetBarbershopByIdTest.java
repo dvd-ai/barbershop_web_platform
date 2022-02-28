@@ -46,7 +46,7 @@ class BarbershopControllerGetBarbershopByIdTest {
                 .andExpect(jsonPath("$", aMapWithSize(1)))
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
-                .andExpect(jsonPath("$.errors[0]", is("'barbershopId' must be greater than or equal to 1")));
+                .andExpect(jsonPath("$.errors[0]", is(btc.PV_BARBERSHOP_ID_ERR_MSG)));
     }
 
     @DisplayName("when there's no barbershop with id 'barbershopId' " +

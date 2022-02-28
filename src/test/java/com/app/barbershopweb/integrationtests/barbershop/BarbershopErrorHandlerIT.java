@@ -12,15 +12,13 @@ import org.springframework.http.*;
 
 import java.util.Objects;
 
+import static com.app.barbershopweb.barbershop.BarbershopTestConstants.BARBERSHOPS_URL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @DisplayName("barbershop error handling IT")
 class BarbershopErrorHandlerIT extends AbstractIT {
-
-    private final String BARBERSHOPS_URL = "/barbershops";
-
     @Autowired
     private TestRestTemplate restTemplate;
 
@@ -28,16 +26,16 @@ class BarbershopErrorHandlerIT extends AbstractIT {
 
     @DisplayName("POST: " + BARBERSHOPS_URL +
             " when barbershop dto isn't valid " +
-            "returns status code 400")
+            "returns status code 400 & error dto")
     @Test
     void whenBarbershopDtoNotValidPost() {
         final ResponseEntity<ErrorDto> response = restTemplate.postForEntity(BARBERSHOPS_URL, btc.INVALID_BARBERSHOP_DTO, ErrorDto.class);
         ErrorDto body = response.getBody();
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(3, Objects.requireNonNull(body).errors().size());
-        assertEquals(btc.DTO_CV_ID_ERR_MSG, body.errors().get(0));
-        assertEquals(btc.DTO_CV_PHONE_NUMBER_ERR_MSG, body.errors().get(1));
-        assertEquals(btc.DTO_CV_NAME_ERR_MSG, body.errors().get(2));
+        assertTrue(body.errors().contains(btc.DTO_CV_ID_ERR_MSG));
+        assertTrue(body.errors().contains(btc.DTO_CV_PHONE_NUMBER_ERR_MSG));
+        assertTrue(body.errors().contains(btc.DTO_CV_NAME_ERR_MSG));
     }
 
     @DisplayName("GET: " + BARBERSHOPS_URL + "/{barbershopId} " +
@@ -45,14 +43,13 @@ class BarbershopErrorHandlerIT extends AbstractIT {
             " returns status code 400 (BAD_REQUEST) & error dto")
     @Test
     void whenBarbershopIdNotValidGet() {
-        String errorMessage = "'barbershopId' must be greater than or equal to 1";
         ResponseEntity<ErrorDto> response = restTemplate.getForEntity(
                 BARBERSHOPS_URL + "/" + btc.INVALID_BARBERSHOP_ID,
                 ErrorDto.class
         );
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals(errorMessage, Objects.requireNonNull(response.getBody()).errors().get(0));
+        assertEquals(btc.PV_BARBERSHOP_ID_ERR_MSG, Objects.requireNonNull(response.getBody()).errors().get(0));
         assertEquals(1, response.getBody().errors().size());
     }
 
@@ -70,12 +67,18 @@ class BarbershopErrorHandlerIT extends AbstractIT {
 
     @DisplayName("PUT: " + BARBERSHOPS_URL +
             " when barbershop dto isn't valid " +
-            "returns status code 400")
+            "returns status code 400 & error dto")
     @Test
     void whenBarbershopDtoNotValidPut() {
         HttpEntity<BarbershopDto> requestEntity = new HttpEntity<>(btc.INVALID_BARBERSHOP_DTO);
-        ResponseEntity<Object> response = restTemplate.exchange(BARBERSHOPS_URL, HttpMethod.PUT, requestEntity, Object.class);
+        ResponseEntity<ErrorDto> response = restTemplate.exchange(BARBERSHOPS_URL, HttpMethod.PUT, requestEntity, ErrorDto.class);
+        ErrorDto body = response.getBody();
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(3, Objects.requireNonNull(body).errors().size());
+        assertTrue(body.errors().contains(btc.DTO_CV_ID_ERR_MSG));
+        assertTrue(body.errors().contains(btc.DTO_CV_PHONE_NUMBER_ERR_MSG));
+        assertTrue(body.errors().contains(btc.DTO_CV_NAME_ERR_MSG));
     }
 
     @Test
@@ -100,13 +103,11 @@ class BarbershopErrorHandlerIT extends AbstractIT {
             " returns status code 400 (BAD_REQUEST) & error dto")
     @Test
     void whenBarbershopIdNotValidDelete() {
-        String errorMessage = "'barbershopId' must be greater than or equal to 1";
-
         ResponseEntity<ErrorDto> response = restTemplate.exchange(BARBERSHOPS_URL + "/" + btc.INVALID_BARBERSHOP_ID, HttpMethod.DELETE, null, ErrorDto.class);
         ErrorDto body = response.getBody();
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(1, Objects.requireNonNull(body).errors().size());
-        assertEquals(errorMessage, body.errors().get(0));
+        assertEquals(btc.PV_BARBERSHOP_ID_ERR_MSG, body.errors().get(0));
     }
 
 }

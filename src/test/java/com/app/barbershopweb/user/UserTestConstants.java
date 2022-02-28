@@ -94,7 +94,10 @@ public final class UserTestConstants {
     //ERROR MESSAGES:
 
     //CV means 'constraint violation'
-    public final String DTO_CV_ID_ERR_MSG = "'userDto.id' must be greater than or equal to 1";
-    public final String DTO_CV_PHONE_NUMBER_ERR_MSG = "'userDto.phoneNumber' must not be blank";
-    public final String DTO_CV_LAST_NAME_ERR_MSG = "'userDto.lastName' must not be blank";
+    public final String DTO_CV_ID_ERR_MSG = "'usersDto.id' must be greater than or equal to 1";
+    public final String DTO_CV_PHONE_NUMBER_ERR_MSG = "'usersDto.phoneNumber' must not be blank";
+    public final String DTO_CV_LAST_NAME_ERR_MSG = "'usersDto.lastName' must not be blank";
+
+    //PV means 'path variable'
+    public final String PV_USER_ID_ERR_MSG = "'userId' must be greater than or equal to 1";
 }

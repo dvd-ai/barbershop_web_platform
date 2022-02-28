@@ -95,4 +95,7 @@ public final class BarbershopTestConstants {
     public final String DTO_CV_ID_ERR_MSG = "'barbershopDto.id' must be greater than or equal to 1";
     public final String DTO_CV_PHONE_NUMBER_ERR_MSG = "'barbershopDto.phoneNumber' must not be blank";
     public final String DTO_CV_NAME_ERR_MSG = "'barbershopDto.name' must not be blank";
+
+    //PV means 'path variable'
+    public final String PV_BARBERSHOP_ID_ERR_MSG = "'barbershopId' must be greater than or equal to 1";
 }

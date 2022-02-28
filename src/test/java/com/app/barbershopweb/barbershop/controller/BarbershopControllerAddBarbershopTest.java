@@ -42,7 +42,7 @@ class BarbershopControllerAddBarbershopTest {
     private final BarbershopTestConstants btc = new BarbershopTestConstants();
 
     @DisplayName("when barbershop dto isn't valid " +
-            "returns status code 400")
+            "returns status code 400 & error dto")
     @Test
     void whenBarbershopDtoNotValid() throws Exception {
         String json = objectMapper.writeValueAsString(

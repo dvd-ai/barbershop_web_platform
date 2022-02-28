@@ -1,9 +1,9 @@
-package com.app.barbershopweb.barbershop.controller;
+package com.app.barbershopweb.user.controller;
 
-import com.app.barbershopweb.barbershop.BarbershopController;
-import com.app.barbershopweb.barbershop.BarbershopConverter;
-import com.app.barbershopweb.barbershop.BarbershopService;
-import com.app.barbershopweb.barbershop.BarbershopTestConstants;
+import com.app.barbershopweb.user.UserController;
+import com.app.barbershopweb.user.UserConverter;
+import com.app.barbershopweb.user.UserService;
+import com.app.barbershopweb.user.UserTestConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,52 +11,53 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.app.barbershopweb.barbershop.BarbershopTestConstants.BARBERSHOPS_URL;
+import static com.app.barbershopweb.user.UserTestConstants.USERS_URL;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(BarbershopController.class)
-@DisplayName("Testing DELETE: " + BARBERSHOPS_URL+ "{barbershopId}")
-class BarbershopControllerDeleteByIdTest {
+@WebMvcTest(UserController.class)
+@DisplayName("Testing DELETE: " + USERS_URL + "{barbershopId}")
+class UserControllerDeleteByIdTest {
 
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
-    BarbershopService barbershopService;
+    UserService userService;
 
     @MockBean
-    BarbershopConverter barbershopConverter;
+    UserConverter userConverter;
 
-    BarbershopTestConstants btc = new BarbershopTestConstants();
+    UserTestConstants utc = new UserTestConstants();
 
-    @DisplayName("When path variable input 'barbershopId' isn't valid" +
+    @DisplayName("When path variable input 'userId' isn't valid" +
             " returns status code 400 (BAD_REQUEST) & error dto")
     @Test
-    void whenBarbershopIdNotValid() throws Exception {
+    void whenUserIdNotValid() throws Exception {
 
 
         mockMvc
-                .perform(delete(BARBERSHOPS_URL + "/" + btc.INVALID_BARBERSHOP_ID))
+                .perform(delete(USERS_URL + "/" + utc.INVALID_USER_ID))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$", aMapWithSize(1)))
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
-                .andExpect(jsonPath("$.errors[0]", is(btc.PV_BARBERSHOP_ID_ERR_MSG)));
+                .andExpect(jsonPath("$.errors[0]", is(utc.PV_USER_ID_ERR_MSG)));
     }
 
     @DisplayName("returns empty body, status code 200, " +
-            "when: barbershop with existing / not existing id was deleted")
+            "when: user with existing / not existing id was deleted")
     @Test
-    void shouldDeleteBarbershopById() throws Exception {
+    void shouldDeleteUserById() throws Exception {
         mockMvc
-                .perform(delete(BARBERSHOPS_URL + "/" + btc.VALID_BARBERSHOP_ID))
+                .perform(delete(USERS_URL + "/" + utc.VALID_USER_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
     }
+
 }
