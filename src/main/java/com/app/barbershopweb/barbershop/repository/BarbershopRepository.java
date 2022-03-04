@@ -14,4 +14,5 @@ public interface BarbershopRepository {
     Optional<Barbershop>updateBarbershop(Barbershop barbershop);
     List<Barbershop> getBarbershops();
     void deleteBarbershopById(Long id);
+    boolean barbershopExistsById(Long id);
 }

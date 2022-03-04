@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -125,5 +126,18 @@ public class JdbcBarbershopRepository implements BarbershopRepository {
                 .addValue("id", id);
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
+    }
+
+    @Override
+    public boolean barbershopExistsById(Long id) {
+        String sql =
+                "SELECT COUNT(*) FROM barbershop " +
+                "WHERE barbershop_id = :id;";
+
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("id", id);
+
+        Integer count = namedParameterJdbcTemplate.queryForObject(sql, sqlParameterSource, Integer.class);
+        return Objects.requireNonNull(count) > 0;
     }
 }

@@ -1,6 +1,7 @@
 package com.app.barbershopweb.error;
 
 import com.app.barbershopweb.exception.NotFoundException;
+import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,5 +47,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .toList();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDto(errors));
+    }
+
+    @ExceptionHandler(DbUniqueConstraintsViolationException.class)
+    public ResponseEntity<ErrorDto> onDbUniqueConstraintViolation(Exception e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDto(List.of(e.getMessage())));
     }
 }

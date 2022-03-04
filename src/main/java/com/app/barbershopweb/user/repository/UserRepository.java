@@ -13,4 +13,5 @@ public interface UserRepository {
     Optional<Users>updateUser(Users barbershop);
     List<Users> getUsers();
     void deleteUserById(Long id);
+    boolean userExistsById(Long id);
 }

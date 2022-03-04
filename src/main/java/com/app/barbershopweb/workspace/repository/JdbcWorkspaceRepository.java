@@ -1,5 +1,9 @@
 package com.app.barbershopweb.workspace.repository;
 
+import com.app.barbershopweb.barbershop.repository.BarbershopRepository;
+import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
+import com.app.barbershopweb.exception.NotFoundException;
+import com.app.barbershopweb.user.repository.UserRepository;
 import com.app.barbershopweb.workspace.Workspace;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -11,19 +15,28 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
 public class JdbcWorkspaceRepository implements WorkspaceRepository{
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final UserRepository userRepository;
+    private final BarbershopRepository barbershopRepository;
 
-    public JdbcWorkspaceRepository(DataSource dataSource) {
+    public JdbcWorkspaceRepository(DataSource dataSource, UserRepository userRepository,
+                                   BarbershopRepository barbershopRepository) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.userRepository = userRepository;
+        this.barbershopRepository = barbershopRepository;
     }
 
     @Override
     public Long addWorkspace(Workspace workspace) {
+        checkFkConstraints(workspace.getBarbershopId(), workspace.getUserId());
+        checkUkConstraints(workspace.getBarbershopId(), workspace.getUserId());
+
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         String sql =
@@ -42,6 +55,8 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
         namedParameterJdbcTemplate.update(sql, sqlParameterSource, keyHolder);
         return Long.valueOf((Integer) keyHolder.getKeys().get("workspace_id"));
     }
+
+
 
     @Override
     public Optional<Workspace> findWorkspaceById(Long id) {
@@ -68,12 +83,15 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
 
     @Override
     public Optional<Workspace>updateWorkspace(Workspace workspace) {
+        checkFkConstraints(workspace.getBarbershopId(), workspace.getUserId());
+        checkUkConstraints(workspace.getBarbershopId(), workspace.getUserId());
+
         String sql =
                 "UPDATE workspace " +
                         "SET " +
                         "barbershop_id = :barbershop_id, " +
                         "user_id = :user_id, " +
-                        "active = :active, " +
+                        "active = :active " +
                         "WHERE workspace_id = :id;";
 
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
@@ -110,5 +128,42 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
                 .addValue("id", id);
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
+    }
+
+    private void checkFkConstraints(Long barbershopId, Long userId) {
+        String fkViolation = "fk violation: ";
+        String notPresent = "' not present";
+
+        if (!userRepository.userExistsById(userId)) {
+            throw new NotFoundException(fkViolation + "user with id '" + userId + notPresent);
+        }
+
+        if (!barbershopRepository.barbershopExistsById(barbershopId)) {
+            throw new NotFoundException(fkViolation + "barbershop with id '" + barbershopId + notPresent);
+        }
+    }
+
+    private void checkUkConstraints(Long barbershopId, Long userId) {
+        String sql =
+                "SELECT count(*) " +
+                "FROM workspace " +
+                "WHERE barbershop_id = :barbershop_id " +
+                "AND " +
+                "user_id = :user_id;";
+
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("barbershop_id", barbershopId)
+                .addValue("user_id", userId);
+
+        Integer count = namedParameterJdbcTemplate.queryForObject(sql, sqlParameterSource, Integer.class);
+
+        if (Objects.requireNonNull(count) > 0) {
+            throw new DbUniqueConstraintsViolationException(
+                    "uk violation: " +
+                    "workspace with user id '" + userId +
+                    "' and barbershop id '" + barbershopId +
+                    "' already exists."
+            );
+        }
     }
 }

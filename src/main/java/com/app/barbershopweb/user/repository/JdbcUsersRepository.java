@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -126,5 +127,18 @@ public class JdbcUsersRepository implements UserRepository {
                 .addValue("id", id);
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
+    }
+
+    @Override
+    public boolean userExistsById(Long id) {
+        String sql =
+                "SELECT COUNT(*) FROM users " +
+                        "WHERE user_id = :id;";
+
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("id", id);
+
+        Integer count = namedParameterJdbcTemplate.queryForObject(sql, sqlParameterSource, Integer.class);
+        return Objects.requireNonNull(count) > 0;
     }
 }
