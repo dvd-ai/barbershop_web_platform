@@ -132,14 +132,14 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
 
     private void checkFkConstraints(Long barbershopId, Long userId) {
         String fkViolation = "fk violation: ";
-        String notPresent = "' not present";
+        String notPresent = " not present";
 
         if (!userRepository.userExistsById(userId)) {
-            throw new NotFoundException(fkViolation + "user with id '" + userId + notPresent);
+            throw new NotFoundException(fkViolation + "user with id " + userId + notPresent);
         }
 
         if (!barbershopRepository.barbershopExistsById(barbershopId)) {
-            throw new NotFoundException(fkViolation + "barbershop with id '" + barbershopId + notPresent);
+            throw new NotFoundException(fkViolation + "barbershop with id " + barbershopId + notPresent);
         }
     }
 
@@ -160,9 +160,9 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
         if (Objects.requireNonNull(count) > 0) {
             throw new DbUniqueConstraintsViolationException(
                     "uk violation: " +
-                    "workspace with user id '" + userId +
-                    "' and barbershop id '" + barbershopId +
-                    "' already exists."
+                    "workspace with user id " + userId +
+                    " and barbershop id " + barbershopId +
+                    " already exists."
             );
         }
     }
