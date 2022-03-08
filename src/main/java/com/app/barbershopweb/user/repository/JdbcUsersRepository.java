@@ -141,4 +141,10 @@ public class JdbcUsersRepository implements UserRepository {
         Integer count = namedParameterJdbcTemplate.queryForObject(sql, sqlParameterSource, Integer.class);
         return Objects.requireNonNull(count) > 0;
     }
+
+    @Override
+    public void truncateAndRestartIdentity() {
+        String sql = "TRUNCATE users RESTART IDENTITY CASCADE;";
+        namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource());
+    }
 }
