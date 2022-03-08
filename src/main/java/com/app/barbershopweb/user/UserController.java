@@ -33,7 +33,11 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<UsersDto> findUserById(@PathVariable @Min(1) Long userId) {
         Users user = userService.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("Users with id " + userId + " not found."));
+                .orElseThrow(() ->
+                        new NotFoundException(
+                                List.of("Users with id '" + userId + "' not found.")
+                        )
+                );
         return new ResponseEntity<>(userConverter.mapToDto(user), HttpStatus.OK);
     }
 
@@ -47,7 +51,11 @@ public class UserController {
     @PutMapping
     public ResponseEntity<UsersDto> updateUser(@RequestBody @Valid UsersDto userDto) {
         Users entity = userService.updateUser(userConverter.mapToEntity(userDto))
-                .orElseThrow(() -> new NotFoundException("User with id '" + userDto.id() + "' not found."));
+                .orElseThrow(() ->
+                        new NotFoundException(
+                                List.of("User with id '" + userDto.id() + "' not found.")
+                        )
+                );
         return new ResponseEntity<>(userConverter.mapToDto(entity), HttpStatus.OK);
     }
 

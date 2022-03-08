@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BarbershopRepository {
+public interface BarbershopRepository{
 
     Long addBarbershop(Barbershop barbershop);
     Optional<Barbershop> findBarbershopById(Long id);
@@ -15,4 +15,5 @@ public interface BarbershopRepository {
     List<Barbershop> getBarbershops();
     void deleteBarbershopById(Long id);
     boolean barbershopExistsById(Long id);
+    void truncateAndRestartSequence();
 }

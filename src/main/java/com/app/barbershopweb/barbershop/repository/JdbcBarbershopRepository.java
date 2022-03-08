@@ -140,4 +140,11 @@ public class JdbcBarbershopRepository implements BarbershopRepository {
         Integer count = namedParameterJdbcTemplate.queryForObject(sql, sqlParameterSource, Integer.class);
         return Objects.requireNonNull(count) > 0;
     }
+
+
+    @Override
+    public void truncateAndRestartSequence() {
+        String sql = "TRUNCATE barbershop RESTART IDENTITY CASCADE;";
+        namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource());
+    }
 }

@@ -33,7 +33,11 @@ public class BarbershopController {
     @GetMapping("/{barbershopId}")
     public ResponseEntity<BarbershopDto> getBarbershopById(@PathVariable @Min(1) Long barbershopId) {
         Barbershop barbershop = barbershopService.findBarbershopById(barbershopId)
-                .orElseThrow(() -> new NotFoundException("Barbershop with id " + barbershopId + " not found."));
+                .orElseThrow(() ->
+                        new NotFoundException(
+                                List.of("Barbershop with id '" + barbershopId + "' not found.")
+                        )
+                );
         return new ResponseEntity<>(barbershopConverter.mapToDto(barbershop), HttpStatus.OK);
     }
 
@@ -47,7 +51,11 @@ public class BarbershopController {
     @PutMapping
     public ResponseEntity<BarbershopDto> updateBarbershop(@RequestBody @Valid BarbershopDto barbershopDto) {
         Barbershop entity = barbershopService.updateBarbershop(barbershopConverter.mapToEntity(barbershopDto))
-                .orElseThrow(() -> new NotFoundException("Barbershop with id '" + barbershopDto.id() + "' not found."));
+                .orElseThrow(() ->
+                        new NotFoundException(
+                                List.of("Barbershop with id '" + barbershopDto.id() + "' not found.")
+                        )
+                );
         return new ResponseEntity<>(barbershopConverter.mapToDto(entity), HttpStatus.OK);
     }
 
