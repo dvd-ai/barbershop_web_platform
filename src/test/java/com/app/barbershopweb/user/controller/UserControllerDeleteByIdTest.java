@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
-@DisplayName("Testing DELETE: " + USERS_URL + "{barbershopId}")
+@DisplayName("Testing DELETE: " + USERS_URL + "{userId}")
 class UserControllerDeleteByIdTest {
 
     @Autowired

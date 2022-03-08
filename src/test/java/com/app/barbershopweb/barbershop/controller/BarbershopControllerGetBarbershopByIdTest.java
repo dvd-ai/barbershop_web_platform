@@ -61,7 +61,7 @@ class BarbershopControllerGetBarbershopByIdTest {
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
                 .andExpect(jsonPath("$.errors[0]", is(
-                        "Barbershop with id " + btc.NOT_EXISTED_BARBERSHOP_ID + " not found.")
+                        "Barbershop with id '" + btc.NOT_EXISTED_BARBERSHOP_ID + "' not found.")
                 ));
     }
 

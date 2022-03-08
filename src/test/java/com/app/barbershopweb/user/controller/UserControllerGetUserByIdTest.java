@@ -64,7 +64,7 @@ class UserControllerGetUserByIdTest {
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
                 .andExpect(jsonPath("$.errors[0]", is(
-                        "Users with id " + utc.NOT_EXISTED_USER_ID + " not found.")
+                        "Users with id '" + utc.NOT_EXISTED_USER_ID + "' not found.")
                 ));
     }
 

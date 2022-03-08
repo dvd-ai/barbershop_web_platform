@@ -64,7 +64,7 @@ class UserControllerAddUserTest {
     @Test
     void shouldAddUser() throws Exception {
         String json = objectMapper.writeValueAsString(
-                utc.VALID_USER_ENTITY
+                utc.VALID_USER_DTO
         );
 
         when(userConverter.mapToEntity(any())).thenReturn(

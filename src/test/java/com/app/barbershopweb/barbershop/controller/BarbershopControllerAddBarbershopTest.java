@@ -65,7 +65,7 @@ class BarbershopControllerAddBarbershopTest {
     @Test
     void shouldAddBarbershop() throws Exception {
         String json = objectMapper.writeValueAsString(
-                btc.VALID_BARBERSHOP_ENTITY
+                btc.VALID_BARBERSHOP_DTO
         );
 
         when(barbershopConverter.mapToEntity(any())).thenReturn(

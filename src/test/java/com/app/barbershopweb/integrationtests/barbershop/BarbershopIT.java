@@ -1,7 +1,6 @@
 package com.app.barbershopweb.integrationtests.barbershop;
 
 
-import com.app.barbershopweb.barbershop.BarbershopConverter;
 import com.app.barbershopweb.barbershop.BarbershopDto;
 import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 
+import java.util.List;
 import java.util.Objects;
 
 import static com.app.barbershopweb.barbershop.BarbershopTestConstants.*;
@@ -20,13 +20,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Barbershop IT without error handling")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BarbershopIT extends AbstractIT {
     
     @Autowired
     private JdbcBarbershopRepository barbershopRepository;
-
-    @Autowired
-    private BarbershopConverter barbershopConverter;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -107,14 +105,15 @@ class BarbershopIT extends AbstractIT {
         barbershopRepository.addBarbershop(btc.VALID_BARBERSHOP_ENTITY_LIST.get(2));
 
         ResponseEntity<BarbershopDto[]> response = restTemplate.getForEntity(BARBERSHOPS_URL, BarbershopDto[].class);
-        BarbershopDto[] body = response.getBody();
+        List<BarbershopDto> body = List.of(Objects.requireNonNull(response.getBody()));
+
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(btc.VALID_BARBERSHOP_DTO_LIST.size(), Objects.requireNonNull(body).length);
-        assertEquals(btc.VALID_UPDATED_BARBERSHOP_DTO, (Objects.requireNonNull(body)[0]));
-        assertEquals(btc.VALID_BARBERSHOP_DTO_LIST.get(1), (Objects.requireNonNull(body)[1]));
-        assertEquals(btc.VALID_BARBERSHOP_DTO_LIST.get(2), (Objects.requireNonNull(body)[2]));
+        assertEquals(btc.VALID_BARBERSHOP_DTO_LIST.size(), Objects.requireNonNull(body).size());
 
+        assertTrue(body.contains(btc.VALID_UPDATED_BARBERSHOP_DTO));
+        assertTrue(body.contains(btc.VALID_BARBERSHOP_DTO_LIST.get(1)));
+        assertTrue(body.contains(btc.VALID_BARBERSHOP_DTO_LIST.get(2)));
     }
 
     @DisplayName("DELETE: " + BARBERSHOPS_URL + "{barbershopId}" +
@@ -134,5 +133,8 @@ class BarbershopIT extends AbstractIT {
         assertTrue(barbershopRepository.findBarbershopById(btc.VALID_BARBERSHOP_ID).isEmpty());
     }
 
-
+    @AfterAll
+    void cleanUpDb() {
+        barbershopRepository.truncateAndRestartSequence();
+    }
 }

@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserController.class)
 @DisplayName("Testing PUT: " + USERS_URL)
-class UserControllerUpdateUserByIdTest {
+class UserControllerUpdateUserTest {
     @Autowired
     MockMvc mockMvc;
 

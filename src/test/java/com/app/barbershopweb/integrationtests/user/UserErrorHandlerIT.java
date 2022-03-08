@@ -34,8 +34,11 @@ class UserErrorHandlerIT extends AbstractIT {
     void whenUserDtoNotValidPost() {
         final ResponseEntity<ErrorDto> response = restTemplate.postForEntity(USERS_URL, utc.INVALID_USER_DTO, ErrorDto.class);
         ErrorDto body = response.getBody();
+
+
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(3, Objects.requireNonNull(body).errors().size());
+
         assertTrue(body.errors().contains(utc.DTO_CV_ID_ERR_MSG));
         assertTrue(body.errors().contains(utc.DTO_CV_LAST_NAME_ERR_MSG));
         assertTrue(body.errors().contains(utc.DTO_CV_PHONE_NUMBER_ERR_MSG));
@@ -51,6 +54,7 @@ class UserErrorHandlerIT extends AbstractIT {
                 ErrorDto.class
         );
 
+
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(utc.PV_USER_ID_ERR_MSG, Objects.requireNonNull(response.getBody()).errors().get(0));
         assertEquals(1, response.getBody().errors().size());
@@ -62,8 +66,10 @@ class UserErrorHandlerIT extends AbstractIT {
     @Test
     void whenNotExistedUserId() {
         ResponseEntity<ErrorDto> response = restTemplate.getForEntity(USERS_URL + "/" + utc.NOT_EXISTED_USER_ID, ErrorDto.class);
+
+
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("Users with id " + utc.NOT_EXISTED_USER_ID + " not found.",
+        assertEquals("Users with id '" + utc.NOT_EXISTED_USER_ID + "' not found.",
                 Objects.requireNonNull(response.getBody()).errors().get(0));
         assertEquals(1, response.getBody().errors().size());
     }
@@ -76,8 +82,11 @@ class UserErrorHandlerIT extends AbstractIT {
         HttpEntity<UsersDto> requestEntity = new HttpEntity<>(utc.INVALID_USER_DTO);
         ResponseEntity<ErrorDto> response = restTemplate.exchange(USERS_URL, HttpMethod.PUT, requestEntity, ErrorDto.class);
         ErrorDto body = response.getBody();
+
+
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(3, Objects.requireNonNull(body).errors().size());
+
         assertTrue(body.errors().contains(utc.DTO_CV_ID_ERR_MSG));
         assertTrue(body.errors().contains(utc.DTO_CV_LAST_NAME_ERR_MSG));
         assertTrue(body.errors().contains(utc.DTO_CV_PHONE_NUMBER_ERR_MSG));
@@ -91,6 +100,7 @@ class UserErrorHandlerIT extends AbstractIT {
         HttpEntity<UsersDto> requestEntity = new HttpEntity<>(utc.USER_DTO_NOT_EXISTED_ID);
         ResponseEntity<ErrorDto> response = restTemplate.exchange(USERS_URL, HttpMethod.PUT, requestEntity, ErrorDto.class);
         ErrorDto body = response.getBody();
+
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals(
@@ -107,6 +117,8 @@ class UserErrorHandlerIT extends AbstractIT {
     void whenUserIdNotValidDelete() {
         ResponseEntity<ErrorDto> response = restTemplate.exchange(USERS_URL + "/" + utc.INVALID_USER_ID, HttpMethod.DELETE, null, ErrorDto.class);
         ErrorDto body = response.getBody();
+
+
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(1, Objects.requireNonNull(body).errors().size());
         assertEquals(utc.PV_USER_ID_ERR_MSG, body.errors().get(0));

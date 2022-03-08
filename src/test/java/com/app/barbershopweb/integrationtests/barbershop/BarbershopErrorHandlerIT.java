@@ -31,8 +31,11 @@ class BarbershopErrorHandlerIT extends AbstractIT {
     void whenBarbershopDtoNotValidPost() {
         final ResponseEntity<ErrorDto> response = restTemplate.postForEntity(BARBERSHOPS_URL, btc.INVALID_BARBERSHOP_DTO, ErrorDto.class);
         ErrorDto body = response.getBody();
+
+
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(3, Objects.requireNonNull(body).errors().size());
+
         assertTrue(body.errors().contains(btc.DTO_CV_ID_ERR_MSG));
         assertTrue(body.errors().contains(btc.DTO_CV_PHONE_NUMBER_ERR_MSG));
         assertTrue(body.errors().contains(btc.DTO_CV_NAME_ERR_MSG));
@@ -48,6 +51,7 @@ class BarbershopErrorHandlerIT extends AbstractIT {
                 ErrorDto.class
         );
 
+
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(btc.PV_BARBERSHOP_ID_ERR_MSG, Objects.requireNonNull(response.getBody()).errors().get(0));
         assertEquals(1, response.getBody().errors().size());
@@ -59,8 +63,10 @@ class BarbershopErrorHandlerIT extends AbstractIT {
     @Test
     void whenNotExistedBarbershopId() {
         ResponseEntity<ErrorDto> response = restTemplate.getForEntity(BARBERSHOPS_URL + "/" + btc.NOT_EXISTED_BARBERSHOP_ID, ErrorDto.class);
+
+
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("Barbershop with id " + btc.NOT_EXISTED_BARBERSHOP_ID + " not found.",
+        assertEquals("Barbershop with id '" + btc.NOT_EXISTED_BARBERSHOP_ID + "' not found.",
                 Objects.requireNonNull(response.getBody()).errors().get(0));
         assertEquals(1, response.getBody().errors().size());
     }
@@ -73,9 +79,12 @@ class BarbershopErrorHandlerIT extends AbstractIT {
         HttpEntity<BarbershopDto> requestEntity = new HttpEntity<>(btc.INVALID_BARBERSHOP_DTO);
         ResponseEntity<ErrorDto> response = restTemplate.exchange(BARBERSHOPS_URL, HttpMethod.PUT, requestEntity, ErrorDto.class);
         ErrorDto body = response.getBody();
+
+
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(3, Objects.requireNonNull(body).errors().size());
+
         assertTrue(body.errors().contains(btc.DTO_CV_ID_ERR_MSG));
         assertTrue(body.errors().contains(btc.DTO_CV_PHONE_NUMBER_ERR_MSG));
         assertTrue(body.errors().contains(btc.DTO_CV_NAME_ERR_MSG));
@@ -89,6 +98,7 @@ class BarbershopErrorHandlerIT extends AbstractIT {
         HttpEntity<BarbershopDto> requestEntity = new HttpEntity<>(btc.BARBERSHOP_DTO_NOT_EXISTED_ID);
         ResponseEntity<ErrorDto> response = restTemplate.exchange(BARBERSHOPS_URL, HttpMethod.PUT, requestEntity, ErrorDto.class);
         ErrorDto body = response.getBody();
+
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals(
@@ -105,6 +115,8 @@ class BarbershopErrorHandlerIT extends AbstractIT {
     void whenBarbershopIdNotValidDelete() {
         ResponseEntity<ErrorDto> response = restTemplate.exchange(BARBERSHOPS_URL + "/" + btc.INVALID_BARBERSHOP_ID, HttpMethod.DELETE, null, ErrorDto.class);
         ErrorDto body = response.getBody();
+
+
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(1, Objects.requireNonNull(body).errors().size());
         assertEquals(btc.PV_BARBERSHOP_ID_ERR_MSG, body.errors().get(0));
