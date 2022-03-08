@@ -11,8 +11,8 @@ public class WorkspaceRowMapper implements RowMapper<Workspace> {
     public Workspace mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new Workspace(
                 rs.getLong("workspace_id"),
-                rs.getLong("barbershop_id"),
                 rs.getLong("user_id"),
+                rs.getLong("barbershop_id"),
                 rs.getBoolean("active")
         );
     }

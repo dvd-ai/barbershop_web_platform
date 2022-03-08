@@ -33,7 +33,11 @@ public class WorkspaceController {
     @GetMapping("/{workspaceId}")
     public ResponseEntity<WorkspaceDto> getWorkspaceById(@PathVariable @Min(1) Long workspaceId) {
         Workspace workspace = workspaceService.findWorkspaceById(workspaceId)
-                .orElseThrow(() -> new NotFoundException("Workspace with id " + workspaceId + " not found."));
+                .orElseThrow(() ->
+                        new NotFoundException(
+                                List.of("Workspace with id '" + workspaceId + "' not found.")
+                        )
+                );
         return new ResponseEntity<>(workspaceConverter.mapToDto(workspace), HttpStatus.OK);
     }
 
@@ -47,7 +51,11 @@ public class WorkspaceController {
     @PutMapping
     public ResponseEntity<WorkspaceDto> updateWorkspace(@RequestBody @Valid WorkspaceDto workspaceDto) {
         Workspace entity = workspaceService.updateWorkspace(workspaceConverter.mapToEntity(workspaceDto))
-                .orElseThrow(() -> new NotFoundException("Workspace with id '" + workspaceDto.workspaceId() + "' not found."));
+                .orElseThrow(() ->
+                        new NotFoundException(
+                            List.of("Workspace with id '" + workspaceDto.workspaceId() + "' not found.")
+                        )
+                );
         return new ResponseEntity<>(workspaceConverter.mapToDto(entity), HttpStatus.OK);
     }
 

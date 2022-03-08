@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -130,16 +131,28 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
     }
 
+    @Override
+    public void truncateAndRestartSequences() {
+        String sql = "TRUNCATE workspace RESTART IDENTITY;";
+        namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource());
+    }
+
     private void checkFkConstraints(Long barbershopId, Long userId) {
         String fkViolation = "fk violation: ";
         String notPresent = " not present";
+        List<String> messages = new ArrayList<>();
+
 
         if (!userRepository.userExistsById(userId)) {
-            throw new NotFoundException(fkViolation + "user with id " + userId + notPresent);
+            messages.add(fkViolation + "user with id " + userId + notPresent);
         }
 
         if (!barbershopRepository.barbershopExistsById(barbershopId)) {
-            throw new NotFoundException(fkViolation + "barbershop with id " + barbershopId + notPresent);
+            messages.add(fkViolation + "barbershop with id " + barbershopId + notPresent);
+        }
+
+        if (!messages.isEmpty()) {
+            throw new NotFoundException(messages);
         }
     }
 
