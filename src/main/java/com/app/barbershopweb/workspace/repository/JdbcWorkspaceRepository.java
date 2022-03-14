@@ -171,11 +171,12 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
         Integer count = namedParameterJdbcTemplate.queryForObject(sql, sqlParameterSource, Integer.class);
 
         if (Objects.requireNonNull(count) > 0) {
-            throw new DbUniqueConstraintsViolationException(
+            throw new DbUniqueConstraintsViolationException(List.of(
                     "uk violation: " +
                     "workspace with user id " + userId +
                     " and barbershop id " + barbershopId +
                     " already exists."
+                )
             );
         }
     }

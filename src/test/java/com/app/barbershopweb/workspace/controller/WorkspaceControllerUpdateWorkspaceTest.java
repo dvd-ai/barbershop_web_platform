@@ -139,7 +139,7 @@ class WorkspaceControllerUpdateWorkspaceTest {
 
         when(workspaceService.updateWorkspace(any())).thenThrow(
                 new DbUniqueConstraintsViolationException(
-                        wtc.DTO_UK_CV_ERR_MSG
+                        List.of(wtc.DTO_UK_CV_ERR_MSG)
                 )
         );
 

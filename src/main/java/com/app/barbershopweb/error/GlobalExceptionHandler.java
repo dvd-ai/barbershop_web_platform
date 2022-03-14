@@ -50,7 +50,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DbUniqueConstraintsViolationException.class)
-    public ResponseEntity<ErrorDto> onDbUniqueConstraintViolation(Exception e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDto(List.of(e.getMessage())));
+    public ResponseEntity<ErrorDto> onDbUniqueConstraintViolation(DbUniqueConstraintsViolationException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDto(e.getMessages()));
     }
 }
