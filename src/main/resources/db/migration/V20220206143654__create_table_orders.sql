@@ -7,8 +7,8 @@ CREATE TABLE orders(
     is_active bool NOT NULL,
 
     PRIMARY KEY (order_id),
-    FOREIGN KEY (barbershop_id) REFERENCES workspace(barbershop_id),
-    FOREIGN KEY (barber_id) REFERENCES workspace(user_id),
+    FOREIGN KEY (barbershop_id) REFERENCES barbershop(barbershop_id),
+    FOREIGN KEY (barber_id) REFERENCES users(user_id),
     FOREIGN KEY (customer_id) REFERENCES users(user_id),
 
     UNIQUE (customer_id, order_date),
