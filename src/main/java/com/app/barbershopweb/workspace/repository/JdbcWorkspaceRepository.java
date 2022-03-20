@@ -83,6 +83,22 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
     }
 
     @Override
+    public boolean workspaceExistsByBarbershopIdAndUserId(Long barbershopId, Long userId) {
+        String sql =
+                "SELECT COUNT(*) " +
+                "FROM workspace " +
+                "WHERE barbershop_id = :barbershopId " +
+                        "AND user_id = :userId";
+
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("barbershopId", barbershopId)
+                .addValue("userId", userId);
+
+        Integer count = namedParameterJdbcTemplate.queryForObject(sql, sqlParameterSource, Integer.class);
+        return Objects.requireNonNull(count) > 0;
+    }
+
+    @Override
     public Optional<Workspace>updateWorkspace(Workspace workspace) {
         checkFkConstraints(workspace.getBarbershopId(), workspace.getUserId());
         checkUkConstraints(workspace.getBarbershopId(), workspace.getUserId());
