@@ -1,6 +1,7 @@
-package com.app.barbershopweb.order.repository;
+package com.app.barbershopweb.order;
 
 import com.app.barbershopweb.order.Order;
+import com.app.barbershopweb.order.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,5 +38,9 @@ public class OrderService {
 
     public List<Order> getOrders() {
         return orderRepository.getOrders();
+    }
+
+    private void checkOrderFormat(Order order) {
+
     }
 }

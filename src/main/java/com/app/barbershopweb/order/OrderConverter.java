@@ -1,4 +1,4 @@
-package com.app.barbershopweb.order.repository;
+package com.app.barbershopweb.order;
 
 import com.app.barbershopweb.order.Order;
 import com.app.barbershopweb.order.OrderDto;

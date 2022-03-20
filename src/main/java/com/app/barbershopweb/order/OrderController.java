@@ -1,8 +1,6 @@
-package com.app.barbershopweb.order.repository;
+package com.app.barbershopweb.order;
 
 import com.app.barbershopweb.exception.NotFoundException;
-import com.app.barbershopweb.order.Order;
-import com.app.barbershopweb.order.OrderDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
