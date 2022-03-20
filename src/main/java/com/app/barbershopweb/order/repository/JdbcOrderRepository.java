@@ -1,10 +1,13 @@
 package com.app.barbershopweb.order.repository;
 
+import com.app.barbershopweb.barbershop.Barbershop;
 import com.app.barbershopweb.barbershop.repository.BarbershopRepository;
 import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
+import com.app.barbershopweb.exception.InvalidBusinessDataFormatException;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.order.Order;
 import com.app.barbershopweb.user.repository.UserRepository;
+import com.app.barbershopweb.workspace.repository.WorkspaceRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,13 +29,14 @@ public class JdbcOrderRepository implements OrderRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final UserRepository userRepository;
     private final BarbershopRepository barbershopRepository;
-
+    private final WorkspaceRepository workspaceRepository;
 
     public JdbcOrderRepository(DataSource dataSource, UserRepository userRepository,
-                               BarbershopRepository barbershopRepository) {
+                               BarbershopRepository barbershopRepository, WorkspaceRepository workspaceRepository) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.userRepository = userRepository;
         this.barbershopRepository = barbershopRepository;
+        this.workspaceRepository = workspaceRepository;
     }
 
     @Override
@@ -41,7 +46,7 @@ public class JdbcOrderRepository implements OrderRepository {
         
         checkUkConstraints(order.getBarberId(), order.getCustomerId(),
                 order.getOrderDate());
-
+        checkBusinessDataFormat(order);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         
         String sql =
@@ -96,6 +101,7 @@ public class JdbcOrderRepository implements OrderRepository {
                 order.getCustomerId());
         checkUkConstraints(order.getBarberId(), order.getCustomerId(),
                 order.getOrderDate());
+        checkBusinessDataFormat(order);
 
         String sql =
                 "UPDATE orders " +
@@ -203,13 +209,11 @@ public class JdbcOrderRepository implements OrderRepository {
         String notPresent = " not present";
         List<String> messages = new ArrayList<>();
 
-        if (!barbershopRepository.barbershopExistsById(barbershopId)) {
-            messages.add(fkViolation + "barbershop with id " + barbershopId + notPresent);
-        }
-
-        if (!userRepository.userExistsById(barberId)) {
-            messages.add(fkViolation + "barber with id " + barberId + notPresent);
-        }
+        if (!workspaceRepository.workspaceIsActiveByBarbershopIdAndUserId(barbershopId, barberId))
+            messages.add(
+                    fkViolation + "barber with id " + barberId +
+                    " doesn't work at barbershop with id " + barbershopId
+            );
 
         if (!userRepository.userExistsById(customerId)) {
             messages.add(fkViolation + "customer with id " + customerId + notPresent);
@@ -237,6 +241,36 @@ public class JdbcOrderRepository implements OrderRepository {
 
         if (!messages.isEmpty()) {
             throw new DbUniqueConstraintsViolationException(messages);
+        }
+    }
+
+    //this check should be after fk and uk checks
+    private void checkBusinessDataFormat(Order order) {
+        List<String> messages = new ArrayList<>();
+        LocalTime orderTime = order.getOrderDate().toLocalTime();
+        Barbershop barbershop = barbershopRepository.findBarbershopById(order.getBarbershopId()).get();
+
+
+        if (order.getBarberId().equals(order.getCustomerId())) {
+            messages.add("Order with id " + order.getOrderId() + " shouldn't have equal customerId and barberId");
+        }
+
+        if (orderTime.isAfter(barbershop.getWorkTimeTo()) || orderTime.isBefore(barbershop.getWorkTimeFrom())) {
+            messages.add(
+                    "orderDate with time " + orderTime + " violates barbershop order hours (" +
+                            barbershop.getWorkTimeFrom() + " - " + barbershop.getWorkTimeTo().minusHours(1L) +
+                            ")"
+            );
+        }
+
+        if ((orderTime.getHour() * 3600 + orderTime.getMinute() * 60 + orderTime.getSecond()) % 3600 != 0) {
+            messages.add(
+              "orderDate with time " + orderTime + " should be hourly formatted"
+            );
+        }
+
+        if (!messages.isEmpty()) {
+            throw new InvalidBusinessDataFormatException(messages);
         }
     }
 }
