@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface OrderCrudRepository {
+public interface OrderRepository {
 
     Long addOrder(Order order);
     Optional<Order> findOrderByOrderId(Long id);

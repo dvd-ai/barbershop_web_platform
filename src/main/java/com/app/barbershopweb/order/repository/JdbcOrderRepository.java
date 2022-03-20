@@ -21,14 +21,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Repository
-public class JdbcOrderCrudRepository implements OrderCrudRepository{
+public class JdbcOrderRepository implements OrderRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final UserRepository userRepository;
     private final BarbershopRepository barbershopRepository;
 
 
-    public JdbcOrderCrudRepository(DataSource dataSource, UserRepository userRepository,
-                                   BarbershopRepository barbershopRepository) {
+    public JdbcOrderRepository(DataSource dataSource, UserRepository userRepository,
+                               BarbershopRepository barbershopRepository) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.userRepository = userRepository;
         this.barbershopRepository = barbershopRepository;
@@ -41,7 +41,7 @@ public class JdbcOrderCrudRepository implements OrderCrudRepository{
         
         checkUkConstraints(order.getBarberId(), order.getCustomerId(),
                 order.getOrderDate());
-        
+
         KeyHolder keyHolder = new GeneratedKeyHolder();
         
         String sql =
@@ -77,11 +77,11 @@ public class JdbcOrderCrudRepository implements OrderCrudRepository{
                         "WHERE order_id = :orderId;";
 
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
-                .addValue("id", orderId);
+                .addValue("orderId", orderId);
 
         try {
             orderOptional = Optional.ofNullable(
-                    namedParameterJdbcTemplate.queryForObject(sql, sqlParameterSource, new OrderCrudRowMapper())
+                    namedParameterJdbcTemplate.queryForObject(sql, sqlParameterSource, new OrderRowMapper())
             );
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
@@ -112,7 +112,8 @@ public class JdbcOrderCrudRepository implements OrderCrudRepository{
                 .addValue("barbershopId", order.getBarbershopId())
                 .addValue("customerId", order.getCustomerId())
                 .addValue(  "orderDate", order.getOrderDate())
-                .addValue(  "active", order.getActive());
+                .addValue(  "active", order.getActive())
+                .addValue(  "orderId", order.getOrderId());
 
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
@@ -132,7 +133,7 @@ public class JdbcOrderCrudRepository implements OrderCrudRepository{
                         "FROM orders;";
 
 
-        return namedParameterJdbcTemplate.query(sql, new OrderCrudRowMapper());
+        return namedParameterJdbcTemplate.query(sql, new OrderRowMapper());
     }
 
     @Override
