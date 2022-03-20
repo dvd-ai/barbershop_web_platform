@@ -56,7 +56,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(InvalidBusinessDataFormatException.class)
-    public ResponseEntity<ErrorDto> onInvalidBusinessDataFormat(DbUniqueConstraintsViolationException e) {
+    public ResponseEntity<ErrorDto> onInvalidBusinessDataFormat(InvalidBusinessDataFormatException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDto(e.getMessages()));
     }
 
