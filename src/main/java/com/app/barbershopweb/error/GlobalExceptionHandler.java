@@ -1,5 +1,6 @@
 package com.app.barbershopweb.error;
 
+import com.app.barbershopweb.exception.InvalidBusinessDataFormatException;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
 import org.springframework.http.HttpHeaders;
@@ -53,4 +54,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorDto> onDbUniqueConstraintViolation(DbUniqueConstraintsViolationException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDto(e.getMessages()));
     }
+
+    @ExceptionHandler(InvalidBusinessDataFormatException.class)
+    public ResponseEntity<ErrorDto> onInvalidBusinessDataFormat(DbUniqueConstraintsViolationException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDto(e.getMessages()));
+    }
+
 }
