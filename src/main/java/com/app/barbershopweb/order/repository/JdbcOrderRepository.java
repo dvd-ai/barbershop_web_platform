@@ -215,7 +215,7 @@ public class JdbcOrderRepository implements OrderRepository {
                     " doesn't work at barbershop with id " + barbershopId
             );
 
-        if (!userRepository.userExistsById(customerId)) {
+        if (customerId != null && !userRepository.userExistsById(customerId)) {
             messages.add(fkViolation + "customer with id " + customerId + notPresent);
         }
 
