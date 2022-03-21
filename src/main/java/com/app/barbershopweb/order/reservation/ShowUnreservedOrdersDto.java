@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ShowUnreservedOrdersRequestDto(
+public record ShowUnreservedOrdersDto(
         @Min(1)
         @NotNull
         Long barbershopId,
