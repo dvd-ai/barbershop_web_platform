@@ -2,12 +2,17 @@ package com.app.barbershopweb.order.reservation.repository;
 
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.repository.OrderRepository;
+import com.app.barbershopweb.order.crud.repository.OrderRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class JdbcOrderReservationRepository implements OrderReservationRepository{
@@ -21,26 +26,80 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
     }
 
     @Override
-    public List<Order> getActiveUnreservedOrdersByBarbershopIdAndWeek(
-            Long barbershopId, LocalDateTime week
+    public List<Order> getActiveUnreservedOrdersForWeekByBarbershopIdAndDate(
+            Long barbershopId, LocalDateTime dateToStartWeekFrom
     ) {
-        return null;
+        String sql =
+                "SELECT " +
+                "order_id, " +
+                "barbershop_id, " +
+                "barber_id, " +
+                "customer_id, " +
+                "order_date, " +
+                "is_active " +
+                "FROM orders " +
+                "WHERE is_active = true " +
+                    "AND barbershop_id = :barbershopId " +
+                    "AND (order_date BETWEEN" +
+                        " :dateToStartWeekFrom AND ( :dateToStartWeekFrom + INTERVAL '7 DAYS' )" +
+                        ");";
+
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("barbershopId", barbershopId)
+                .addValue("dateToStartWeekFrom", dateToStartWeekFrom);
+
+       return namedParameterJdbcTemplate.query(sql, sqlParameterSource, new OrderRowMapper());
     }
 
     @Override
-    public List<Order> getActiveUnreservedOrdersByBarbershopIdAndWeekAndBarberIds(
-            Long barbershopId, LocalDateTime week, List<Long> barberIds
+    public List<Order> getActiveUnreservedOrdersForWeekByBarbershopIdAndDateAndBarberIds(
+            Long barbershopId, LocalDateTime dateToStartWeekFrom, List<Long> barberIds
     ) {
-        return null;
+        String sql =
+                "SELECT " +
+                        "order_id, " +
+                        "barbershop_id, " +
+                        "barber_id, " +
+                        "customer_id, " +
+                        "order_date, " +
+                        "is_active " +
+                        "FROM orders " +
+                        "WHERE is_active = true " +
+                        "AND barbershop_id = :barbershopId " +
+                        "AND barber_id IN ( :barberIds)" +
+                        "AND (order_date BETWEEN" +
+                        " :dateToStartWeekFrom AND ( :dateToStartWeekFrom + INTERVAL '7 DAYS' )" +
+                        ");";
+
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("barbershopId", barbershopId)
+                .addValue("barberIds", barberIds)
+                .addValue("dateToStartWeekFrom", dateToStartWeekFrom);
+
+        return namedParameterJdbcTemplate.query(sql, sqlParameterSource, new OrderRowMapper());
     }
 
     @Override
-    public Order reserveOrderByCustomerId(Long orderId, Long customerId) {
-        return null;
+    public Optional<Order> reserveOrderByOrderIdAndCustomerId(Long orderId, Long customerId) {
+        String sql =
+                "UPDATE orders " +
+                    "SET customer_id = :customerId " +
+                    "WHERE order_id = :orderId;";
+
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("customerId", customerId)
+                .addValue("orderId", orderId);
+
+        namedParameterJdbcTemplate.update(sql, sqlParameterSource);
+        return orderRepository.findOrderByOrderId(orderId);
     }
 
     @Override
-    public List<Order> reserveOrdersByCustomerId(List<Long> orderIds, Long customerId) {
-        return null;
+    public List<Optional<Order>> reserveOrdersByOrderIdsAndByCustomerId(List<Long> orderIds, Long customerId) {
+        List<Optional<Order>> orderOptionals = new ArrayList<>();
+        orderIds.forEach(
+                order -> orderOptionals.add(reserveOrderByOrderIdAndCustomerId(order, customerId))
+        );
+        return orderOptionals;
     }
 }

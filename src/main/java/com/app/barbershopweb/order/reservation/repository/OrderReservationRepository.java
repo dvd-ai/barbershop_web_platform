@@ -5,14 +5,15 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderReservationRepository {
 
-    List<Order>getActiveUnreservedOrdersByBarbershopIdAndWeek(Long barbershopId, LocalDateTime week);
-    List<Order> getActiveUnreservedOrdersByBarbershopIdAndWeekAndBarberIds(
-            Long barbershopId, LocalDateTime week, List<Long>barberIds
+    List<Order>getActiveUnreservedOrdersForWeekByBarbershopIdAndDate(Long barbershopId, LocalDateTime dateToStartWeekFrom);
+    List<Order> getActiveUnreservedOrdersForWeekByBarbershopIdAndDateAndBarberIds(
+            Long barbershopId, LocalDateTime dateToStartWeekFrom, List<Long>barberIds
     );
-    Order reserveOrderByCustomerId(Long orderId, Long customerId);
-    List<Order>reserveOrdersByCustomerId(List<Long>orderIds, Long customerId);
+    Optional<Order> reserveOrderByOrderIdAndCustomerId(Long orderId, Long customerId);
+    List<Optional<Order>> reserveOrdersByOrderIdsAndByCustomerId(List<Long>orderIds, Long customerId);
 }
