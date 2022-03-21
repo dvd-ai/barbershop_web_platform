@@ -1,7 +1,5 @@
-package com.app.barbershopweb.order;
+package com.app.barbershopweb.order.crud;
 
-import com.app.barbershopweb.order.Order;
-import com.app.barbershopweb.order.OrderDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

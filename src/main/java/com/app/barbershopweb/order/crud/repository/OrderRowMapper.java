@@ -1,6 +1,6 @@
-package com.app.barbershopweb.order.repository;
+package com.app.barbershopweb.order.crud.repository;
 
-import com.app.barbershopweb.order.Order;
+import com.app.barbershopweb.order.crud.Order;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

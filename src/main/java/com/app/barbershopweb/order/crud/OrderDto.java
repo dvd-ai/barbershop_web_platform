@@ -1,4 +1,4 @@
-package com.app.barbershopweb.order;
+package com.app.barbershopweb.order.crud;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;

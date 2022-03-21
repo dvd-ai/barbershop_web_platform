@@ -1,7 +1,6 @@
-package com.app.barbershopweb.order;
+package com.app.barbershopweb.order.crud;
 
-import com.app.barbershopweb.order.Order;
-import com.app.barbershopweb.order.repository.OrderRepository;
+import com.app.barbershopweb.order.crud.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

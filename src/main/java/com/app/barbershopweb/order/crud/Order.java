@@ -1,4 +1,4 @@
-package com.app.barbershopweb.order;
+package com.app.barbershopweb.order.crud;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

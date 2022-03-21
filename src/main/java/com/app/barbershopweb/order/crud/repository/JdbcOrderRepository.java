@@ -1,11 +1,11 @@
-package com.app.barbershopweb.order.repository;
+package com.app.barbershopweb.order.crud.repository;
 
 import com.app.barbershopweb.barbershop.Barbershop;
 import com.app.barbershopweb.barbershop.repository.BarbershopRepository;
 import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
 import com.app.barbershopweb.exception.InvalidBusinessDataFormatException;
 import com.app.barbershopweb.exception.NotFoundException;
-import com.app.barbershopweb.order.Order;
+import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.user.repository.UserRepository;
 import com.app.barbershopweb.workspace.repository.WorkspaceRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
