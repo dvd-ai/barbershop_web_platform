@@ -1,5 +1,7 @@
-package com.app.barbershopweb.order.reservation;
+package com.app.barbershopweb.order.reservation.converter;
 
+import com.app.barbershopweb.order.reservation.dto.ShowUnreservedOrdersDto;
+import com.app.barbershopweb.order.reservation.entity.ShowUnreservedOrders;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,16 +24,14 @@ public class ShowUnreservedOrdersConverter {
     public ShowUnreservedOrders mapToEntity(ShowUnreservedOrdersDto dto) {
         return new ShowUnreservedOrders(
                 dto.barbershopId(),
-                dto.reservationDateToStartWeekFrom(),
-                dto.barberIds()
+                dto.reservationDateToStartWeekFrom()
         );
     }
 
     public ShowUnreservedOrdersDto mapToDto(ShowUnreservedOrders entity) {
         return new ShowUnreservedOrdersDto(
                 entity.getBarbershopId(),
-                entity.getReservationDateToStartWeekFrom(),
-                entity.getBarberIds()
+                entity.getReservationDateToStartWeekFrom()
         );
     }
 }

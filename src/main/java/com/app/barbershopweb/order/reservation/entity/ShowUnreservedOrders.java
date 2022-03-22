@@ -1,19 +1,17 @@
-package com.app.barbershopweb.order.reservation;
+package com.app.barbershopweb.order.reservation.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 public class ShowUnreservedOrders {
-    Long barbershopId;
-    LocalDateTime reservationDateToStartWeekFrom;
-    List<Long>barberIds;
+    private Long barbershopId;
+    private LocalDateTime reservationDateToStartWeekFrom;
+
     public ShowUnreservedOrders(Long barbershopId,
-                                LocalDateTime reservationDateToStartWeekFrom,
-                                List<Long> barberIds) {
+                                LocalDateTime reservationDateToStartWeekFrom
+                                ) {
         this.barbershopId = barbershopId;
         this.reservationDateToStartWeekFrom = reservationDateToStartWeekFrom;
-        this.barberIds = barberIds;
     }
 
     public ShowUnreservedOrders() {
@@ -35,14 +33,6 @@ public class ShowUnreservedOrders {
         this.reservationDateToStartWeekFrom = reservationDateToStartWeekFrom;
     }
 
-    public List<Long> getBarberIds() {
-        return barberIds;
-    }
-
-    public void setBarberIds(List<Long> barberIds) {
-        this.barberIds = barberIds;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -51,16 +41,13 @@ public class ShowUnreservedOrders {
         ShowUnreservedOrders that = (ShowUnreservedOrders) o;
 
         if (!Objects.equals(barbershopId, that.barbershopId)) return false;
-        if (!Objects.equals(reservationDateToStartWeekFrom, that.reservationDateToStartWeekFrom))
-            return false;
-        return Objects.equals(barberIds, that.barberIds);
+        return Objects.equals(reservationDateToStartWeekFrom, that.reservationDateToStartWeekFrom);
     }
 
     @Override
     public int hashCode() {
         int result = barbershopId != null ? barbershopId.hashCode() : 0;
         result = 31 * result + (reservationDateToStartWeekFrom != null ? reservationDateToStartWeekFrom.hashCode() : 0);
-        result = 31 * result + (barberIds != null ? barberIds.hashCode() : 0);
         return result;
     }
 }
