@@ -31,15 +31,16 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
     ) {
         String sql =
                 "SELECT " +
-                "order_id, " +
-                "barbershop_id, " +
-                "barber_id, " +
-                "customer_id, " +
-                "order_date, " +
-                "is_active " +
+                    "order_id, " +
+                    "barbershop_id, " +
+                    "barber_id, " +
+                    "customer_id, " +
+                    "order_date, " +
+                    "is_active " +
                 "FROM orders " +
                 "WHERE is_active = true " +
                     "AND barbershop_id = :barbershopId " +
+                    "AND customer_id IS NULL " +
                     "AND (order_date BETWEEN" +
                         " :dateToStartWeekFrom AND ( :dateToStartWeekFrom + INTERVAL '7 DAYS' )" +
                         ");";
@@ -48,7 +49,7 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
                 .addValue("barbershopId", barbershopId)
                 .addValue("dateToStartWeekFrom", dateToStartWeekFrom);
 
-       return namedParameterJdbcTemplate.query(sql, sqlParameterSource, new OrderRowMapper());
+        return namedParameterJdbcTemplate.query(sql, sqlParameterSource, new OrderRowMapper());
     }
 
     @Override
@@ -65,11 +66,12 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
                         "is_active " +
                         "FROM orders " +
                         "WHERE is_active = true " +
-                        "AND barbershop_id = :barbershopId " +
-                        "AND barber_id IN ( :barberIds)" +
-                        "AND (order_date BETWEEN" +
-                        " :dateToStartWeekFrom AND ( :dateToStartWeekFrom + INTERVAL '7 DAYS' )" +
-                        ");";
+                            "AND barbershop_id = :barbershopId " +
+                            "AND customer_id IS NULL " +
+                            "AND barber_id IN ( :barberIds)" +
+                            "AND (order_date BETWEEN" +
+                            " :dateToStartWeekFrom AND ( :dateToStartWeekFrom + INTERVAL '7 DAYS' )" +
+                            ");";
 
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("barbershopId", barbershopId)
