@@ -59,17 +59,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorDto> onInvalidBusinessDataFormat(InvalidBusinessDataFormatException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDto(e.getMessages()));
     }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorDto> onControllerMethodParameterConstraintViolation(ConstraintViolationException e) {
-        List<String> errors = e.getConstraintViolations()
-                .stream()
-                .map(
-                        cv ->"'" + cv.getPropertyPath().toString().split("\\.")[1]
-                                + "' " + cv.getMessage()
-                )
-                .toList();
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDto(errors));
-    }
 }
