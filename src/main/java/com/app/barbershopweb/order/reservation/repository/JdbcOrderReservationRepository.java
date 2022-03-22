@@ -1,8 +1,10 @@
 package com.app.barbershopweb.order.reservation.repository;
 
+import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.repository.OrderRepository;
 import com.app.barbershopweb.order.crud.repository.OrderRowMapper;
+import com.app.barbershopweb.user.repository.UserRepository;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -19,10 +21,12 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
 
     private final OrderRepository orderRepository;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final UserRepository userRepository;
 
-    public JdbcOrderReservationRepository(OrderRepository orderRepository, DataSource dataSource) {
+    public JdbcOrderReservationRepository(OrderRepository orderRepository, DataSource dataSource, UserRepository userRepository) {
         this.orderRepository = orderRepository;
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -97,11 +101,26 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
     }
 
     @Override
-    public List<Optional<Order>> reserveOrdersByOrderIdsAndByCustomerId(List<Long> orderIds, Long customerId) {
-        List<Optional<Order>> orderOptionals = new ArrayList<>();
-        orderIds.forEach(
-                order -> orderOptionals.add(reserveOrderByOrderIdAndCustomerId(order, customerId))
-        );
-        return orderOptionals;
+    public List<Order> reserveOrdersByOrderIdsAndByCustomerId(List<Long> orderIds, Long customerId) {
+        List<Order> orders = new ArrayList<>();
+        List<String> messages = new ArrayList<>();
+
+        if (userRepository.userExistsById(customerId)) {
+            messages.add("Customer with id " + customerId + " wasn't found during order reservation");
+        }
+
+        for (Long orderId : orderIds) {
+            Optional<Order> order = reserveOrderByOrderIdAndCustomerId(orderId, customerId);
+            if (order.isPresent()) {
+                orders.add(order.get());
+            }
+            else messages.add("Order with id " + orderId + " wasn't found during order reservation");
+        }
+
+        if (!messages.isEmpty()) {
+            throw new NotFoundException(messages);
+        }
+
+        return orders;
     }
 }

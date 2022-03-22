@@ -15,5 +15,5 @@ public interface OrderReservationRepository {
             Long barbershopId, LocalDateTime dateToStartWeekFrom, List<Long>barberIds
     );
     Optional<Order> reserveOrderByOrderIdAndCustomerId(Long orderId, Long customerId);
-    List<Optional<Order>> reserveOrdersByOrderIdsAndByCustomerId(List<Long>orderIds, Long customerId);
+    List<Order> reserveOrdersByOrderIdsAndByCustomerId(List<Long>orderIds, Long customerId);
 }
