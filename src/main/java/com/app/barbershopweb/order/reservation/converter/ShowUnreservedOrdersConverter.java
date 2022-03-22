@@ -9,13 +9,13 @@ import java.util.List;
 @Component
 public class ShowUnreservedOrdersConverter {
 
-    public List<ShowUnreservedOrders> orderReservationDtoListToEntityList(List<ShowUnreservedOrdersDto> dtos) {
+    public List<ShowUnreservedOrders> showUnreservedOrdersDtoListToEntityList(List<ShowUnreservedOrdersDto> dtos) {
         return dtos.stream()
                 .map(this::mapToEntity)
                 .toList();
     }
 
-    public List<ShowUnreservedOrdersDto> orderReservationEntityListToDtoList(List<ShowUnreservedOrders> entities) {
+    public List<ShowUnreservedOrdersDto> showUnreservedOrdersEntityListToDtoList(List<ShowUnreservedOrders> entities) {
         return entities.stream()
                 .map(this::mapToDto)
                 .toList();
