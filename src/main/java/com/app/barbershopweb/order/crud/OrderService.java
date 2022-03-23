@@ -16,8 +16,6 @@ public class OrderService {
     }
 
     public Long addOrder(Order order) {
-        //check date (barbershop should work on given date, date format (per hour))
-        //check: customerId != barberId
         return orderRepository.addOrder(order);
     }
 
@@ -26,8 +24,6 @@ public class OrderService {
     }
 
     public Optional<Order> updateOrder(Order order) {
-        //check date (barbershop should work on given date, date format (per hour))
-        //check: customerId != barberId
         return orderRepository.updateOrder(order);
     }
 
@@ -37,9 +33,5 @@ public class OrderService {
 
     public List<Order> getOrders() {
         return orderRepository.getOrders();
-    }
-
-    private void checkOrderFormat(Order order) {
-
     }
 }
