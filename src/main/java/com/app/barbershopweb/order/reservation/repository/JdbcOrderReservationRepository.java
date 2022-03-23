@@ -1,5 +1,6 @@
 package com.app.barbershopweb.order.reservation.repository;
 
+import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.repository.OrderRepository;
@@ -87,6 +88,8 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
 
     @Override
     public Optional<Order> reserveOrderByOrderIdAndCustomerId(Long orderId, Long customerId) {
+        checkOrderUk(orderId, customerId);
+
         String sql =
                 "UPDATE orders " +
                     "SET customer_id = :customerId " +
@@ -100,31 +103,58 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
         return orderRepository.findOrderByOrderId(orderId);
     }
 
+    private void checkOrderUk(Long orderId, Long customerId) {
+        Order order = orderRepository.findOrderByOrderId(orderId).get();
+
+        if(orderRepository.orderExistsByCustomerIdAndOrderDate(
+                customerId, order.getOrderDate())
+        ) {
+            throw new DbUniqueConstraintsViolationException(
+                    List.of(
+                            "uk violation during order reservation (" +
+                            "orderId " + order.getOrderId() + ") :" +
+                            " order with" +
+                            " customerId " + customerId +
+                            " and orderDate " + order.getOrderDate() +
+                            " already exists"
+                    )
+            );
+        }
+    }
+
     @Override
     public List<Order> reserveOrdersByOrderIdsAndByCustomerId(List<Long> orderIds, Long customerId) {
-        List<Order> orders = new ArrayList<>();
+        checkCustomerExistence(customerId);
+        checkOrdersExistence(orderIds);
+
+        return orderIds.stream()
+                .map(orderId -> reserveOrderByOrderIdAndCustomerId(orderId, customerId))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .toList();
+    }
+
+    private void checkCustomerExistence(Long customerId) {
+        if (!userRepository.userExistsById(customerId))
+            throw new NotFoundException(
+                    List.of(
+                        "Customer with id " + customerId +
+                                " wasn't found during order reservation"
+                    )
+            );
+    }
+
+    private void checkOrdersExistence(List<Long> orderIds) {
         List<String> messages = new ArrayList<>();
 
-        //check orders
-        //check fk
-        //check uk
-
-        if (!userRepository.userExistsById(customerId)) {
-            messages.add("Customer with id " + customerId + " wasn't found during order reservation");
-        }
-
-        for (Long orderId : orderIds) {
-            Optional<Order> order = reserveOrderByOrderIdAndCustomerId(orderId, customerId);
-            if (order.isPresent()) {
-                orders.add(order.get());
-            }
-            else messages.add("Order with id " + orderId + " wasn't found during order reservation");
-        }
+        orderIds.stream()
+                .filter(orderId -> !orderRepository.orderExistsByOrderId(orderId))
+                .forEach(oId -> messages.add("Order with id " + oId +  " wasn't found during order reservation"));
 
         if (!messages.isEmpty()) {
             throw new NotFoundException(messages);
         }
 
-        return orders;
     }
+
 }

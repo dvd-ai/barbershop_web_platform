@@ -3,13 +3,10 @@ package com.app.barbershopweb.order.reservation;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.OrderConverter;
 import com.app.barbershopweb.order.crud.OrderDto;
-import com.app.barbershopweb.order.reservation.converter.OrderFiltersConverter;
 import com.app.barbershopweb.order.reservation.converter.OrderReservationConverter;
 import com.app.barbershopweb.order.reservation.converter.ShowUnreservedOrdersConverter;
-import com.app.barbershopweb.order.reservation.dto.OrderFiltersDto;
 import com.app.barbershopweb.order.reservation.dto.OrderReservationDto;
 import com.app.barbershopweb.order.reservation.dto.ShowUnreservedOrdersDto;
-import com.app.barbershopweb.order.reservation.entity.OrderFilters;
 import com.app.barbershopweb.order.reservation.entity.OrderReservation;
 import com.app.barbershopweb.order.reservation.entity.ShowUnreservedOrders;
 import org.springframework.http.HttpStatus;
@@ -28,14 +25,16 @@ public class OrderReservationController {
     private final OrderReservationService orderReservationService;
     private final OrderConverter orderConverter;
     private final ShowUnreservedOrdersConverter showUnreservedOrdersConverter;
-    private final OrderFiltersConverter orderFiltersConverter;
     private final OrderReservationConverter orderReservationConverter;
 
-    public OrderReservationController(OrderReservationService orderReservationService, OrderConverter orderConverter, ShowUnreservedOrdersConverter showUnreservedOrdersConverter, OrderFiltersConverter orderFiltersConverter, OrderReservationConverter orderReservationConverter) {
+    public OrderReservationController(OrderReservationService orderReservationService,
+                                      OrderConverter orderConverter,
+                                      ShowUnreservedOrdersConverter showUnreservedOrdersConverter,
+                                      OrderReservationConverter orderReservationConverter)
+    {
         this.orderReservationService = orderReservationService;
         this.orderConverter = orderConverter;
         this.showUnreservedOrdersConverter = showUnreservedOrdersConverter;
-        this.orderFiltersConverter = orderFiltersConverter;
         this.orderReservationConverter = orderReservationConverter;
     }
 
@@ -53,18 +52,16 @@ public class OrderReservationController {
         );
     }
 
-    @GetMapping
+    @GetMapping("/filtered")
     public ResponseEntity<List<OrderDto>> getBarbershopActiveFilteredUnreservedOrdersForWeek(
-            @RequestBody @Valid ShowUnreservedOrdersDto showUnreservedOrdersDto,
-            @RequestBody @Valid OrderFiltersDto orderFiltersDto
-            ) {
+            @RequestBody @Valid ShowUnreservedOrdersDto showUnreservedOrdersDto
+    ) {
         ShowUnreservedOrders entity = showUnreservedOrdersConverter.mapToEntity(showUnreservedOrdersDto);
-        OrderFilters filters = orderFiltersConverter.mapToEntity(orderFiltersDto);
 
         List<Order> orders = orderReservationService.getBarbershopFilteredActiveUnreservedOrdersForWeek(
                 entity.getBarbershopId(),
                 entity.getReservationDateToStartWeekFrom(),
-                filters
+                entity.getOrderFilters()
         );
         return new ResponseEntity<>(
                 orderConverter.orderEntityListToDtoList(orders), HttpStatus.OK
@@ -72,7 +69,7 @@ public class OrderReservationController {
     }
 
     @PutMapping()
-    public ResponseEntity<List<OrderDto>> reserveCustomerOrders(OrderReservationDto orderReservationDto) {
+    public ResponseEntity<List<OrderDto>> reserveCustomerOrders(@RequestBody OrderReservationDto orderReservationDto) {
         OrderReservation entity = orderReservationConverter.mapToEntity(orderReservationDto);
         List<Order> reservedOrders =
                 orderReservationService.reserveCustomerOrders(
