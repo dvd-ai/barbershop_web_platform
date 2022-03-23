@@ -6,7 +6,6 @@ import com.app.barbershopweb.order.reservation.entity.OrderFilters;
 import com.app.barbershopweb.order.reservation.repository.OrderReservationRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
