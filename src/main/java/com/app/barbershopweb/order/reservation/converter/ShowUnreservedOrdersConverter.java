@@ -24,14 +24,17 @@ public class ShowUnreservedOrdersConverter {
     public ShowUnreservedOrders mapToEntity(ShowUnreservedOrdersDto dto) {
         return new ShowUnreservedOrders(
                 dto.barbershopId(),
-                dto.reservationDateToStartWeekFrom()
+                dto.reservationDateToStartWeekFrom(),
+                dto.orderFilters()
         );
     }
 
     public ShowUnreservedOrdersDto mapToDto(ShowUnreservedOrders entity) {
         return new ShowUnreservedOrdersDto(
                 entity.getBarbershopId(),
-                entity.getReservationDateToStartWeekFrom()
+                entity.getReservationDateToStartWeekFrom(),
+                entity.getOrderFilters()
+
         );
     }
 }

@@ -105,7 +105,11 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
         List<Order> orders = new ArrayList<>();
         List<String> messages = new ArrayList<>();
 
-        if (userRepository.userExistsById(customerId)) {
+        //check orders
+        //check fk
+        //check uk
+
+        if (!userRepository.userExistsById(customerId)) {
             messages.add("Customer with id " + customerId + " wasn't found during order reservation");
         }
 
