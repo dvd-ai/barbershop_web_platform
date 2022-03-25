@@ -11,6 +11,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public abstract class AbstractIT {
     public static PostgreSQLContainer<?> postgreDBContainer = new PostgreSQLContainer<>("postgres:9.6.12");
+    private static final String flywayTestMigrationLocation = "classpath:db/migration";
 
     static {
         postgreDBContainer.start();
@@ -21,5 +22,10 @@ public abstract class AbstractIT {
         registry.add("spring.datasource.url=", postgreDBContainer::getJdbcUrl);
         registry.add("spring.datasource.username=", postgreDBContainer::getUsername);
         registry.add("spring.datasource.password=", postgreDBContainer::getPassword);
+        registry.add("spring.flyway.locations=", AbstractIT::getFlywayTestMigrationLocation);
+    }
+
+    public static String getFlywayTestMigrationLocation() {
+        return flywayTestMigrationLocation;
     }
 }
