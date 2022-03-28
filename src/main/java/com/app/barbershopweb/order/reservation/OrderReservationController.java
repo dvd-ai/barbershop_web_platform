@@ -38,7 +38,7 @@ public class OrderReservationController {
         this.orderReservationConverter = orderReservationConverter;
     }
 
-    @GetMapping
+    @PostMapping
     public ResponseEntity<List<OrderDto>>getBarbershopActiveUnreservedOrdersForWeek(
             @RequestBody @Valid ShowUnreservedOrdersDto showUnreservedOrdersDto
     ) {
@@ -52,7 +52,7 @@ public class OrderReservationController {
         );
     }
 
-    @GetMapping("/filtered")
+    @PostMapping("/filtered")
     public ResponseEntity<List<OrderDto>> getBarbershopActiveFilteredUnreservedOrdersForWeek(
             @RequestBody @Valid ShowUnreservedOrdersDto showUnreservedOrdersDto
     ) {
