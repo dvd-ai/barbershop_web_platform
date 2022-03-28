@@ -17,13 +17,13 @@ public class OrderReservationService {
         this.orderReservationRepository = orderReservationRepository;
     }
 
-    public List<Order> getBarbershopActiveUnreservedOrdersForWeek(
+    public List<Order> getAvailableOrders(
             Long barbershopId, LocalDateTime dateToStartWeekFrom
     ) {
         return orderReservationRepository.getAvailableOrders(barbershopId, dateToStartWeekFrom);
     }
 
-    public List<Order> getBarbershopFilteredActiveUnreservedOrdersForWeek(
+    public List<Order> getFilteredAvailableOrders(
             Long barbershopId, LocalDateTime dateToStartWeekFrom, OrderFilters orderFilters
     ) {
         return orderReservationRepository.getAvailableFilteredOrders(

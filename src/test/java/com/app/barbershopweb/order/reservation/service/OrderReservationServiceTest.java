@@ -47,7 +47,7 @@ class OrderReservationServiceTest {
                 .thenReturn(orders);
 
         List<Order> unreservedOrdersForWeek = orderReservationService
-                .getBarbershopActiveUnreservedOrdersForWeek(
+                .getAvailableOrders(
                         1L, LocalDateTime.now()
                 );
 
@@ -66,7 +66,7 @@ class OrderReservationServiceTest {
 
 
         List<Order> unreservedFilteredOrdersForWeek = orderReservationService
-                .getBarbershopFilteredActiveUnreservedOrdersForWeek(
+                .getFilteredAvailableOrders(
                         1L, LocalDateTime.now(), new OrderFilters(List.of(1L, 2L))
                 );
 

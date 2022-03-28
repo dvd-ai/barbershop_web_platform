@@ -43,7 +43,7 @@ public class OrderReservationController {
             @RequestBody @Valid ShowUnreservedOrdersRequestDto showUnreservedOrdersRequestDto
     ) {
         ShowUnreservedOrders entity = showUnreservedOrdersConverter.mapToEntity(showUnreservedOrdersRequestDto);
-        List<Order> orders = orderReservationService.getBarbershopActiveUnreservedOrdersForWeek(
+        List<Order> orders = orderReservationService.getAvailableOrders(
                 entity.getBarbershopId(),
                 entity.getStartWeekDate()
         );
@@ -58,7 +58,7 @@ public class OrderReservationController {
     ) {
         ShowUnreservedOrders entity = showUnreservedOrdersConverter.mapToEntity(showUnreservedOrdersRequestDto);
 
-        List<Order> orders = orderReservationService.getBarbershopFilteredActiveUnreservedOrdersForWeek(
+        List<Order> orders = orderReservationService.getFilteredAvailableOrders(
                 entity.getBarbershopId(),
                 entity.getStartWeekDate(),
                 entity.getOrderFilters()

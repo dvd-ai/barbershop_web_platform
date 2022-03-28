@@ -9,7 +9,10 @@ import java.util.Optional;
 
 @Repository
 public interface OrderReservationRepository {
+    //gets active unreserved orders for week by barbershopId and date
     List<Order> getAvailableOrders(Long barbershopId, LocalDateTime dateToStartWeekFrom);
+
+    //gets active unreserved orders for week by barbershopId, date, barberIds
     List<Order> getAvailableFilteredOrders(
             Long barbershopId, LocalDateTime dateToStartWeekFrom, List<Long>barberIds
     );
