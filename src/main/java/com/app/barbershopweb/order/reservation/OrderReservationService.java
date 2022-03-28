@@ -26,9 +26,12 @@ public class OrderReservationService {
     public List<Order> getFilteredAvailableOrders(
             Long barbershopId, LocalDateTime dateToStartWeekFrom, OrderFilters orderFilters
     ) {
-        return orderReservationRepository.getAvailableFilteredOrders(
-            barbershopId, dateToStartWeekFrom, orderFilters.getBarberIds()
-        );
+        if (!orderFilters.getBarberIds().isEmpty())
+            return orderReservationRepository.getAvailableFilteredOrders(
+                    barbershopId, dateToStartWeekFrom, orderFilters.getBarberIds()
+            );
+
+        else return orderReservationRepository.getAvailableOrders(barbershopId, dateToStartWeekFrom);
     }
 
     public List<Order> reserveCustomerOrders(List<Long> orderIds, Long customerId) {
