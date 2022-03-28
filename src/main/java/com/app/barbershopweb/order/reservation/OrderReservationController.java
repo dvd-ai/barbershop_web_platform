@@ -6,7 +6,7 @@ import com.app.barbershopweb.order.crud.OrderDto;
 import com.app.barbershopweb.order.reservation.converter.OrderReservationConverter;
 import com.app.barbershopweb.order.reservation.converter.ShowUnreservedOrdersConverter;
 import com.app.barbershopweb.order.reservation.dto.OrderReservationDto;
-import com.app.barbershopweb.order.reservation.dto.ShowUnreservedOrdersDto;
+import com.app.barbershopweb.order.reservation.dto.ShowUnreservedOrdersRequestDto;
 import com.app.barbershopweb.order.reservation.entity.OrderReservation;
 import com.app.barbershopweb.order.reservation.entity.ShowUnreservedOrders;
 import org.springframework.http.HttpStatus;
@@ -40,9 +40,9 @@ public class OrderReservationController {
 
     @PostMapping
     public ResponseEntity<List<OrderDto>>getBarbershopActiveUnreservedOrdersForWeek(
-            @RequestBody @Valid ShowUnreservedOrdersDto showUnreservedOrdersDto
+            @RequestBody @Valid ShowUnreservedOrdersRequestDto showUnreservedOrdersRequestDto
     ) {
-        ShowUnreservedOrders entity = showUnreservedOrdersConverter.mapToEntity(showUnreservedOrdersDto);
+        ShowUnreservedOrders entity = showUnreservedOrdersConverter.mapToEntity(showUnreservedOrdersRequestDto);
         List<Order> orders = orderReservationService.getBarbershopActiveUnreservedOrdersForWeek(
                 entity.getBarbershopId(),
                 entity.getReservationDateToStartWeekFrom()
@@ -54,9 +54,9 @@ public class OrderReservationController {
 
     @PostMapping("/filtered")
     public ResponseEntity<List<OrderDto>> getBarbershopActiveFilteredUnreservedOrdersForWeek(
-            @RequestBody @Valid ShowUnreservedOrdersDto showUnreservedOrdersDto
+            @RequestBody @Valid ShowUnreservedOrdersRequestDto showUnreservedOrdersRequestDto
     ) {
-        ShowUnreservedOrders entity = showUnreservedOrdersConverter.mapToEntity(showUnreservedOrdersDto);
+        ShowUnreservedOrders entity = showUnreservedOrdersConverter.mapToEntity(showUnreservedOrdersRequestDto);
 
         List<Order> orders = orderReservationService.getBarbershopFilteredActiveUnreservedOrdersForWeek(
                 entity.getBarbershopId(),
