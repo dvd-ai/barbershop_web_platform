@@ -12,7 +12,7 @@ public record ShowUnreservedOrdersRequestDto(
         @NotNull
         Long barbershopId,
         @NotNull
-        LocalDateTime reservationDateToStartWeekFrom,
+        LocalDateTime startWeekDate,
         @NotNull
         OrderFilters orderFilters
 ) {

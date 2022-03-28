@@ -5,14 +5,14 @@ import java.util.Objects;
 
 public class ShowUnreservedOrders {
     private Long barbershopId;
-    private LocalDateTime reservationDateToStartWeekFrom;
+    private LocalDateTime startWeekDate;
     private OrderFilters orderFilters;
 
     public ShowUnreservedOrders(Long barbershopId,
-                                LocalDateTime reservationDateToStartWeekFrom,
+                                LocalDateTime startWeekDate,
                                 OrderFilters orderFilters) {
         this.barbershopId = barbershopId;
-        this.reservationDateToStartWeekFrom = reservationDateToStartWeekFrom;
+        this.startWeekDate = startWeekDate;
         this.orderFilters = orderFilters;
     }
 
@@ -27,12 +27,12 @@ public class ShowUnreservedOrders {
         this.barbershopId = barbershopId;
     }
 
-    public LocalDateTime getReservationDateToStartWeekFrom() {
-        return reservationDateToStartWeekFrom;
+    public LocalDateTime getStartWeekDate() {
+        return startWeekDate;
     }
 
-    public void setReservationDateToStartWeekFrom(LocalDateTime reservationDateToStartWeekFrom) {
-        this.reservationDateToStartWeekFrom = reservationDateToStartWeekFrom;
+    public void setStartWeekDate(LocalDateTime startWeekDate) {
+        this.startWeekDate = startWeekDate;
     }
 
     public OrderFilters getOrderFilters() {
@@ -51,7 +51,7 @@ public class ShowUnreservedOrders {
         ShowUnreservedOrders that = (ShowUnreservedOrders) o;
 
         if (!Objects.equals(barbershopId, that.barbershopId)) return false;
-        if (!Objects.equals(reservationDateToStartWeekFrom, that.reservationDateToStartWeekFrom))
+        if (!Objects.equals(startWeekDate, that.startWeekDate))
             return false;
         return Objects.equals(orderFilters, that.orderFilters);
     }
@@ -59,7 +59,7 @@ public class ShowUnreservedOrders {
     @Override
     public int hashCode() {
         int result = barbershopId != null ? barbershopId.hashCode() : 0;
-        result = 31 * result + (reservationDateToStartWeekFrom != null ? reservationDateToStartWeekFrom.hashCode() : 0);
+        result = 31 * result + (startWeekDate != null ? startWeekDate.hashCode() : 0);
         result = 31 * result + (orderFilters != null ? orderFilters.hashCode() : 0);
         return result;
     }
