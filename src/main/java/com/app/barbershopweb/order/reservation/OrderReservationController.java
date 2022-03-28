@@ -3,12 +3,8 @@ package com.app.barbershopweb.order.reservation;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.OrderConverter;
 import com.app.barbershopweb.order.crud.OrderDto;
-import com.app.barbershopweb.order.reservation.converter.OrderReservationConverter;
-import com.app.barbershopweb.order.reservation.converter.ShowUnreservedOrdersConverter;
 import com.app.barbershopweb.order.reservation.dto.OrderReservationDto;
 import com.app.barbershopweb.order.reservation.dto.ShowUnreservedOrdersRequestDto;
-import com.app.barbershopweb.order.reservation.entity.OrderReservation;
-import com.app.barbershopweb.order.reservation.entity.ShowUnreservedOrders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,28 +20,21 @@ public class OrderReservationController {
 
     private final OrderReservationService orderReservationService;
     private final OrderConverter orderConverter;
-    private final ShowUnreservedOrdersConverter showUnreservedOrdersConverter;
-    private final OrderReservationConverter orderReservationConverter;
 
     public OrderReservationController(OrderReservationService orderReservationService,
-                                      OrderConverter orderConverter,
-                                      ShowUnreservedOrdersConverter showUnreservedOrdersConverter,
-                                      OrderReservationConverter orderReservationConverter)
+                                      OrderConverter orderConverter)
     {
         this.orderReservationService = orderReservationService;
         this.orderConverter = orderConverter;
-        this.showUnreservedOrdersConverter = showUnreservedOrdersConverter;
-        this.orderReservationConverter = orderReservationConverter;
     }
 
     @PostMapping
     public ResponseEntity<List<OrderDto>>getBarbershopActiveUnreservedOrdersForWeek(
             @RequestBody @Valid ShowUnreservedOrdersRequestDto showUnreservedOrdersRequestDto
     ) {
-        ShowUnreservedOrders entity = showUnreservedOrdersConverter.mapToEntity(showUnreservedOrdersRequestDto);
         List<Order> orders = orderReservationService.getAvailableOrders(
-                entity.getBarbershopId(),
-                entity.getStartWeekDate()
+                showUnreservedOrdersRequestDto.barbershopId(),
+                showUnreservedOrdersRequestDto.startWeekDate()
         );
         return new ResponseEntity<>(
                 orderConverter.orderEntityListToDtoList(orders), HttpStatus.OK
@@ -56,12 +45,10 @@ public class OrderReservationController {
     public ResponseEntity<List<OrderDto>> getBarbershopActiveFilteredUnreservedOrdersForWeek(
             @RequestBody @Valid ShowUnreservedOrdersRequestDto showUnreservedOrdersRequestDto
     ) {
-        ShowUnreservedOrders entity = showUnreservedOrdersConverter.mapToEntity(showUnreservedOrdersRequestDto);
-
         List<Order> orders = orderReservationService.getFilteredAvailableOrders(
-                entity.getBarbershopId(),
-                entity.getStartWeekDate(),
-                entity.getOrderFilters()
+                showUnreservedOrdersRequestDto.barbershopId(),
+                showUnreservedOrdersRequestDto.startWeekDate(),
+                showUnreservedOrdersRequestDto.orderFilters()//todo if there's no filters -> do simple listing (handle it in the service)
         );
         return new ResponseEntity<>(
                 orderConverter.orderEntityListToDtoList(orders), HttpStatus.OK
@@ -70,11 +57,10 @@ public class OrderReservationController {
 
     @PutMapping()
     public ResponseEntity<List<OrderDto>> reserveCustomerOrders(@RequestBody OrderReservationDto orderReservationDto) {
-        OrderReservation entity = orderReservationConverter.mapToEntity(orderReservationDto);
         List<Order> reservedOrders =
                 orderReservationService.reserveCustomerOrders(
-                        entity.getOrderIds(),
-                        entity.getCustomerId()
+                        orderReservationDto.orderIds(),
+                        orderReservationDto.customerId()
                 );
         return new ResponseEntity<>(
                 orderConverter.orderEntityListToDtoList(reservedOrders),
