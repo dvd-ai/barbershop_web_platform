@@ -43,7 +43,7 @@ class OrderReservationServiceTest {
     @Test
     void getBarbershopActiveUnreservedOrdersForWeek() {
         when(orderReservationRepository
-                .getActiveUnreservedOrdersForWeekByBarbershopIdAndDate(any(), any()))
+                .getAvailableOrders(any(), any()))
                 .thenReturn(orders);
 
         List<Order> unreservedOrdersForWeek = orderReservationService
@@ -58,7 +58,7 @@ class OrderReservationServiceTest {
     @Test
     void getBarbershopFilteredActiveUnreservedOrdersForWeek() {
         when(orderReservationRepository
-                .getActiveUnreservedOrdersForWeekByBarbershopIdAndDateAndBarberIds(
+                .getAvailableFilteredOrders(
                         any(), any(), any()
                 )
         )
@@ -71,7 +71,7 @@ class OrderReservationServiceTest {
                 );
 
         verify(orderReservationRepository, times(1)).
-                        getActiveUnreservedOrdersForWeekByBarbershopIdAndDateAndBarberIds(
+                getAvailableFilteredOrders(
                                 any(), any(), any()
                         );
         assertEquals(orders.size(), unreservedFilteredOrdersForWeek.size());

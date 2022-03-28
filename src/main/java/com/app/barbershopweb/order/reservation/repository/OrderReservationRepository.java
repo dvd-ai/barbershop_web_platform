@@ -9,9 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface OrderReservationRepository {
-
-    List<Order>getActiveUnreservedOrdersForWeekByBarbershopIdAndDate(Long barbershopId, LocalDateTime dateToStartWeekFrom);
-    List<Order> getActiveUnreservedOrdersForWeekByBarbershopIdAndDateAndBarberIds(
+    List<Order> getAvailableOrders(Long barbershopId, LocalDateTime dateToStartWeekFrom);
+    List<Order> getAvailableFilteredOrders(
             Long barbershopId, LocalDateTime dateToStartWeekFrom, List<Long>barberIds
     );
     Optional<Order> reserveOrderByOrderIdAndCustomerId(Long orderId, Long customerId);

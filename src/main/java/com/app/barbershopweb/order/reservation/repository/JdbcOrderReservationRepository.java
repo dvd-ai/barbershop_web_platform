@@ -31,7 +31,7 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
     }
 
     @Override
-    public List<Order> getActiveUnreservedOrdersForWeekByBarbershopIdAndDate(
+    public List<Order> getAvailableOrders(
             Long barbershopId, LocalDateTime dateToStartWeekFrom
     ) {
         String sql =
@@ -58,7 +58,7 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
     }
 
     @Override
-    public List<Order> getActiveUnreservedOrdersForWeekByBarbershopIdAndDateAndBarberIds(
+    public List<Order> getAvailableFilteredOrders(
             Long barbershopId, LocalDateTime dateToStartWeekFrom, List<Long> barberIds
     ) {
         String sql =

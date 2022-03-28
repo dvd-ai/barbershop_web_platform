@@ -20,13 +20,13 @@ public class OrderReservationService {
     public List<Order> getBarbershopActiveUnreservedOrdersForWeek(
             Long barbershopId, LocalDateTime dateToStartWeekFrom
     ) {
-        return orderReservationRepository.getActiveUnreservedOrdersForWeekByBarbershopIdAndDate(barbershopId, dateToStartWeekFrom);
+        return orderReservationRepository.getAvailableOrders(barbershopId, dateToStartWeekFrom);
     }
 
     public List<Order> getBarbershopFilteredActiveUnreservedOrdersForWeek(
             Long barbershopId, LocalDateTime dateToStartWeekFrom, OrderFilters orderFilters
     ) {
-        return orderReservationRepository.getActiveUnreservedOrdersForWeekByBarbershopIdAndDateAndBarberIds(
+        return orderReservationRepository.getAvailableFilteredOrders(
             barbershopId, dateToStartWeekFrom, orderFilters.getBarberIds()
         );
     }
