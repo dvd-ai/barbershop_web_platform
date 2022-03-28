@@ -5,6 +5,7 @@ import com.app.barbershopweb.order.reservation.OrderReservationService;
 import com.app.barbershopweb.order.reservation.entity.OrderFilters;
 import com.app.barbershopweb.order.reservation.repository.OrderReservationRepository;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,7 +42,7 @@ class OrderReservationServiceTest {
     }
 
     @Test
-    void getBarbershopActiveUnreservedOrdersForWeek() {
+    void getAvailableOrders() {
         when(orderReservationRepository
                 .getAvailableOrders(any(), any()))
                 .thenReturn(orders);
@@ -56,7 +57,8 @@ class OrderReservationServiceTest {
     }
 
     @Test
-    void getBarbershopFilteredActiveUnreservedOrdersForWeek() {
+    @DisplayName("when order filters (barberIds) were specified returns filtered orders")
+    void getAvailableFilteredOrders() {
         when(orderReservationRepository
                 .getAvailableFilteredOrders(
                         any(), any(), any()
@@ -70,10 +72,34 @@ class OrderReservationServiceTest {
                         1L, LocalDateTime.now(), new OrderFilters(List.of(1L, 2L))
                 );
 
-        verify(orderReservationRepository, times(1)).
-                getAvailableFilteredOrders(
-                                any(), any(), any()
+        verify(orderReservationRepository, times(0)).
+                getAvailableOrders(
+                                any(), any()
                         );
+        assertEquals(orders.size(), unreservedFilteredOrdersForWeek.size());
+        assertEquals(orders, unreservedFilteredOrdersForWeek);
+    }
+
+    @Test
+    @DisplayName("when order filters (barberIds) were NOT specified returns all available orders")
+    void getAvailableFilteredOrdersWithNoFilters() {
+        when(orderReservationRepository
+                .getAvailableOrders(
+                        any(), any()
+                )
+        )
+                .thenReturn(orders);
+
+
+        List<Order> unreservedFilteredOrdersForWeek = orderReservationService
+                .getFilteredAvailableOrders(
+                        1L, LocalDateTime.now(), new OrderFilters(List.of())
+                );
+
+        verify(orderReservationRepository, times(0)).
+                getAvailableFilteredOrders(
+                        any(), any(), any()
+                );
         assertEquals(orders.size(), unreservedFilteredOrdersForWeek.size());
         assertEquals(orders, unreservedFilteredOrdersForWeek);
     }
