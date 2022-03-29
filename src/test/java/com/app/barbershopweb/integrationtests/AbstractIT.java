@@ -25,7 +25,7 @@ public abstract class AbstractIT {
         registry.add("spring.flyway.locations=", AbstractIT::getFlywayTestMigrationLocation);
     }
 
-    public static String getFlywayTestMigrationLocation() {
+    private static String getFlywayTestMigrationLocation() {
         return flywayTestMigrationLocation;
     }
 }
