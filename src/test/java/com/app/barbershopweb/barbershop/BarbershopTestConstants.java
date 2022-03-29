@@ -22,6 +22,12 @@ public final class BarbershopTestConstants {
             "1@gmail.com", TIME_FROM, TIME_TO
     );
 
+    public final Barbershop VALID_UPDATED_BARBERSHOP_ENTITY = new Barbershop(
+            VALID_BARBERSHOP_ID, "A1",
+            "Barbershop1", VALID_BARBERSHOP_ENTITY.getPhoneNumber(),
+            VALID_BARBERSHOP_ENTITY.getEmail(), TIME_FROM, TIME_TO
+    );
+
     public final Barbershop BARBERSHOP_ENTITY_NOT_EXISTED_ID = new Barbershop(
             NOT_EXISTED_BARBERSHOP_ID, VALID_BARBERSHOP_ENTITY.getAddress(),
             VALID_BARBERSHOP_ENTITY.getName(), VALID_BARBERSHOP_ENTITY.getPhoneNumber(),
@@ -60,14 +66,14 @@ public final class BarbershopTestConstants {
                     VALID_BARBERSHOP_DTO.email(), TIME_FROM, TIME_TO
             ),
             new Barbershop(
-                    VALID_BARBERSHOP_ID + 1, "a2",
-                    "name2", "+38092",
-                    "2@gmail.com", TIME_FROM, TIME_TO
+                    VALID_BARBERSHOP_ID + 1, VALID_BARBERSHOP_DTO.address(),
+                    VALID_BARBERSHOP_DTO.name(), VALID_BARBERSHOP_DTO.phoneNumber(),
+                    VALID_BARBERSHOP_DTO.email(), TIME_FROM, TIME_TO
             ),
             new Barbershop(
-                    VALID_BARBERSHOP_ID + 2, "a3",
-                    "name3", "+38093",
-                    "3@gmail.com", TIME_FROM, TIME_TO
+                    VALID_BARBERSHOP_ID + 2, VALID_BARBERSHOP_DTO.address(),
+                    VALID_BARBERSHOP_DTO.name(), VALID_BARBERSHOP_DTO.phoneNumber(),
+                    VALID_BARBERSHOP_DTO.email(), TIME_FROM, TIME_TO
             )
     );
 
