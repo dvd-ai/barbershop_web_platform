@@ -165,7 +165,7 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
     }
 
     @Override
-    public void truncateAndRestartSequences() {
+    public void truncateAndRestartSequence() {
         String sql = "TRUNCATE workspace RESTART IDENTITY;";
         namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource());
     }

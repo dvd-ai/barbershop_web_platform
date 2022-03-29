@@ -104,7 +104,7 @@ class JdbcUsersRepositoryTest extends AbstractJdbcRepositoryTest {
     @Test
     void truncateAndRestartIdentity() {
         usersRepository.addUser(utc.VALID_USER_ENTITY);
-        usersRepository.truncateAndRestartIdentity();
+        usersRepository.truncateAndRestartSequence();
 
         assertTrue(usersRepository.getUsers().isEmpty());
 
@@ -115,6 +115,6 @@ class JdbcUsersRepositoryTest extends AbstractJdbcRepositoryTest {
 
     @AfterEach
     void cleanUpDb() {
-        usersRepository.truncateAndRestartIdentity();
+        usersRepository.truncateAndRestartSequence();
     }
 }

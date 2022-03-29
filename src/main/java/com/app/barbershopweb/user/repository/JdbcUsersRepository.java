@@ -143,7 +143,7 @@ public class JdbcUsersRepository implements UserRepository {
     }
 
     @Override
-    public void truncateAndRestartIdentity() {
+    public void truncateAndRestartSequence() {
         String sql = "TRUNCATE users RESTART IDENTITY CASCADE;";
         namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource());
     }

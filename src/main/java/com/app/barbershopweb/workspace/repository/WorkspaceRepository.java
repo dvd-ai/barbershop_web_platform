@@ -15,6 +15,6 @@ public interface WorkspaceRepository {
     Optional<Workspace>updateWorkspace(Workspace workspace);
     List<Workspace> getWorkspaces();
     void deleteWorkspaceById(Long id);
-    void truncateAndRestartSequences();
+    void truncateAndRestartSequence();
 
 }

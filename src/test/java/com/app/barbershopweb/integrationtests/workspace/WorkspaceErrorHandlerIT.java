@@ -232,7 +232,7 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
     @AfterAll
     void cleanUpDb() {
         barbershopRepository.truncateAndRestartSequence();
-        usersRepository.truncateAndRestartIdentity();
-        workspaceRepository.truncateAndRestartSequences();
+        usersRepository.truncateAndRestartSequence();
+        workspaceRepository.truncateAndRestartSequence();
     }
 }

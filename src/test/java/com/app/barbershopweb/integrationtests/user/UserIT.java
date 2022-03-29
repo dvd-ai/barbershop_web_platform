@@ -1,7 +1,6 @@
 package com.app.barbershopweb.integrationtests.user;
 
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.user.UserConverter;
 import com.app.barbershopweb.user.UserTestConstants;
 import com.app.barbershopweb.user.UsersDto;
 import com.app.barbershopweb.user.repository.JdbcUsersRepository;
@@ -135,6 +134,6 @@ class UserIT extends AbstractIT {
 
     @AfterAll
     void cleanUpDb() {
-        userRepository.truncateAndRestartIdentity();
+        userRepository.truncateAndRestartSequence();
     }
 }

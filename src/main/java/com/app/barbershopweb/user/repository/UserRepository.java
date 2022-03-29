@@ -14,5 +14,5 @@ public interface UserRepository {
     List<Users> getUsers();
     void deleteUserById(Long id);
     boolean userExistsById(Long id);
-    void truncateAndRestartIdentity();
+    void truncateAndRestartSequence();
 }

@@ -161,9 +161,9 @@ class WorkspaceIT extends AbstractIT {
 
     @AfterAll
     void cleanUpDb() {
-        usersRepository.truncateAndRestartIdentity();
+        usersRepository.truncateAndRestartSequence();
         barbershopRepository.truncateAndRestartSequence();
-        workspaceRepository.truncateAndRestartSequences();
+        workspaceRepository.truncateAndRestartSequence();
     }
 
 }
