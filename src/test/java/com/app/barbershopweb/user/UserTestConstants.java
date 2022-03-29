@@ -30,6 +30,12 @@ public final class UserTestConstants {
             VALID_USER_ENTITY.getEmail(), VALID_USER_ENTITY.getRole(), REGISTRATION_DATE
     );
 
+    public final Users VALID_UPDATED_USER_ENTITY = new Users(
+            VALID_USER_ENTITY.getId(), "Antonio",
+            "Petru44i", VALID_USER_ENTITY.getPhoneNumber(),
+            VALID_USER_ENTITY.getEmail(), ROLE, REGISTRATION_DATE
+    );
+
     public final UsersDto VALID_USER_DTO = new UsersDto(
             VALID_USER_ID, VALID_USER_ENTITY.getFirstName(),
             VALID_USER_ENTITY.getLastName(), VALID_USER_ENTITY.getPhoneNumber(),
@@ -62,14 +68,14 @@ public final class UserTestConstants {
                     VALID_USER_ENTITY.getEmail(), VALID_USER_ENTITY.getRole(), REGISTRATION_DATE
             ),
             new Users(
-                    VALID_USER_ID + 1, "firstname2",
-                    "lastname2", "+38092",
-                    "2@gmail.com", ROLE, REGISTRATION_DATE
+                    VALID_USER_ID + 1, VALID_USER_ENTITY.getFirstName(),
+                    VALID_USER_ENTITY.getLastName(), VALID_USER_ENTITY.getPhoneNumber(),
+                    VALID_USER_ENTITY.getEmail(), VALID_USER_ENTITY.getRole(), REGISTRATION_DATE
             ),
             new Users(
-                    VALID_USER_ID + 1, "firstname3",
-                    "lastname3", "+38093",
-                    "3@gmail.com", ROLE, REGISTRATION_DATE
+                    VALID_USER_ID + 2, VALID_USER_ENTITY.getFirstName(),
+                    VALID_USER_ENTITY.getLastName(), VALID_USER_ENTITY.getPhoneNumber(),
+                    VALID_USER_ENTITY.getEmail(), VALID_USER_ENTITY.getRole(), REGISTRATION_DATE
             )
     );
 
