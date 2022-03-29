@@ -1,10 +1,5 @@
 package com.app.barbershopweb.database;
 
-import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
-import com.app.barbershopweb.order.crud.repository.JdbcOrderRepository;
-import com.app.barbershopweb.order.reservation.repository.JdbcOrderReservationRepository;
-import com.app.barbershopweb.user.repository.JdbcUsersRepository;
-import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.postgresql.ds.PGSimpleDataSource;
