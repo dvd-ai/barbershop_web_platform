@@ -21,6 +21,11 @@ public final class WorkspaceTestConstants {
             VALID_BARBERSHOP_ID, ACTIVE
     );
 
+    public final Workspace VALID_UPDATED_WORKSPACE_ENTITY = new Workspace(
+            VALID_WORKSPACE_ID, 2L,
+            1L, ACTIVE
+    );
+
     public final Workspace WORKSPACE_ENTITY_NOT_EXISTED_ID = new Workspace(
             NOT_EXISTED_WORKSPACE_ID, VALID_USER_ID,
             VALID_BARBERSHOP_ID, ACTIVE
