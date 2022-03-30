@@ -143,8 +143,8 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
         assertEquals(2, Objects.requireNonNull(body).errors().size());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
-        assertTrue(body.errors().contains(wtc.DTO_FK_CV_BARBERSHOP_ID_ERR_MSG));
-        assertTrue(body.errors().contains(wtc.DTO_FK_CV_USER_ID_ERR_MSG));
+        assertTrue(body.errors().contains(wtc.FK_CV_BARBERSHOP_ID_ERR_MSG));
+        assertTrue(body.errors().contains(wtc.FK_CV_USER_ID_ERR_MSG));
 
     }
 
@@ -161,8 +161,8 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
         assertEquals(2, Objects.requireNonNull(body).errors().size());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
-        assertTrue(body.errors().contains(wtc.DTO_FK_CV_BARBERSHOP_ID_ERR_MSG));
-        assertTrue(body.errors().contains(wtc.DTO_FK_CV_USER_ID_ERR_MSG));
+        assertTrue(body.errors().contains(wtc.FK_CV_BARBERSHOP_ID_ERR_MSG));
+        assertTrue(body.errors().contains(wtc.FK_CV_USER_ID_ERR_MSG));
     }
 
     @Test
@@ -203,7 +203,7 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
         assertEquals(1, Objects.requireNonNull(body).errors().size());
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
-        assertTrue(body.errors().contains(wtc.DTO_UK_CV_ERR_MSG));
+        assertTrue(body.errors().contains(wtc.UK_CV_ERR_MSG));
 
     }
 
@@ -222,7 +222,7 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
         assertEquals(1, Objects.requireNonNull(body).errors().size());
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
-        assertTrue(body.errors().contains(wtc.DTO_UK_CV_ERR_MSG));
+        assertTrue(body.errors().contains(wtc.UK_CV_ERR_MSG));
     }
 
     void addWorkspaceWithUnusedUk() {

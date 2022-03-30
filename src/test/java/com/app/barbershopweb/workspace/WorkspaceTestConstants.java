@@ -93,13 +93,13 @@ public final class WorkspaceTestConstants {
     public final String PV_WORKSPACE_ID_ERR_MSG = "'workspaceId' must be greater than or equal to 1";
 
     //fk, uk violation
-    public final String DTO_FK_CV_USER_ID_ERR_MSG = "fk violation: user with id " +
+    public final String FK_CV_USER_ID_ERR_MSG = "fk violation: user with id " +
             VALID_WORKSPACE_DTO.userId()  + " not present";
 
-    public final String DTO_FK_CV_BARBERSHOP_ID_ERR_MSG = "fk violation: barbershop with id " +
+    public final String FK_CV_BARBERSHOP_ID_ERR_MSG = "fk violation: barbershop with id " +
             VALID_WORKSPACE_DTO.barbershopId()  + " not present";
 
-    public final String DTO_UK_CV_ERR_MSG = "uk violation: workspace with user id " + VALID_WORKSPACE_DTO.userId() +
+    public final String UK_CV_ERR_MSG = "uk violation: workspace with user id " + VALID_WORKSPACE_DTO.userId() +
             " and barbershop id " + VALID_WORKSPACE_DTO.barbershopId() + " already exists.";
 
 

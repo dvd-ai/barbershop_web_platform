@@ -78,8 +78,8 @@ class WorkspaceControllerAddWorkspaceTest {
         when(workspaceService.addWorkspace(any())).thenThrow(
                 new NotFoundException(
                         List.of(
-                                wtc.DTO_FK_CV_USER_ID_ERR_MSG,
-                                wtc.DTO_FK_CV_BARBERSHOP_ID_ERR_MSG
+                                wtc.FK_CV_USER_ID_ERR_MSG,
+                                wtc.FK_CV_BARBERSHOP_ID_ERR_MSG
                         )
                 )
         );
@@ -91,8 +91,8 @@ class WorkspaceControllerAddWorkspaceTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(2)))
-                .andExpect(jsonPath("$.errors", hasItem(wtc.DTO_FK_CV_USER_ID_ERR_MSG)))
-                .andExpect(jsonPath("$.errors", hasItem(wtc.DTO_FK_CV_BARBERSHOP_ID_ERR_MSG)));
+                .andExpect(jsonPath("$.errors", hasItem(wtc.FK_CV_USER_ID_ERR_MSG)))
+                .andExpect(jsonPath("$.errors", hasItem(wtc.FK_CV_BARBERSHOP_ID_ERR_MSG)));
     }
 
     @DisplayName("when workspace dto violates db uk constraints " +
@@ -108,7 +108,7 @@ class WorkspaceControllerAddWorkspaceTest {
 
         when(workspaceService.addWorkspace(any())).thenThrow(
                 new DbUniqueConstraintsViolationException(
-                        List.of(wtc.DTO_UK_CV_ERR_MSG)
+                        List.of(wtc.UK_CV_ERR_MSG)
                 )
         );
 
@@ -119,7 +119,7 @@ class WorkspaceControllerAddWorkspaceTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
-                .andExpect(jsonPath("$.errors", hasItem(wtc.DTO_UK_CV_ERR_MSG)));
+                .andExpect(jsonPath("$.errors", hasItem(wtc.UK_CV_ERR_MSG)));
     }
 
 
