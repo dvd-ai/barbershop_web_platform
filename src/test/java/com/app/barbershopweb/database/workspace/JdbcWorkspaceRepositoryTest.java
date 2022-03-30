@@ -23,9 +23,9 @@ class JdbcWorkspaceRepositoryTest extends AbstractJdbcRepositoryTest {
     static JdbcBarbershopRepository barbershopRepository;
     static JdbcUsersRepository usersRepository;
 
-    static WorkspaceTestConstants wtc = new WorkspaceTestConstants();
-    static UserTestConstants utc = new UserTestConstants();
-    static BarbershopTestConstants btc = new BarbershopTestConstants();
+    WorkspaceTestConstants wtc = new WorkspaceTestConstants();
+    UserTestConstants utc = new UserTestConstants();
+    BarbershopTestConstants btc = new BarbershopTestConstants();
 
     @BeforeAll
     static void init() {
