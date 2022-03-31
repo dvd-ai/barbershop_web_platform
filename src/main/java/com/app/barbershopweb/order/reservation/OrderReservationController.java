@@ -48,7 +48,7 @@ public class OrderReservationController {
         List<Order> orders = orderReservationService.getFilteredAvailableOrders(
                 showUnreservedOrdersRequestDto.barbershopId(),
                 showUnreservedOrdersRequestDto.startWeekDate(),
-                showUnreservedOrdersRequestDto.orderFilters()//todo if there's no filters -> do simple listing (handle it in the service)
+                showUnreservedOrdersRequestDto.orderFilters()
         );
         return new ResponseEntity<>(
                 orderConverter.orderEntityListToDtoList(orders), HttpStatus.OK
