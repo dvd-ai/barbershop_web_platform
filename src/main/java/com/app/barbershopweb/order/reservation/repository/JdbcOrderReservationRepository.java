@@ -86,8 +86,8 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
         return namedParameterJdbcTemplate.query(sql, sqlParameterSource, new OrderRowMapper());
     }
 
-    @Override
-    public Optional<Order> reserveOrderByOrderIdAndCustomerId(Long orderId, Long customerId) {
+
+    private Optional<Order> reserveOrderByOrderIdAndCustomerId(Long orderId, Long customerId) {
         checkOrderUk(orderId, customerId);
 
         String sql =

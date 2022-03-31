@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+
 
 @Repository
 public interface OrderReservationRepository {
@@ -16,6 +16,5 @@ public interface OrderReservationRepository {
     List<Order> getAvailableFilteredOrders(
             Long barbershopId, LocalDateTime dateToStartWeekFrom, List<Long>barberIds
     );
-    Optional<Order> reserveOrderByOrderIdAndCustomerId(Long orderId, Long customerId);
     List<Order> reserveOrdersByOrderIdsAndByCustomerId(List<Long>orderIds, Long customerId);
 }
