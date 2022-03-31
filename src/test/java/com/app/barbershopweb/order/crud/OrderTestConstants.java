@@ -36,6 +36,10 @@ public final class OrderTestConstants {
             VALID_BARBER_ID, VALID_CUSTOMER_ID, VALID_ORDER_DATE, ACTIVE
     );
 
+    public final Order VALID_UPDATED_ORDER_ENTITY = new Order(
+            VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID + 1,
+            VALID_BARBER_ID, VALID_CUSTOMER_ID, VALID_ORDER_DATE, ACTIVE
+    );
 //    public final Order VALID_UPDATED_ORDER_ENTITY = new Order(
 //            VALID_ORDER_ID, 2L,
 //            1L, ACTIVE
@@ -48,6 +52,11 @@ public final class OrderTestConstants {
 
     public final OrderDto VALID_ORDER_DTO = new OrderDto(
             VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID,
+            VALID_BARBER_ID, VALID_CUSTOMER_ID, VALID_ORDER_DATE, ACTIVE
+    );
+
+    public final OrderDto VALID_UPDATED_ORDER_DTO = new OrderDto(
+            VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID + 1,
             VALID_BARBER_ID, VALID_CUSTOMER_ID, VALID_ORDER_DATE, ACTIVE
     );
 
