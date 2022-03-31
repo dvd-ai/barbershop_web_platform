@@ -141,8 +141,9 @@ class OrderControllerAddOrderTest {
         when(orderService.addOrder(any())).thenThrow(
                 new DbUniqueConstraintsViolationException(
                         List.of(
-                                otc.UK_CV_BARBER_ID_ORDER_DATE_ERR_MSG,
-                                otc.UK_CV_CUSTOMER_ID_ORDER_DATE_ERR_MSG
+                                otc.BDF_CV_TIME_FORMAT_ERR_MSG,
+                                otc.BDF_CV_BARBERSHOP_HOURS_ERR_MSG,
+                                otc.BDF_CV_CUSTOMER_ID_BARBER_ID_EQ_ERR_MSG
                         )
                 )
         );
@@ -153,9 +154,10 @@ class OrderControllerAddOrderTest {
                         .content(json))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").isArray())
-                .andExpect(jsonPath("$.errors", hasSize(2)))
-                .andExpect(jsonPath("$.errors", hasItem(otc.UK_CV_BARBER_ID_ORDER_DATE_ERR_MSG)))
-                .andExpect(jsonPath("$.errors", hasItem(otc.UK_CV_CUSTOMER_ID_ORDER_DATE_ERR_MSG)));
+                .andExpect(jsonPath("$.errors", hasSize(3)))
+                .andExpect(jsonPath("$.errors", hasItem(otc.BDF_CV_TIME_FORMAT_ERR_MSG)))
+                .andExpect(jsonPath("$.errors", hasItem(otc.BDF_CV_BARBERSHOP_HOURS_ERR_MSG)))
+                .andExpect(jsonPath("$.errors", hasItem(otc.BDF_CV_CUSTOMER_ID_BARBER_ID_EQ_ERR_MSG)));
     }
 
 

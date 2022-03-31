@@ -22,7 +22,13 @@ public final class OrderTestConstants {
                     .getHour(),
             0
     );
-    public final LocalDateTime INVALID_ORDER_DATE = VALID_ORDER_DATE.minusHours(5L);
+    //hours shouldn't match to barbershop order hours,
+    // minutes shouldn't be like '00';
+    public final LocalDateTime INVALID_ORDER_DATE =
+            VALID_ORDER_DATE
+                    .minusHours(5L)
+                    .minusMinutes(30L);
+
     public final boolean ACTIVE = true;
 
     public final Order VALID_ORDER_ENTITY = new Order(
@@ -145,5 +151,10 @@ public final class OrderTestConstants {
                     btc.VALID_BARBERSHOP_ENTITY.getWorkTimeFrom() + " - " +
                     btc.VALID_BARBERSHOP_ENTITY.getWorkTimeTo().minusHours(1L) +
                     ")";
+    //orderDate with time k should be hourly formatted
+    public final String BDF_CV_TIME_FORMAT_ERR_MSG =
+            "orderDate with time " + INVALID_BDF_ORDER_DTO.orderDate().
+                    toLocalTime() + " should hourly formatted";
+
 
 }
