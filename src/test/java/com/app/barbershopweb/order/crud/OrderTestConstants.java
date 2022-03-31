@@ -151,7 +151,7 @@ public final class OrderTestConstants {
                     btc.VALID_BARBERSHOP_ENTITY.getWorkTimeFrom() + " - " +
                     btc.VALID_BARBERSHOP_ENTITY.getWorkTimeTo().minusHours(1L) +
                     ")";
-    //orderDate with time k should be hourly formatted
+
     public final String BDF_CV_TIME_FORMAT_ERR_MSG =
             "orderDate with time " + INVALID_BDF_ORDER_DTO.orderDate().
                     toLocalTime() + " should hourly formatted";
