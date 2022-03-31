@@ -2,6 +2,7 @@ package com.app.barbershopweb.order.crud.service;
 
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.OrderService;
+import com.app.barbershopweb.order.crud.OrderTestConstants;
 import com.app.barbershopweb.order.crud.repository.OrderRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,62 +26,50 @@ class OrderServiceTest {
     @InjectMocks
     OrderService orderService;
 
+    OrderTestConstants otc = new OrderTestConstants();
+
     @Test
     void addOrder() {
-        Order order = new Order(1L, 1L,
-                1L, 1L, LocalDateTime.now(), true);
-
         when(orderRepository.addOrder(any(Order.class)))
-                .thenReturn(order.getOrderId());
+                .thenReturn(otc.VALID_ORDER_ID);
 
-        Long orderId = orderService.addOrder(order);
+        Long orderId = orderService.addOrder(otc.VALID_ORDER_ENTITY);
 
-        assertEquals(order.getOrderId(), orderId);
+        assertEquals(otc.VALID_ORDER_ID, orderId);
     }
 
     @Test
     void updateOrder() {
-        Order orderToUpdate = new Order(1L, 3L,
-                10L, 1L, LocalDateTime.now(), true);
-
         when(orderRepository.updateOrder(any(Order.class)))
-                .thenReturn(Optional.of(orderToUpdate));
+                .thenReturn(Optional.of(otc.VALID_UPDATED_ORDER_ENTITY));
 
-        Optional<Order> optionalOrder = orderService.updateOrder(orderToUpdate);
+        Optional<Order> optionalOrder = orderService
+                .updateOrder(otc.VALID_UPDATED_ORDER_ENTITY);
 
         assertTrue(optionalOrder.isPresent());
-        assertEquals(orderToUpdate, optionalOrder.get());
+        assertEquals(otc.VALID_UPDATED_ORDER_ENTITY, optionalOrder.get());
     }
 
     @Test
     void findOrderByOrderId() {
-        Order order = new Order(1L, 1L,
-                1L, 1L, LocalDateTime.now(), true);
 
         when(orderRepository.findOrderByOrderId(any(Long.class)))
-                .thenReturn(Optional.of(order));
+                .thenReturn(Optional.of(otc.VALID_ORDER_ENTITY));
 
         Optional<Order> foundOrder = orderService.findOrderByOrderId(1L);
 
         assertTrue(foundOrder.isPresent());
-        assertEquals(order, foundOrder.get());
+        assertEquals(otc.VALID_ORDER_ENTITY, foundOrder.get());
     }
 
     @Test
     void getOrders() {
-        List<Order> orders = List.of(
-                new Order(1L, 1L,
-                        1L, 1L, LocalDateTime.now(), true),
-                new Order(2L, 2L,
-                        2L, 2L, LocalDateTime.now(), true)
-        );
-
         when(orderRepository.getOrders())
-                .thenReturn(orders);
+                .thenReturn(otc.VALID_ORDER_ENTITY_LIST);
 
         List<Order> orderList = orderService.getOrders();
 
-        assertEquals(orders.size(), orderList.size());
-        assertEquals(orders, orderList);
+        assertEquals(otc.VALID_ORDER_ENTITY_LIST.size(), orderList.size());
+        assertEquals(otc.VALID_ORDER_ENTITY_LIST, orderList);
     }
 }
