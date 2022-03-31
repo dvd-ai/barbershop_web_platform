@@ -40,10 +40,6 @@ public final class OrderTestConstants {
             VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID + 1,
             VALID_BARBER_ID, VALID_CUSTOMER_ID, VALID_ORDER_DATE, ACTIVE
     );
-//    public final Order VALID_UPDATED_ORDER_ENTITY = new Order(
-//            VALID_ORDER_ID, 2L,
-//            1L, ACTIVE
-//    );
 
 //    public final Order ORDER_ENTITY_NOT_EXISTED_ID = new Order(
 //            NOT_EXISTING_ORDER_ID, VALID_USER_ID,
@@ -73,11 +69,6 @@ public final class OrderTestConstants {
 //    public final OrderDto ORDER_DTO_NOT_EXISTED_ID = new OrderDto(
 //            NOT_EXISTING_ORDER_ID, VALID_USER_ID,
 //            VALID_BARBERSHOP_ID, ACTIVE
-//    );
-
-//    public final OrderDto VALID_UPDATED_ORDER_DTO = new OrderDto(
-//            VALID_ORDER_ID, 1L,
-//            2L, ACTIVE
 //    );
 
     public final List<Long>barberIds = List.of(2L, 4L);
