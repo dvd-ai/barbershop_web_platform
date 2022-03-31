@@ -32,13 +32,13 @@ public final class OrderTestConstants {
     public final boolean ACTIVE = true;
 
     public final Order VALID_ORDER_ENTITY = new Order(
-            VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID,
+            VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID + 1,
             VALID_BARBER_ID, VALID_CUSTOMER_ID, VALID_ORDER_DATE, ACTIVE
     );
 
     public final Order VALID_UPDATED_ORDER_ENTITY = new Order(
-            VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID + 1,
-            VALID_BARBER_ID, VALID_CUSTOMER_ID, VALID_ORDER_DATE, ACTIVE
+            VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID + 2,
+            VALID_BARBER_ID + 1, VALID_CUSTOMER_ID, VALID_ORDER_DATE.plusDays(1L), ACTIVE
     );
 
 //    public final Order ORDER_ENTITY_NOT_EXISTED_ID = new Order(
@@ -78,18 +78,18 @@ public final class OrderTestConstants {
     public final List<Order> VALID_ORDER_ENTITY_LIST = List.of(
             new Order(
                     VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID,
-                    barberIds.get(0), customerIds.get(0),
+                    1L, VALID_CUSTOMER_ID + 1,
                     VALID_ORDER_DATE, ACTIVE
             ),
             new Order(
-                    VALID_ORDER_ID + 1, btc.VALID_BARBERSHOP_ID,
-                    barberIds.get(0), customerIds.get(0),
+                    VALID_ORDER_ID + 1, btc.VALID_BARBERSHOP_ID + 1,
+                    2L, VALID_CUSTOMER_ID,
                     VALID_ORDER_DATE.plusDays(1L), ACTIVE
             ),
             new Order(
-                    VALID_ORDER_ID + 2, btc.VALID_BARBERSHOP_ID + 1,
-                    barberIds.get(1), customerIds.get(1),
-                    VALID_ORDER_DATE, ACTIVE
+                    VALID_ORDER_ID + 2, btc.VALID_BARBERSHOP_ID + 2,
+                    3L, VALID_CUSTOMER_ID + 1,
+                    VALID_ORDER_DATE.plusHours(1L), ACTIVE
             )
     );
 
