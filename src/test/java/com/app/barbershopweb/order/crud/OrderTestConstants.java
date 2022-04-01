@@ -142,12 +142,12 @@ public final class OrderTestConstants {
             VALID_ORDER_DTO.customerId()  + " not present";
 
     public final String UK_CV_BARBER_ID_ORDER_DATE_ERR_MSG = "uk violation: order with barberId " + VALID_ORDER_DTO.barberId() +
-            " and orderDate " + VALID_ORDER_DTO.orderDate() + " already exists.";
+            " and orderDate " + VALID_ORDER_DTO.orderDate() + " already exists";
 
     public final String UK_CV_CUSTOMER_ID_ORDER_DATE_ERR_MSG =
             "uk violation: order with customerId "
             + VALID_ORDER_DTO.customerId() +
-            " and orderDate " + VALID_ORDER_DTO.orderDate() + " already exists.";
+            " and orderDate " + VALID_ORDER_DTO.orderDate() + " already exists";
 
     //BDF - means business data format
     public final String BDF_CV_CUSTOMER_ID_BARBER_ID_EQ_ERR_MSG =
