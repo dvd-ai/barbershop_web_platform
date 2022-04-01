@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 import javax.validation.constraints.NotNull;
 
 @Testcontainers
-public class AbstractJdbcRepositoryTest {
+public abstract class AbstractJdbcRepositoryTest {
 
     public static PostgreSQLContainer<?> postgreDBContainer = new PostgreSQLContainer<>("postgres:10");
     private static final String flywayTestMigrationLocation = "classpath:db/migration";
