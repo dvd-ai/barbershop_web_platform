@@ -67,7 +67,6 @@ class WorkspaceIT extends AbstractIT {
     void shouldReturnEmptyWorkspaceList() {
 
         ResponseEntity<WorkspaceDto[]> response = restTemplate.getForEntity(WORKSPACES_URL, WorkspaceDto[].class);
-        System.out.println(Arrays.toString(response.getBody()));
         assertEquals(0, Objects.requireNonNull(response.getBody()).length);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
