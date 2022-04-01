@@ -42,6 +42,11 @@ public final class OrderTestConstants {
             VALID_ORDER_ENTITY.getOrderDate().plusDays(1L), VALID_ORDER_ENTITY.getActive()
     );
 
+    public final Order INVALID_BDF_ORDER_ENTITY = new Order(
+            VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID,
+            VALID_CUSTOMER_ID, VALID_CUSTOMER_ID, INVALID_ORDER_DATE, ACTIVE
+    );
+
 //    public final Order ORDER_ENTITY_NOT_EXISTED_ID = new Order(
 //            NOT_EXISTING_ORDER_ID, VALID_USER_ID,
 //            VALID_BARBERSHOP_ID, ACTIVE
@@ -65,8 +70,12 @@ public final class OrderTestConstants {
     );
 
     public final OrderDto INVALID_BDF_ORDER_DTO = new OrderDto(
-            VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID,
-            VALID_CUSTOMER_ID, VALID_CUSTOMER_ID, INVALID_ORDER_DATE, ACTIVE
+            INVALID_BDF_ORDER_ENTITY.getOrderId(),
+            INVALID_BDF_ORDER_ENTITY.getBarbershopId(),
+            INVALID_BDF_ORDER_ENTITY.getBarberId(),
+            INVALID_BDF_ORDER_ENTITY.getCustomerId(),
+            INVALID_BDF_ORDER_ENTITY.getOrderDate(),
+            INVALID_BDF_ORDER_ENTITY.getActive()
     );
 
 //    public final OrderDto ORDER_DTO_NOT_EXISTED_ID = new OrderDto(
@@ -163,7 +172,7 @@ public final class OrderTestConstants {
 
     public final String BDF_CV_TIME_FORMAT_ERR_MSG =
             "orderDate with time " + INVALID_BDF_ORDER_DTO.orderDate().
-                    toLocalTime() + " should hourly formatted";
+                    toLocalTime() + " should be hourly formatted";
 
 
 }
