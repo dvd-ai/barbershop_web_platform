@@ -47,11 +47,6 @@ public final class OrderTestConstants {
             VALID_CUSTOMER_ID, VALID_CUSTOMER_ID, INVALID_ORDER_DATE, ACTIVE
     );
 
-//    public final Order ORDER_ENTITY_NOT_EXISTED_ID = new Order(
-//            NOT_EXISTING_ORDER_ID, VALID_USER_ID,
-//            VALID_BARBERSHOP_ID, ACTIVE
-//    );
-
     public final OrderDto VALID_ORDER_DTO = new OrderDto(
             VALID_ORDER_ENTITY.getOrderId(), VALID_ORDER_ENTITY.getBarbershopId(),
             VALID_ORDER_ENTITY.getBarberId(), VALID_ORDER_ENTITY.getCustomerId(),
@@ -77,11 +72,6 @@ public final class OrderTestConstants {
             INVALID_BDF_ORDER_ENTITY.getOrderDate(),
             INVALID_BDF_ORDER_ENTITY.getActive()
     );
-
-//    public final OrderDto ORDER_DTO_NOT_EXISTED_ID = new OrderDto(
-//            NOT_EXISTING_ORDER_ID, VALID_USER_ID,
-//            VALID_BARBERSHOP_ID, ACTIVE
-//    );
 
     //note: barbershop should work at VALID_ORDER_DATE & the barber can work there
     public final List<Order> VALID_ORDER_ENTITY_LIST = List.of(
