@@ -37,8 +37,9 @@ public final class OrderTestConstants {
     );
 
     public final Order VALID_UPDATED_ORDER_ENTITY = new Order(
-            VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID + 2,
-            VALID_BARBER_ID + 1, VALID_CUSTOMER_ID, VALID_ORDER_DATE.plusDays(1L), ACTIVE
+            VALID_ORDER_ENTITY.getOrderId(), VALID_ORDER_ENTITY.getBarbershopId() + 1,
+            VALID_ORDER_ENTITY.getBarberId() + 1, VALID_ORDER_ENTITY.getCustomerId(),
+            VALID_ORDER_ENTITY.getOrderDate().plusDays(1L), VALID_ORDER_ENTITY.getActive()
     );
 
 //    public final Order ORDER_ENTITY_NOT_EXISTED_ID = new Order(
@@ -47,13 +48,15 @@ public final class OrderTestConstants {
 //    );
 
     public final OrderDto VALID_ORDER_DTO = new OrderDto(
-            VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID,
-            VALID_BARBER_ID, VALID_CUSTOMER_ID, VALID_ORDER_DATE, ACTIVE
+            VALID_ORDER_ENTITY.getOrderId(), VALID_ORDER_ENTITY.getBarbershopId(),
+            VALID_ORDER_ENTITY.getBarberId(), VALID_ORDER_ENTITY.getCustomerId(),
+            VALID_ORDER_ENTITY.getOrderDate(), VALID_ORDER_ENTITY.getActive()
     );
 
     public final OrderDto VALID_UPDATED_ORDER_DTO = new OrderDto(
-            VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID + 1,
-            VALID_BARBER_ID, VALID_CUSTOMER_ID, VALID_ORDER_DATE, ACTIVE
+            VALID_ORDER_ENTITY.getOrderId(), VALID_ORDER_ENTITY.getBarbershopId() + 1,
+            VALID_ORDER_ENTITY.getBarberId() + 1, VALID_ORDER_ENTITY.getCustomerId(),
+            VALID_ORDER_ENTITY.getOrderDate().plusDays(1L), VALID_ORDER_ENTITY.getActive()
     );
 
     public final OrderDto INVALID_ORDER_DTO = new OrderDto(
@@ -70,9 +73,6 @@ public final class OrderTestConstants {
 //            NOT_EXISTING_ORDER_ID, VALID_USER_ID,
 //            VALID_BARBERSHOP_ID, ACTIVE
 //    );
-
-    public final List<Long>barberIds = List.of(2L, 4L);
-    public final List<Long>customerIds = List.of(1L, 3L);
 
     //note: barbershop should work at VALID_ORDER_DATE & the barber can work there
     public final List<Order> VALID_ORDER_ENTITY_LIST = List.of(
@@ -97,19 +97,28 @@ public final class OrderTestConstants {
     //note: barbershop should work at VALID_ORDER_DATE & the barber can work there
     public final List<OrderDto> VALID_ORDER_DTO_LIST = List.of(
             new OrderDto(
-                    VALID_ORDER_ID, btc.VALID_BARBERSHOP_ID,
-                    barberIds.get(0), customerIds.get(0),
-                    VALID_ORDER_DATE, ACTIVE
+                    VALID_ORDER_ENTITY_LIST.get(0).getOrderId(),
+                    VALID_ORDER_ENTITY_LIST.get(0).getOrderId(),
+                    VALID_ORDER_ENTITY_LIST.get(0).getBarberId(),
+                    VALID_ORDER_ENTITY_LIST.get(0).getCustomerId(),
+                    VALID_ORDER_ENTITY_LIST.get(0).getOrderDate(),
+                    VALID_ORDER_ENTITY_LIST.get(0).getActive()
             ),
             new OrderDto(
-                    VALID_ORDER_ID + 1, btc.VALID_BARBERSHOP_ID,
-                    barberIds.get(0), customerIds.get(0),
-                    VALID_ORDER_DATE.plusDays(1L), ACTIVE
+                    VALID_ORDER_ENTITY_LIST.get(1).getOrderId(),
+                    VALID_ORDER_ENTITY_LIST.get(1).getOrderId(),
+                    VALID_ORDER_ENTITY_LIST.get(1).getBarberId(),
+                    VALID_ORDER_ENTITY_LIST.get(1).getCustomerId(),
+                    VALID_ORDER_ENTITY_LIST.get(1).getOrderDate(),
+                    VALID_ORDER_ENTITY_LIST.get(1).getActive()
             ),
             new OrderDto(
-                    VALID_ORDER_ID + 2, btc.VALID_BARBERSHOP_ID + 1,
-                    barberIds.get(1), customerIds.get(1),
-                    VALID_ORDER_DATE, ACTIVE
+                    VALID_ORDER_ENTITY_LIST.get(2).getOrderId(),
+                    VALID_ORDER_ENTITY_LIST.get(2).getOrderId(),
+                    VALID_ORDER_ENTITY_LIST.get(2).getBarberId(),
+                    VALID_ORDER_ENTITY_LIST.get(2).getCustomerId(),
+                    VALID_ORDER_ENTITY_LIST.get(2).getOrderDate(),
+                    VALID_ORDER_ENTITY_LIST.get(2).getActive()
             )
     );
 
