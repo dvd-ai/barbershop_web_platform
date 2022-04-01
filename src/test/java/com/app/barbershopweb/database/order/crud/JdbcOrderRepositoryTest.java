@@ -101,8 +101,7 @@ class JdbcOrderRepositoryTest extends AbstractJdbcRepositoryTest {
 
     @Test
     void getOrders() {
-        List<Order> noOrders = orderRepository.getOrders();
-        assertTrue(noOrders.isEmpty());
+        assertTrue(orderRepository.getOrders().isEmpty());
 
         usersRepository.addUser(utc.VALID_USER_ENTITY);
         usersRepository.addUser(utc.VALID_USER_ENTITY);
