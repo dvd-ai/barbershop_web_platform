@@ -11,12 +11,16 @@ import com.app.barbershopweb.workspace.Workspace;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.function.Function;
 
 public final class OrderReservationTestConstants {
 
     public static final String ORDER_RESERV_URL = "/orders/reservations";
     public static final String ORDER_RESERV_FILTER_URL = ORDER_RESERV_URL + "/filtered";
 
+    public final long BARBER_FILTER = 3L;
+
+    //SUOR - show unreserved orders request
     public final LocalDateTime SUOR_START_WEEK_DATE = LocalDateTime.of(2022, 3,
             28, 12, 30
     );
@@ -24,6 +28,10 @@ public final class OrderReservationTestConstants {
 
     public final ShowUnreservedOrdersRequestDto SUOR_DTO_NO_FILTERS = new ShowUnreservedOrdersRequestDto(
       1L, SUOR_START_WEEK_DATE, new OrderFilters()
+    );
+
+    public final ShowUnreservedOrdersRequestDto SUOR_DTO_WITH_FILTERS = new ShowUnreservedOrdersRequestDto(
+            1L, SUOR_START_WEEK_DATE, new OrderFilters(List.of(BARBER_FILTER))
     );
 
     public final ShowUnreservedOrdersRequestDto INVALID_SUOR_DTO_NO_FILTERS = new ShowUnreservedOrdersRequestDto(
@@ -70,16 +78,19 @@ public final class OrderReservationTestConstants {
                 LocalDateTime.of(2022, 4, 2, 15, 0),
                 true
         ),
-        new Order(3L, FK_BARBERSHOP_ENTITY_LIST.get(1).getId(),
-                FK_USER_ENTITY_LIST.get(3).getId(), null,
-                LocalDateTime.of(2022, 4, 2, 14, 0),
-                true
-        ),
-        new Order(4L, FK_BARBERSHOP_ENTITY_LIST.get(1).getId(),
+
+        new Order(3L, FK_BARBERSHOP_ENTITY_LIST.get(0).getId(),
                 FK_USER_ENTITY_LIST.get(2).getId(), null,
                 LocalDateTime.of(2022, 4, 3, 14, 0),
                 true
+        ),
+
+        new Order(4L, FK_BARBERSHOP_ENTITY_LIST.get(0).getId(),
+                FK_USER_ENTITY_LIST.get(3).getId(), null,
+                LocalDateTime.of(2022, 4, 2, 14, 0),
+                true
         )
+
     );
 
     public final List<OrderDto> UNRESERVED_ORDER_DTO_LIST = List.of(
@@ -116,6 +127,27 @@ public final class OrderReservationTestConstants {
                     UNRESERVED_ORDER_ENTITY_LIST.get(3).getActive()
             )
     );
+
+    public final List<Order> UNRESERVED_FILTERED_ORDER_ENTITY_LIST = UNRESERVED_ORDER_ENTITY_LIST
+            .stream()
+            .filter(i -> i.getBarberId().equals(BARBER_FILTER))
+            .toList();
+
+
+    private final Function<Order, OrderDto> mapToDto = item -> new OrderDto(
+            item.getOrderId(),
+            item.getBarbershopId(),
+            item.getBarberId(),
+            item.getCustomerId(),
+            item.getOrderDate(),
+            item.getActive()
+    );
+
+    public final List<OrderDto> UNRESERVED_FILTERED_ORDER_DTO_LIST = UNRESERVED_FILTERED_ORDER_ENTITY_LIST
+            .stream()
+            .map(mapToDto)
+            .toList();
+
 
 
     //CV means 'constraint violation'
