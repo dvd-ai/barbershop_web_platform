@@ -56,7 +56,7 @@ public class OrderReservationController {
     }
 
     @PutMapping()
-    public ResponseEntity<List<OrderDto>> reserveCustomerOrders(@RequestBody OrderReservationDto orderReservationDto) {
+    public ResponseEntity<List<OrderDto>> reserveCustomerOrders(@RequestBody @Valid OrderReservationDto orderReservationDto) {
         List<Order> reservedOrders =
                 orderReservationService.reserveCustomerOrders(
                         orderReservationDto.orderIds(),
