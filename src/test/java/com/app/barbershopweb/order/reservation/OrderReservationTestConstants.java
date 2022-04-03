@@ -102,6 +102,31 @@ public final class OrderReservationTestConstants {
 
     );
 
+    public final List<Order> NOT_SUITABLE_UNRESERVED_ORDER_ENTITY_LIST = List.of (
+            new Order(1L, FK_BARBERSHOP_ENTITY_LIST.get(0).getId(),
+                    FK_USER_ENTITY_LIST.get(2).getId(), null,
+                    LocalDateTime.of(2022, 4, 2, 14, 0),
+                    false
+            ),
+            new Order(2L, FK_BARBERSHOP_ENTITY_LIST.get(0).getId(),
+                    FK_USER_ENTITY_LIST.get(2).getId(), null,
+                    LocalDateTime.of(2021, 4, 2, 15, 0),
+                    true
+            ),
+
+            new Order(3L, FK_BARBERSHOP_ENTITY_LIST.get(0).getId(),
+                    FK_USER_ENTITY_LIST.get(2).getId(), 1L,
+                    LocalDateTime.of(2022, 4, 3, 14, 0),
+                    true
+            ),
+
+            new Order(4L, FK_BARBERSHOP_ENTITY_LIST.get(0).getId(),
+                    FK_USER_ENTITY_LIST.get(3).getId(), 2L,
+                    LocalDateTime.of(2022, 11, 2, 10, 0),
+                    false
+            )
+    );
+
     public final List<OrderDto> UNRESERVED_ORDER_DTO_LIST = List.of(
             new OrderDto(
                     UNRESERVED_ORDER_ENTITY_LIST.get(0).getOrderId(),

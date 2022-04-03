@@ -83,6 +83,29 @@ class JdbcOrderReservationRepoTest extends AbstractJdbcRepositoryTest {
     }
 
     @Test
+    @DisplayName("when there are no suitable orders (doesn't meet sql conditions), " +
+            "but they EXIST  " +
+            "- returns empty list")
+    void getAvailableOrdersNotSuitableOrders() {
+        assertTrue(
+                orderReservationRepository.getAvailableOrders(
+                        ortc.SUOR_DTO_NO_FILTERS.barbershopId(),
+                        ortc.SUOR_DTO_NO_FILTERS.startWeekDate()
+                ).isEmpty()
+        );
+
+        ortc.NOT_SUITABLE_UNRESERVED_ORDER_ENTITY_LIST.forEach(orderRepository::addOrder);
+
+        List<Order> availableOrders = orderReservationRepository.getAvailableOrders(
+                ortc.SUOR_DTO_NO_FILTERS.barbershopId(),
+                ortc.SUOR_DTO_NO_FILTERS.startWeekDate()
+        );
+
+        assertTrue(availableOrders.isEmpty());
+    }
+
+
+    @Test
     void getAvailableFilteredOrders() {
         assertTrue(
                 orderReservationRepository.getAvailableFilteredOrders(
@@ -109,6 +132,31 @@ class JdbcOrderReservationRepoTest extends AbstractJdbcRepositoryTest {
         assertTrue(ortc.UNRESERVED_FILTERED_ORDER_ENTITY_LIST.containsAll(filteredOrders));
 
     }
+
+    @Test
+    @DisplayName("when there are no suitable orders (doesn't meet sql conditions + filter), " +
+            "but they EXIST  " +
+            "- returns empty list")
+    void getFilteredAvailableOrdersNotSuitableOrders() {
+        assertTrue(
+                orderReservationRepository.getAvailableFilteredOrders(
+                        ortc.SUOR_DTO_WITH_FILTERS.barbershopId(),
+                        ortc.SUOR_DTO_WITH_FILTERS.startWeekDate(),
+                        ortc.SUOR_DTO_WITH_FILTERS.orderFilters().getBarberIds()
+                ).isEmpty()
+        );
+
+        ortc.NOT_SUITABLE_UNRESERVED_ORDER_ENTITY_LIST.forEach(orderRepository::addOrder);
+
+        List<Order> availableOrders = orderReservationRepository.getAvailableFilteredOrders(
+                ortc.SUOR_DTO_WITH_FILTERS.barbershopId(),
+                ortc.SUOR_DTO_WITH_FILTERS.startWeekDate(),
+                ortc.SUOR_DTO_WITH_FILTERS.orderFilters().getBarberIds()
+        );
+
+        assertTrue(availableOrders.isEmpty());
+    }
+
 
     @Test
     void reserveOrdersByOrderIdsAndByCustomerId() {
