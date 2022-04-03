@@ -2,9 +2,9 @@ package com.app.barbershopweb.order.reservation.service;
 
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.reservation.OrderReservationService;
+import com.app.barbershopweb.order.reservation.OrderReservationTestConstants;
 import com.app.barbershopweb.order.reservation.entity.OrderFilters;
 import com.app.barbershopweb.order.reservation.repository.OrderReservationRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,8 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,55 +27,48 @@ class OrderReservationServiceTest {
     @InjectMocks
     OrderReservationService orderReservationService;
 
-    static List<Order> orders = new ArrayList<>();
-
-    @BeforeAll
-    static void init() {
-        orders.add(new Order(1L, 1L,
-                1L, 1L, LocalDateTime.now(), true));
-        orders.add(new Order(2L, 2L,
-                2L, 2L, LocalDateTime.now(), true));
-        orders.add(new Order(3L, 3L,
-                        3L, 3L, LocalDateTime.now(), true));
-    }
+    OrderReservationTestConstants ortc = new OrderReservationTestConstants();
 
     @Test
     void getAvailableOrders() {
         when(orderReservationRepository
                 .getAvailableOrders(any(), any()))
-                .thenReturn(orders);
+                .thenReturn(ortc.UNRESERVED_ORDER_ENTITY_LIST);
 
         List<Order> unreservedOrdersForWeek = orderReservationService
                 .getAvailableOrders(
-                        1L, LocalDateTime.now()
+                        ortc.SUOR_DTO_NO_FILTERS.barbershopId(),
+                        ortc.SUOR_DTO_NO_FILTERS.startWeekDate()
                 );
 
-        assertEquals(orders.size(), unreservedOrdersForWeek.size());
-        assertEquals(orders, unreservedOrdersForWeek);
+        assertEquals(ortc.UNRESERVED_ORDER_ENTITY_LIST.size(), unreservedOrdersForWeek.size());
+        assertEquals(ortc.UNRESERVED_ORDER_ENTITY_LIST, unreservedOrdersForWeek);
     }
 
     @Test
-    @DisplayName("when order filters (barberIds) were specified returns filtered orders")
+    @DisplayName("when order filters (barberIds) were specified returns available filtered orders")
     void getAvailableFilteredOrders() {
         when(orderReservationRepository
                 .getAvailableFilteredOrders(
                         any(), any(), any()
                 )
         )
-                .thenReturn(orders);
+                .thenReturn(ortc.UNRESERVED_FILTERED_ORDER_ENTITY_LIST);
 
 
         List<Order> unreservedFilteredOrdersForWeek = orderReservationService
                 .getFilteredAvailableOrders(
-                        1L, LocalDateTime.now(), new OrderFilters(List.of(1L, 2L))
+                        ortc.SUOR_DTO_WITH_FILTERS.barbershopId(),
+                        ortc.SUOR_DTO_WITH_FILTERS.startWeekDate(),
+                        ortc.SUOR_DTO_WITH_FILTERS.orderFilters()
                 );
 
         verify(orderReservationRepository, times(0)).
                 getAvailableOrders(
                                 any(), any()
                         );
-        assertEquals(orders.size(), unreservedFilteredOrdersForWeek.size());
-        assertEquals(orders, unreservedFilteredOrdersForWeek);
+        assertEquals(ortc.UNRESERVED_FILTERED_ORDER_ENTITY_LIST.size(), unreservedFilteredOrdersForWeek.size());
+        assertEquals(ortc.UNRESERVED_FILTERED_ORDER_ENTITY_LIST, unreservedFilteredOrdersForWeek);
     }
 
     @Test
@@ -88,20 +79,22 @@ class OrderReservationServiceTest {
                         any(), any()
                 )
         )
-                .thenReturn(orders);
+                .thenReturn(ortc.UNRESERVED_ORDER_ENTITY_LIST);
 
 
         List<Order> unreservedFilteredOrdersForWeek = orderReservationService
                 .getFilteredAvailableOrders(
-                        1L, LocalDateTime.now(), new OrderFilters(List.of())
+                        ortc.SUOR_DTO_NO_FILTERS.barbershopId(),
+                        ortc.SUOR_DTO_NO_FILTERS.startWeekDate(),
+                        new OrderFilters(List.of())
                 );
 
         verify(orderReservationRepository, times(0)).
                 getAvailableFilteredOrders(
                         any(), any(), any()
                 );
-        assertEquals(orders.size(), unreservedFilteredOrdersForWeek.size());
-        assertEquals(orders, unreservedFilteredOrdersForWeek);
+        assertEquals(ortc.UNRESERVED_ORDER_ENTITY_LIST.size(), unreservedFilteredOrdersForWeek.size());
+        assertEquals(ortc.UNRESERVED_ORDER_ENTITY_LIST, unreservedFilteredOrdersForWeek);
     }
 
     @Test
@@ -109,14 +102,15 @@ class OrderReservationServiceTest {
         when(orderReservationRepository
                         .reserveOrdersByOrderIdsAndByCustomerId(any(), any())
         )
-                .thenReturn(orders);
+                .thenReturn(ortc.RESERVED_ORDER_ENTITY_LIST);
 
-        List<Order> unreservedFilteredOrdersForWeek = orderReservationService
+        List<Order> reservedFilteredOrdersForWeek = orderReservationService
                 .reserveCustomerOrders(
-                        List.of(1L, 2L), 1L
+                        ortc.VALID_ORDER_RESERV_DTO.orderIds(),
+                        ortc.VALID_ORDER_RESERV_DTO.customerId()
                 );
 
-        assertEquals(orders.size(), unreservedFilteredOrdersForWeek.size());
-        assertEquals(orders, unreservedFilteredOrdersForWeek);
+        assertEquals(ortc.RESERVED_ORDER_ENTITY_LIST.size(), reservedFilteredOrdersForWeek.size());
+        assertEquals(ortc.RESERVED_ORDER_ENTITY_LIST, reservedFilteredOrdersForWeek);
     }
 }
