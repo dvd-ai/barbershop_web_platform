@@ -80,7 +80,7 @@ class OrderReservationControllerReserveCusOrders {
     @DisplayName(
             """
             When fk violation (customerId) in the dto, returns 
-            status code 404 and error dto"
+            status code 404 and error dto
             """
     )
     void whenCustomerDoesntExist() throws Exception {
