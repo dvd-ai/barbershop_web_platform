@@ -28,7 +28,7 @@ public final class OrderReservationTestConstants {
 
 
     public final ShowUnreservedOrdersRequestDto SUOR_DTO_NO_FILTERS = new ShowUnreservedOrdersRequestDto(
-      1L, SUOR_START_WEEK_DATE, new OrderFilters()
+      1L, SUOR_START_WEEK_DATE, new OrderFilters(List.of())
     );
 
     public final ShowUnreservedOrdersRequestDto SUOR_DTO_WITH_FILTERS = new ShowUnreservedOrdersRequestDto(
