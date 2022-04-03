@@ -3,6 +3,7 @@ package com.app.barbershopweb.order.reservation;
 import com.app.barbershopweb.barbershop.Barbershop;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.OrderDto;
+import com.app.barbershopweb.order.reservation.dto.OrderReservationDto;
 import com.app.barbershopweb.order.reservation.dto.ShowUnreservedOrdersRequestDto;
 import com.app.barbershopweb.order.reservation.entity.OrderFilters;
 import com.app.barbershopweb.user.Users;
@@ -36,6 +37,14 @@ public final class OrderReservationTestConstants {
 
     public final ShowUnreservedOrdersRequestDto INVALID_SUOR_DTO_NO_FILTERS = new ShowUnreservedOrdersRequestDto(
             0L, null, null
+    );
+
+    public final OrderReservationDto INVALID_ORDER_RESERV_DTO = new OrderReservationDto(
+            List.of(), 0L
+    );
+
+    public final OrderReservationDto VALID_ORDER_RESERV_DTO = new OrderReservationDto(
+            List.of(1L, 2L, 3L), 1L
     );
 
     public final List<Users> FK_USER_ENTITY_LIST = List.of(
@@ -149,10 +158,67 @@ public final class OrderReservationTestConstants {
             .toList();
 
 
+    public final List<Order> RESERVED_ORDER_ENTITY_LIST = List.of(
+            new Order(
+                    UNRESERVED_ORDER_ENTITY_LIST.get(0).getOrderId(),
+                    UNRESERVED_ORDER_ENTITY_LIST.get(0).getBarbershopId(),
+                    UNRESERVED_ORDER_ENTITY_LIST.get(0).getBarberId(),
+                    VALID_ORDER_RESERV_DTO.customerId(),
+                    UNRESERVED_ORDER_ENTITY_LIST.get(0).getOrderDate(),
+                    UNRESERVED_ORDER_ENTITY_LIST.get(0).getActive()
+            ),
+            new Order(
+                    UNRESERVED_ORDER_ENTITY_LIST.get(1).getOrderId(),
+                    UNRESERVED_ORDER_ENTITY_LIST.get(1).getBarbershopId(),
+                    UNRESERVED_ORDER_ENTITY_LIST.get(1).getBarberId(),
+                    VALID_ORDER_RESERV_DTO.customerId(),
+                    UNRESERVED_ORDER_ENTITY_LIST.get(1).getOrderDate(),
+                    UNRESERVED_ORDER_ENTITY_LIST.get(1).getActive()
+            ),
+            new Order(
+                    UNRESERVED_ORDER_ENTITY_LIST.get(2).getOrderId(),
+                    UNRESERVED_ORDER_ENTITY_LIST.get(2).getBarbershopId(),
+                    UNRESERVED_ORDER_ENTITY_LIST.get(2).getBarberId(),
+                    VALID_ORDER_RESERV_DTO.customerId(),
+                    UNRESERVED_ORDER_ENTITY_LIST.get(2).getOrderDate(),
+                    UNRESERVED_ORDER_ENTITY_LIST.get(2).getActive()
+            )
+    );
+
+    public final List<OrderDto> RESERVED_ORDER_DTO_LIST = RESERVED_ORDER_ENTITY_LIST
+            .stream()
+            .map(mapToDto)
+            .toList()
+    ;
+
+
 
     //CV means 'constraint violation'
     public final String DTO_CV_ORDER_FILTERS_ERR_MSG = "'showUnreservedOrdersRequestDto.orderFilters' must not be null";
     public final String DTO_CV_BARBERSHOP_ID_ERR_MSG = "'showUnreservedOrdersRequestDto.barbershopId' must be greater than or equal to 1";
     public final String DTO_CV_START_WEEK_DATE_ERR_MSG = "'showUnreservedOrdersRequestDto.startWeekDate' must not be null";
+    public final String DTO_CV_CUSTOMER_ID_ERR_MSG = "'orderReservationDto.customerId' must be greater than or equal to 1";
+    public final String DTO_CV_ORDER_ID_LIST_ERR_MSG = "'orderReservationDto.orderIds' must not be empty";
+
+    public final String FK_CV_CUSTOMER_ID_ERR_MSG = "Customer with id " +
+            VALID_ORDER_RESERV_DTO.customerId() +
+            " wasn't found during order reservation";
+
+    public final List<String> FK_CV_ORDER_ID_LIST_ERR_MSG = VALID_ORDER_RESERV_DTO.orderIds()
+            .stream()
+            .map(id -> "Order with id " + id +  " wasn't found during order reservation")
+            .toList();
+
+    public final String UK_CV_CUSTOMER_ID_ORDER_DATE_ERR_MSG =
+            "uk violation during order reservation (" +
+                    "orderId " +  RESERVED_ORDER_ENTITY_LIST.get(0).getOrderId() + ") :" +
+                    " order with" +
+                    " customerId " + RESERVED_ORDER_ENTITY_LIST.get(0).getCustomerId() +
+                    " and orderDate " + RESERVED_ORDER_ENTITY_LIST.get(0).getOrderDate() +
+                    " already exists"
+    ;
+
+
+
 
 }
