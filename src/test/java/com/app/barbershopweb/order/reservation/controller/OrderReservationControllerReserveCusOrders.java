@@ -103,7 +103,7 @@ class OrderReservationControllerReserveCusOrders {
                 .andDo(print())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
                 .andExpect(jsonPath("$", aMapWithSize(1)))
-                .andExpect(jsonPath("$.errors", hasItem(ortc.DTO_CV_CUSTOMER_ID_ERR_MSG)))
+                .andExpect(jsonPath("$.errors", hasItem(ortc.FK_CV_CUSTOMER_ID_ERR_MSG)))
         ;
     }
 
