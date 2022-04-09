@@ -31,8 +31,8 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderDto> getOrderByOrderId(@PathVariable @Min(1) Long orderId) {
-        Order order = orderService.findOrderByOrderId(orderId)
+    public ResponseEntity<OrderDto> getOrder(@PathVariable @Min(1) Long orderId) {
+        Order order = orderService.findOrder(orderId)
                 .orElseThrow(() ->
                         new NotFoundException(
                                 List.of("Order with orderId '" + orderId + "' not found.")
@@ -60,8 +60,8 @@ public class OrderController {
     }
 
     @DeleteMapping("/{orderId}")
-    public ResponseEntity<Object> deleteOrderByOrderId(@PathVariable @Min(1) Long orderId) {
-        orderService.deleteOrderByOrderId(orderId);
+    public ResponseEntity<Object> deleteOrder(@PathVariable @Min(1) Long orderId) {
+        orderService.deleteOrder(orderId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

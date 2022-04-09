@@ -2,7 +2,6 @@ package com.app.barbershopweb.barbershop.service;
 
 import com.app.barbershopweb.barbershop.Barbershop;
 import com.app.barbershopweb.barbershop.BarbershopService;
-import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import com.app.barbershopweb.barbershop.repository.BarbershopRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,9 +12,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static com.app.barbershopweb.barbershop.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
+import static com.app.barbershopweb.barbershop.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_UPDATED_ENTITY;
+import static com.app.barbershopweb.barbershop.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOP_VALID_BARBERSHOP_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,56 +29,55 @@ class BarbershopServiceTest {
     @InjectMocks
     BarbershopService barbershopService;
 
-    BarbershopTestConstants btc = new BarbershopTestConstants();
 
     @Test
     void addBarbershop() {
-        when(barbershopRepository.addBarbershop(any()))
-                .thenReturn(btc.VALID_BARBERSHOP_ID);
+        when(barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY))
+                .thenReturn(BARBERSHOP_VALID_BARBERSHOP_ID);
 
-        Long id = barbershopService.addBarbershop(btc.VALID_BARBERSHOP_ENTITY);
+        Long id = barbershopService.addBarbershop(BARBERSHOP_VALID_ENTITY);
 
-        assertEquals(btc.VALID_BARBERSHOP_ID, id);
+        assertEquals(BARBERSHOP_VALID_BARBERSHOP_ID, id);
     }
 
     @Test
     void deleteBarbershopById() {
-        barbershopService.deleteBarbershopById(btc.VALID_BARBERSHOP_ID);
-        verify(barbershopRepository, times(1)).deleteBarbershopById(any());
+        barbershopService.deleteBarbershopById(BARBERSHOP_VALID_BARBERSHOP_ID);
+        verify(barbershopRepository, times(1)).deleteBarbershopById(BARBERSHOP_VALID_BARBERSHOP_ID);
     }
 
     @Test
     void updateBarbershop() {
-        when(barbershopRepository.updateBarbershop(any()))
-                .thenReturn(Optional.of(btc.VALID_UPDATED_BARBERSHOP_ENTITY));
+        when(barbershopRepository.updateBarbershop(BARBERSHOP_VALID_UPDATED_ENTITY))
+                .thenReturn(Optional.of(BARBERSHOP_VALID_UPDATED_ENTITY));
 
         Optional<Barbershop> barbershopUpdOptional = barbershopService
-                .updateBarbershop(btc.VALID_UPDATED_BARBERSHOP_ENTITY);
+                .updateBarbershop(BARBERSHOP_VALID_UPDATED_ENTITY);
 
         assertTrue(barbershopUpdOptional.isPresent());
-        assertEquals(btc.VALID_UPDATED_BARBERSHOP_ENTITY, barbershopUpdOptional.get());
+        assertEquals(BARBERSHOP_VALID_UPDATED_ENTITY, barbershopUpdOptional.get());
     }
 
     @Test
     void findBarbershopById() {
-        when(barbershopRepository.findBarbershopById(any()))
-                .thenReturn(Optional.of(btc.VALID_BARBERSHOP_ENTITY));
+        when(barbershopRepository.findBarbershopById(BARBERSHOP_VALID_BARBERSHOP_ID))
+                .thenReturn(Optional.of(BARBERSHOP_VALID_ENTITY));
 
         Optional<Barbershop> foundBarbershopOpt = barbershopService
-                .findBarbershopById(btc.VALID_BARBERSHOP_ID);
+                .findBarbershopById(BARBERSHOP_VALID_BARBERSHOP_ID);
 
         assertTrue(foundBarbershopOpt.isPresent());
-        assertEquals(btc.VALID_BARBERSHOP_ENTITY, foundBarbershopOpt.get());
+        assertEquals(BARBERSHOP_VALID_ENTITY, foundBarbershopOpt.get());
     }
 
     @Test
     void getBarbershops() {
         when(barbershopRepository.getBarbershops())
-                .thenReturn(btc.VALID_BARBERSHOP_ENTITY_LIST);
+                .thenReturn(BARBERSHOP_VALID_ENTITY_LIST);
 
         List<Barbershop> barbershops = barbershopService.getBarbershops();
 
-        assertEquals(btc.VALID_BARBERSHOP_ENTITY_LIST.size(), barbershops.size());
-        assertEquals(btc.VALID_BARBERSHOP_ENTITY_LIST, barbershops);
+        assertEquals(BARBERSHOP_VALID_ENTITY_LIST.size(), barbershops.size());
+        assertEquals(BARBERSHOP_VALID_ENTITY_LIST, barbershops);
     }
 }

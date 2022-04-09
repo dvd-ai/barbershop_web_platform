@@ -5,7 +5,6 @@ import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.order.crud.OrderController;
 import com.app.barbershopweb.order.crud.OrderConverter;
 import com.app.barbershopweb.order.crud.OrderService;
-import com.app.barbershopweb.order.crud.OrderTestConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,13 +18,21 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
-import static com.app.barbershopweb.order.crud.OrderTestConstants.ORDERS_URL;
+import static com.app.barbershopweb.order.crud.constants.OrderDto__TestConstants.ORDER_VALID_UPDATED_DTO;
+import static com.app.barbershopweb.order.crud.constants.OrderEntity__TestConstants.ORDER_VALID_UPDATED_ENTITY;
+import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.ORDERS_URL;
+import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.ORDER_FIELD_AMOUNT;
+import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Business_TestConstants.*;
+import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Fk__TestConstants.ORDER_ERR_FK_BARBER_ID;
+import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Fk__TestConstants.ORDER_ERR_FK_CUSTOMER_ID;
+import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Uk__TestConstants.ORDER_ERR_UK_BARBER_ID__ORDER_DATE;
+import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Uk__TestConstants.ORDER_ERR_UK_CUSTOMER_ID__ORDER_DATE;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @WebMvcTest(OrderController.class)
@@ -44,45 +51,25 @@ class OrderControllerUpdateOrderTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    private final OrderTestConstants otc = new OrderTestConstants();
-
-    @DisplayName("when order dto isn't valid " +
-            "returns status code 400 & error dto")
-    @Test
-    void whenOrderDtoNotValid() throws Exception {
-        String json = objectMapper.writeValueAsString(
-                otc.INVALID_ORDER_DTO
-        );
-
-        mockMvc
-                .perform(put(ORDERS_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors").isArray())
-                .andExpect(jsonPath("$.errors", hasSize(4)))
-                .andExpect(jsonPath("$.errors", hasItem(otc.DTO_CV_BARBERSHOP_ID_ERR_MSG)))
-                .andExpect(jsonPath("$.errors", hasItem(otc.DTO_CV_ORDER_ID_ERR_MSG)))
-                .andExpect(jsonPath("$.errors", hasItem(otc.DTO_CV_CUSTOMER_ID_ERR_MSG)))
-                .andExpect(jsonPath("$.errors", hasItem(otc.DTO_CV_BARBER_ID_ERR_MSG)));
-    }
 
     @DisplayName("when order dto violates db fk constraints " +
             "returns status code 404 & error dto")
     @Test
     void whenOrderDtoViolatesDbFkConstraints() throws Exception {
         String json = objectMapper.writeValueAsString(
-                otc.VALID_UPDATED_ORDER_DTO
+                ORDER_VALID_UPDATED_DTO
         );
 
-        when(orderConverter.mapToEntity(any())).thenReturn(
-                otc.VALID_UPDATED_ORDER_ENTITY);
+        when(orderConverter.mapToEntity(ORDER_VALID_UPDATED_DTO))
+                .thenReturn(
+                        ORDER_VALID_UPDATED_ENTITY
+                );
 
-        when(orderService.updateOrder(any())).thenThrow(
+        when(orderService.updateOrder(ORDER_VALID_UPDATED_ENTITY)).thenThrow(
                 new NotFoundException(
                         List.of(
-                                otc.FK_CV_BARBER_ID_ERR_MSG,
-                                otc.FK_CV_CUSTOMER_ID_ERR_MSG
+                                ORDER_ERR_FK_BARBER_ID,
+                                ORDER_ERR_FK_CUSTOMER_ID
                         )
                 )
         );
@@ -94,8 +81,8 @@ class OrderControllerUpdateOrderTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(2)))
-                .andExpect(jsonPath("$.errors", hasItem(otc.FK_CV_BARBER_ID_ERR_MSG)))
-                .andExpect(jsonPath("$.errors", hasItem(otc.FK_CV_CUSTOMER_ID_ERR_MSG)));
+                .andExpect(jsonPath("$.errors", hasItem(ORDER_ERR_FK_BARBER_ID)))
+                .andExpect(jsonPath("$.errors", hasItem(ORDER_ERR_FK_CUSTOMER_ID)));
     }
 
     @DisplayName("when order dto violates db uk constraints " +
@@ -103,17 +90,17 @@ class OrderControllerUpdateOrderTest {
     @Test
     void whenOrderDtoViolatesDbUkConstraints() throws Exception {
         String json = objectMapper.writeValueAsString(
-                otc.VALID_UPDATED_ORDER_DTO
+                ORDER_VALID_UPDATED_DTO
         );
 
-        when(orderConverter.mapToEntity(any())).thenReturn(
-                otc.VALID_UPDATED_ORDER_ENTITY);
+        when(orderConverter.mapToEntity(ORDER_VALID_UPDATED_DTO)).thenReturn(
+                ORDER_VALID_UPDATED_ENTITY);
 
-        when(orderService.updateOrder(any())).thenThrow(
+        when(orderService.updateOrder(ORDER_VALID_UPDATED_ENTITY)).thenThrow(
                 new DbUniqueConstraintsViolationException(
                         List.of(
-                                otc.UK_CV_BARBER_ID_ORDER_DATE_ERR_MSG,
-                                otc.UK_CV_CUSTOMER_ID_ORDER_DATE_ERR_MSG
+                                ORDER_ERR_UK_BARBER_ID__ORDER_DATE,
+                                ORDER_ERR_UK_CUSTOMER_ID__ORDER_DATE
                         )
                 )
         );
@@ -125,8 +112,8 @@ class OrderControllerUpdateOrderTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(2)))
-                .andExpect(jsonPath("$.errors", hasItem(otc.UK_CV_BARBER_ID_ORDER_DATE_ERR_MSG)))
-                .andExpect(jsonPath("$.errors", hasItem(otc.UK_CV_CUSTOMER_ID_ORDER_DATE_ERR_MSG)));
+                .andExpect(jsonPath("$.errors", hasItem(ORDER_ERR_UK_BARBER_ID__ORDER_DATE)))
+                .andExpect(jsonPath("$.errors", hasItem(ORDER_ERR_UK_CUSTOMER_ID__ORDER_DATE)));
     }
 
     @DisplayName("when order dto violates business data format " +
@@ -134,18 +121,18 @@ class OrderControllerUpdateOrderTest {
     @Test
     void whenOrderDtoViolatesBusinessDataFormat() throws Exception {
         String json = objectMapper.writeValueAsString(
-                otc.VALID_UPDATED_ORDER_DTO
+                ORDER_VALID_UPDATED_DTO
         );
 
-        when(orderConverter.mapToEntity(any())).thenReturn(
-                otc.VALID_UPDATED_ORDER_ENTITY);
+        when(orderConverter.mapToEntity(ORDER_VALID_UPDATED_DTO)).thenReturn(
+                ORDER_VALID_UPDATED_ENTITY);
 
-        when(orderService.updateOrder(any())).thenThrow(
+        when(orderService.updateOrder(ORDER_VALID_UPDATED_ENTITY)).thenThrow(
                 new DbUniqueConstraintsViolationException(
                         List.of(
-                                otc.BDF_CV_TIME_FORMAT_ERR_MSG,
-                                otc.BDF_CV_BARBERSHOP_HOURS_ERR_MSG,
-                                otc.BDF_CV_CUSTOMER_ID_BARBER_ID_EQ_ERR_MSG
+                                ORDER_ERR_BUSINESS_TIME_FORMAT,
+                                ORDER_ERR_BUSINESS_BARBERSHOP_HOURS,
+                                ORDER_ERR_BUSINESS_CUSTOMER_ID_BARBER_ID
                         )
                 )
         );
@@ -157,28 +144,27 @@ class OrderControllerUpdateOrderTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(3)))
-                .andExpect(jsonPath("$.errors", hasItem(otc.BDF_CV_TIME_FORMAT_ERR_MSG)))
-                .andExpect(jsonPath("$.errors", hasItem(otc.BDF_CV_BARBERSHOP_HOURS_ERR_MSG)))
-                .andExpect(jsonPath("$.errors", hasItem(otc.BDF_CV_CUSTOMER_ID_BARBER_ID_EQ_ERR_MSG)));
+                .andExpect(jsonPath("$.errors", hasItem(ORDER_ERR_BUSINESS_TIME_FORMAT)))
+                .andExpect(jsonPath("$.errors", hasItem(ORDER_ERR_BUSINESS_BARBERSHOP_HOURS)))
+                .andExpect(jsonPath("$.errors", hasItem(ORDER_ERR_BUSINESS_CUSTOMER_ID_BARBER_ID)));
     }
-
 
 
     @DisplayName("after saving order entity returns its id and status code 201")
     @Test
     void shouldAddOrder() throws Exception {
         String json = objectMapper.writeValueAsString(
-                otc.VALID_UPDATED_ORDER_DTO
+                ORDER_VALID_UPDATED_DTO
         );
 
-        when(orderConverter.mapToEntity(any())).thenReturn(
-                otc.VALID_UPDATED_ORDER_ENTITY
+        when(orderConverter.mapToEntity(ORDER_VALID_UPDATED_DTO)).thenReturn(
+                ORDER_VALID_UPDATED_ENTITY
         );
-        when(orderService.updateOrder(any())).thenReturn(
-                Optional.of(otc.VALID_UPDATED_ORDER_ENTITY)
+        when(orderService.updateOrder(ORDER_VALID_UPDATED_ENTITY)).thenReturn(
+                Optional.of(ORDER_VALID_UPDATED_ENTITY)
         );
-        when(orderConverter.mapToDto(any())).thenReturn(
-                otc.VALID_UPDATED_ORDER_DTO
+        when(orderConverter.mapToDto(ORDER_VALID_UPDATED_ENTITY)).thenReturn(
+                ORDER_VALID_UPDATED_DTO
         );
 
         mockMvc
@@ -188,13 +174,13 @@ class OrderControllerUpdateOrderTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.orderId", is(otc.VALID_UPDATED_ORDER_DTO.orderId().intValue())))
-                .andExpect(jsonPath("$.barberId", is(otc.VALID_UPDATED_ORDER_DTO.barberId().intValue())))
-                .andExpect(jsonPath("$.customerId", is(otc.VALID_UPDATED_ORDER_DTO.customerId().intValue())))
-                .andExpect(jsonPath("$.barbershopId", is(otc.VALID_UPDATED_ORDER_DTO.barbershopId().intValue())))
-                .andExpect(jsonPath("$.active", is(otc.VALID_UPDATED_ORDER_DTO.active())))
-                .andExpect(jsonPath("$.orderDate", is(otc.VALID_UPDATED_ORDER_DTO.orderDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))))
+                .andExpect(jsonPath("$.orderId", is(ORDER_VALID_UPDATED_DTO.orderId().intValue())))
+                .andExpect(jsonPath("$.barberId", is(ORDER_VALID_UPDATED_DTO.barberId().intValue())))
+                .andExpect(jsonPath("$.customerId", is(ORDER_VALID_UPDATED_DTO.customerId().intValue())))
+                .andExpect(jsonPath("$.barbershopId", is(ORDER_VALID_UPDATED_DTO.barbershopId().intValue())))
+                .andExpect(jsonPath("$.active", is(ORDER_VALID_UPDATED_DTO.active())))
+                .andExpect(jsonPath("$.orderDate", is(ORDER_VALID_UPDATED_DTO.orderDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))))
 
-                .andExpect(jsonPath("$", aMapWithSize(otc.ORDER_FIELD_AMOUNT)));
+                .andExpect(jsonPath("$", aMapWithSize(ORDER_FIELD_AMOUNT)));
     }
 }

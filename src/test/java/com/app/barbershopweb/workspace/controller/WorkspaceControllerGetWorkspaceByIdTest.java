@@ -3,20 +3,22 @@ package com.app.barbershopweb.workspace.controller;
 import com.app.barbershopweb.workspace.WorkspaceController;
 import com.app.barbershopweb.workspace.WorkspaceConverter;
 import com.app.barbershopweb.workspace.WorkspaceService;
-import com.app.barbershopweb.workspace.WorkspaceTestConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import static com.app.barbershopweb.workspace.WorkspaceTestConstants.WORKSPACES_URL;
+import static com.app.barbershopweb.workspace.constants.WorkspaceDto__TestConstants.WORKSPACE_VALID_DTO;
+import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_ENTITY;
+import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.*;
+import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMessage_PathVar__TestConstants.WORKSPACE_ERR_INVALID_PATH_VAR_WORKSPACE_ID;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -25,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(WorkspaceController.class)
 @DisplayName("Testing GET: " + WORKSPACES_URL + "/" + "{workspaceId}")
+@ExtendWith(MockitoExtension.class)
 class WorkspaceControllerGetWorkspaceByIdTest {
 
     @Autowired
@@ -36,20 +39,19 @@ class WorkspaceControllerGetWorkspaceByIdTest {
     @MockBean
     WorkspaceConverter workspaceConverter;
 
-    WorkspaceTestConstants wtc = new WorkspaceTestConstants();
 
     @DisplayName("When path variable input 'workspaceId' isn't valid" +
             " returns status code 400 (BAD_REQUEST) & error dto")
     @Test
     void whenWorkspaceIdNotValid() throws Exception {
         mockMvc
-                .perform(get(WORKSPACES_URL + "/" + wtc.INVALID_WORKSPACE_ID))
+                .perform(get(WORKSPACES_URL + "/" + WORKSPACE_INVALID_WORKSPACE_ID))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$", aMapWithSize(1)))
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
-                .andExpect(jsonPath("$.errors[0]", is(wtc.PV_WORKSPACE_ID_ERR_MSG)));
+                .andExpect(jsonPath("$.errors[0]", is(WORKSPACE_ERR_INVALID_PATH_VAR_WORKSPACE_ID)));
     }
 
     @DisplayName("when there's no workspace with id 'workspaceId' " +
@@ -57,36 +59,36 @@ class WorkspaceControllerGetWorkspaceByIdTest {
     @Test
     void whenNotExistedWorkspaceId() throws Exception {
         mockMvc
-                .perform(get(WORKSPACES_URL + "/" + wtc.NOT_EXISTED_WORKSPACE_ID))
+                .perform(get(WORKSPACES_URL + "/" + WORKSPACE_NOT_EXISTED_WORKSPACE_ID))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$", aMapWithSize(1)))
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
                 .andExpect(jsonPath("$.errors[0]", is(
-                        "Workspace with id '" + wtc.NOT_EXISTED_WORKSPACE_ID + "' not found.")
+                        "Workspace with id '" + WORKSPACE_NOT_EXISTED_WORKSPACE_ID + "' not found.")
                 ));
     }
 
     @DisplayName("returns corresponding workspace dto")
     @Test
     void shouldReturnWorkspace() throws Exception {
-        when(workspaceService.findWorkspaceById(any())).thenReturn(
-                Optional.of(wtc.VALID_WORKSPACE_ENTITY)
+        when(workspaceService.findWorkspaceById(WORKSPACE_VALID_WORKSPACE_ID)).thenReturn(
+                Optional.of(WORKSPACE_VALID_ENTITY)
         );
-        when(workspaceConverter.mapToDto(any())).thenReturn(
-                wtc.VALID_WORKSPACE_DTO
+        when(workspaceConverter.mapToDto(WORKSPACE_VALID_ENTITY)).thenReturn(
+                WORKSPACE_VALID_DTO
         );
 
         mockMvc
-                .perform(get(WORKSPACES_URL+ "/" + wtc.VALID_WORKSPACE_ID))
+                .perform(get(WORKSPACES_URL + "/" + WORKSPACE_VALID_WORKSPACE_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.barbershopId",  is(wtc.VALID_WORKSPACE_DTO.barbershopId().intValue())))
-                .andExpect(jsonPath("$.workspaceId", is(wtc.VALID_WORKSPACE_DTO.workspaceId().intValue())))
-                .andExpect(jsonPath("$.userId", is(wtc.VALID_WORKSPACE_DTO.userId().intValue())))
-                .andExpect(jsonPath("$.active", is(wtc.VALID_WORKSPACE_DTO.active())))
+                .andExpect(jsonPath("$.barbershopId", is(WORKSPACE_VALID_DTO.barbershopId().intValue())))
+                .andExpect(jsonPath("$.workspaceId", is(WORKSPACE_VALID_DTO.workspaceId().intValue())))
+                .andExpect(jsonPath("$.userId", is(WORKSPACE_VALID_DTO.userId().intValue())))
+                .andExpect(jsonPath("$.active", is(WORKSPACE_VALID_DTO.active())))
 
-                .andExpect(jsonPath("$", aMapWithSize(wtc.WORKSPACE_FIELD_AMOUNT)));
+                .andExpect(jsonPath("$", aMapWithSize(WORKSPACE_FIELD_AMOUNT)));
     }
 }

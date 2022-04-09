@@ -3,22 +3,26 @@ package com.app.barbershopweb.order.crud.converter;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.OrderConverter;
 import com.app.barbershopweb.order.crud.OrderDto;
-import com.app.barbershopweb.order.crud.OrderTestConstants;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.app.barbershopweb.order.crud.constants.OrderDto__TestConstants.ORDER_VALID_DTO;
+import static com.app.barbershopweb.order.crud.constants.OrderEntity__TestConstants.ORDER_VALID_ENTITY;
+import static com.app.barbershopweb.order.crud.constants.OrderList__TestConstants.ORDER_VALID_DTO_LIST;
+import static com.app.barbershopweb.order.crud.constants.OrderList__TestConstants.ORDER_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.ORDER_FIELD_AMOUNT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class OrderConverterTest {
 
     private final OrderConverter orderConverter = new OrderConverter();
-    private final OrderTestConstants otc = new OrderTestConstants();
+
 
     @Test
     void orderDtoListToEntityList() {
 
-        List<Order> orders = otc.VALID_ORDER_DTO_LIST.stream()
+        List<Order> orders = ORDER_VALID_DTO_LIST.stream()
                 .map(dto -> new Order(
                         dto.orderId(),
                         dto.barbershopId(),
@@ -32,14 +36,14 @@ class OrderConverterTest {
         assertEquals(
                 orders,
                 orderConverter.orderDtoListToEntityList(
-                        otc.VALID_ORDER_DTO_LIST
+                        ORDER_VALID_DTO_LIST
                 )
         );
     }
 
     @Test
     void orderEntityListToDtoList() {
-        List<OrderDto> dtos = otc.VALID_ORDER_ENTITY_LIST.stream()
+        List<OrderDto> dtos = ORDER_VALID_ENTITY_LIST.stream()
                 .map(entity -> new OrderDto(
                         entity.getOrderId(),
                         entity.getBarbershopId(),
@@ -53,7 +57,7 @@ class OrderConverterTest {
         assertEquals(
                 dtos,
                 orderConverter.orderEntityListToDtoList(
-                        otc.VALID_ORDER_ENTITY_LIST
+                        ORDER_VALID_ENTITY_LIST
                 )
         );
     }
@@ -61,21 +65,21 @@ class OrderConverterTest {
     @Test
     void mapToEntity() {
         assertEquals(
-                otc.VALID_ORDER_ENTITY,
-                orderConverter.mapToEntity(otc.VALID_ORDER_DTO)
+                ORDER_VALID_ENTITY,
+                orderConverter.mapToEntity(ORDER_VALID_DTO)
         );
     }
 
     @Test
     void mapToDto() {
         assertEquals(
-                otc.VALID_ORDER_DTO,
-                orderConverter.mapToDto(otc.VALID_ORDER_ENTITY)
+                ORDER_VALID_DTO,
+                orderConverter.mapToDto(ORDER_VALID_ENTITY)
         );
     }
 
     @Test
     void actualFieldAmount() {
-        assertEquals(otc.ORDER_FIELD_AMOUNT, Order.class.getDeclaredFields().length);
+        assertEquals(ORDER_FIELD_AMOUNT, Order.class.getDeclaredFields().length);
     }
 }

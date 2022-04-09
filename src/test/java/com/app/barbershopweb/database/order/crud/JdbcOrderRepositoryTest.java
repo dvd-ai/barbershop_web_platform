@@ -1,59 +1,51 @@
 package com.app.barbershopweb.database.order.crud;
 
-import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
-import com.app.barbershopweb.database.AbstractJdbcRepositoryTest;
+import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.Order;
-import com.app.barbershopweb.order.crud.OrderTestConstants;
 import com.app.barbershopweb.order.crud.repository.JdbcOrderRepository;
-import com.app.barbershopweb.user.UserTestConstants;
 import com.app.barbershopweb.user.repository.JdbcUsersRepository;
-import com.app.barbershopweb.workspace.WorkspaceTestConstants;
 import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
-import org.junit.jupiter.api.*;
-
-import javax.sql.DataSource;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
 
+import static com.app.barbershopweb.barbershop.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
+import static com.app.barbershopweb.order.crud.constants.OrderEntity__TestConstants.ORDER_VALID_ENTITY;
+import static com.app.barbershopweb.order.crud.constants.OrderEntity__TestConstants.ORDER_VALID_UPDATED_ENTITY;
+import static com.app.barbershopweb.order.crud.constants.OrderList__TestConstants.ORDER_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.*;
+import static com.app.barbershopweb.user.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_ENTITY;
+import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_ENTITY_LIST;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("jdbc order repository test without error handling")
-class JdbcOrderRepositoryTest extends AbstractJdbcRepositoryTest {
+class JdbcOrderRepositoryTest extends AbstractIT {
 
-    static JdbcWorkspaceRepository workspaceRepository;
-    static JdbcBarbershopRepository barbershopRepository;
-    static JdbcUsersRepository usersRepository;
-    static JdbcOrderRepository orderRepository;
+    @Autowired
+    JdbcWorkspaceRepository workspaceRepository;
+    @Autowired
+    JdbcBarbershopRepository barbershopRepository;
+    @Autowired
+    JdbcUsersRepository usersRepository;
+    @Autowired
+    JdbcOrderRepository orderRepository;
 
-    WorkspaceTestConstants wtc = new WorkspaceTestConstants();
-    UserTestConstants utc = new UserTestConstants();
-    BarbershopTestConstants btc = new BarbershopTestConstants();
-    OrderTestConstants otc = new OrderTestConstants();
-
-    @BeforeAll
-    static void init() {
-        DataSource ds = getDataSource();
-        barbershopRepository = new JdbcBarbershopRepository(ds);
-        usersRepository = new JdbcUsersRepository(ds);
-        workspaceRepository = new JdbcWorkspaceRepository(
-                ds, usersRepository, barbershopRepository
-        );
-        orderRepository = new JdbcOrderRepository(
-                ds, usersRepository,
-                barbershopRepository, workspaceRepository
-        );
-    }
 
     @BeforeEach
     void initFks() {
-        barbershopRepository.addBarbershop(btc.VALID_BARBERSHOP_ENTITY);
-        barbershopRepository.addBarbershop(btc.VALID_BARBERSHOP_ENTITY);
-        usersRepository.addUser(utc.VALID_USER_ENTITY);
-        usersRepository.addUser(utc.VALID_USER_ENTITY);
-        workspaceRepository.addWorkspace(wtc.VALID_WORKSPACE_ENTITY);
-        workspaceRepository.addWorkspace(wtc.VALID_WORKSPACE_ENTITY_LIST.get(1));
+        barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
+        barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
+        usersRepository.addUser(USERS_VALID_ENTITY);
+        usersRepository.addUser(USERS_VALID_ENTITY);
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(1));
     }
 
     @AfterEach
@@ -65,72 +57,71 @@ class JdbcOrderRepositoryTest extends AbstractJdbcRepositoryTest {
     }
 
 
-
     @Test
     void addOrder() {
-        Long id = orderRepository.addOrder(otc.VALID_ORDER_ENTITY);
+        Long id = orderRepository.addOrder(ORDER_VALID_ENTITY);
 
         assertTrue(id > 0);
     }
 
     @Test
-    void findOrderByOrderId() {
-        assertTrue(orderRepository.findOrderByOrderId(otc.VALID_ORDER_ID).isEmpty());
+    void findOrder() {
+        assertTrue(orderRepository.findOrder(ORDER_VALID_ORDER_ID).isEmpty());
 
-        Long id = orderRepository.addOrder(otc.VALID_ORDER_ENTITY);
-        Optional<Order> foundOrderOpt = orderRepository.findOrderByOrderId(id);
+        Long id = orderRepository.addOrder(ORDER_VALID_ENTITY);
+        Optional<Order> foundOrderOpt = orderRepository.findOrder(id);
 
         assertTrue(foundOrderOpt.isPresent());
-        assertEquals(otc.VALID_ORDER_ENTITY, foundOrderOpt.get());
+        assertEquals(ORDER_VALID_ENTITY, foundOrderOpt.get());
     }
 
     @Test
     void updateOrder() {
-        usersRepository.addUser(utc.VALID_USER_ENTITY);
-        barbershopRepository.addBarbershop(btc.VALID_BARBERSHOP_ENTITY);
-        workspaceRepository.addWorkspace(wtc.VALID_WORKSPACE_ENTITY_LIST.get(2));
+        usersRepository.addUser(USERS_VALID_ENTITY);
+        barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(2));
 
-        orderRepository.addOrder(otc.VALID_ORDER_ENTITY);
+        orderRepository.addOrder(ORDER_VALID_ENTITY);
         Optional<Order> updOrderOpt = orderRepository.updateOrder(
-                otc.VALID_UPDATED_ORDER_ENTITY
+                ORDER_VALID_UPDATED_ENTITY
         );
 
         assertTrue(updOrderOpt.isPresent());
-        assertEquals(otc.VALID_UPDATED_ORDER_ENTITY, updOrderOpt.get());
+        assertEquals(ORDER_VALID_UPDATED_ENTITY, updOrderOpt.get());
     }
 
     @Test
     void getOrders() {
         assertTrue(orderRepository.getOrders().isEmpty());
 
-        usersRepository.addUser(utc.VALID_USER_ENTITY);
-        usersRepository.addUser(utc.VALID_USER_ENTITY);
-        barbershopRepository.addBarbershop(btc.VALID_BARBERSHOP_ENTITY);
-        workspaceRepository.addWorkspace(wtc.VALID_WORKSPACE_ENTITY_LIST.get(2));
+        usersRepository.addUser(USERS_VALID_ENTITY);
+        usersRepository.addUser(USERS_VALID_ENTITY);
+        barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(2));
 
-        orderRepository.addOrder(otc.VALID_ORDER_ENTITY_LIST.get(0));
-        orderRepository.addOrder(otc.VALID_ORDER_ENTITY_LIST.get(1));
-        orderRepository.addOrder(otc.VALID_ORDER_ENTITY_LIST.get(2));
+        orderRepository.addOrder(ORDER_VALID_ENTITY_LIST.get(0));
+        orderRepository.addOrder(ORDER_VALID_ENTITY_LIST.get(1));
+        orderRepository.addOrder(ORDER_VALID_ENTITY_LIST.get(2));
 
         List<Order> orders = orderRepository.getOrders();
 
-        assertEquals(otc.VALID_ORDER_ENTITY_LIST.size(), orders.size());
-        assertEquals(otc.VALID_ORDER_ENTITY_LIST, orders);
+        assertEquals(ORDER_VALID_ENTITY_LIST.size(), orders.size());
+        assertEquals(ORDER_VALID_ENTITY_LIST, orders);
     }
 
     @Test
-    void deleteOrderByOrderId() {
-        Long id = orderRepository.addOrder(otc.VALID_ORDER_ENTITY);
-        orderRepository.deleteOrderByOrderId(id);
+    void deleteOrder() {
+        Long id = orderRepository.addOrder(ORDER_VALID_ENTITY);
+        orderRepository.deleteOrder(id);
 
         assertTrue(orderRepository.getOrders().isEmpty());
     }
 
     @Test
     void orderExistsByOrderId() {
-        assertFalse(orderRepository.orderExistsByOrderId(otc.VALID_ORDER_ID));
+        assertFalse(orderRepository.orderExistsByOrderId(ORDER_VALID_ORDER_ID));
 
-        Long id = orderRepository.addOrder(otc.VALID_ORDER_ENTITY);
+        Long id = orderRepository.addOrder(ORDER_VALID_ENTITY);
 
         assertTrue(orderRepository.orderExistsByOrderId(id));
     }
@@ -139,15 +130,15 @@ class JdbcOrderRepositoryTest extends AbstractJdbcRepositoryTest {
     void orderExistsByCustomerIdAndOrderDate() {
         assertFalse(
                 orderRepository.orderExistsByCustomerIdAndOrderDate(
-                        otc.VALID_CUSTOMER_ID, otc.VALID_ORDER_DATE
+                        ORDER_VALID_CUSTOMER_ID, ORDER_VALID_ORDER_DATE
                 )
         );
 
-        orderRepository.addOrder(otc.VALID_ORDER_ENTITY);
+        orderRepository.addOrder(ORDER_VALID_ENTITY);
 
         assertTrue(
                 orderRepository.orderExistsByCustomerIdAndOrderDate(
-                    otc.VALID_CUSTOMER_ID, otc.VALID_ORDER_DATE
+                        ORDER_VALID_CUSTOMER_ID, ORDER_VALID_ORDER_DATE
                 )
         );
     }
@@ -156,27 +147,27 @@ class JdbcOrderRepositoryTest extends AbstractJdbcRepositoryTest {
     void orderExistsByBarberIdAndOrderDate() {
         assertFalse(
                 orderRepository.orderExistsByBarberIdAndOrderDate(
-                    otc.VALID_BARBER_ID, otc.VALID_ORDER_DATE
+                        ORDER_VALID_BARBER_ID, ORDER_VALID_ORDER_DATE
                 )
         );
 
-        orderRepository.addOrder(otc.VALID_ORDER_ENTITY);
+        orderRepository.addOrder(ORDER_VALID_ENTITY);
 
         assertTrue(
                 orderRepository.orderExistsByBarberIdAndOrderDate(
-                        otc.VALID_BARBER_ID, otc.VALID_ORDER_DATE
+                        ORDER_VALID_BARBER_ID, ORDER_VALID_ORDER_DATE
                 )
         );
     }
 
     @Test
     void truncateAndRestartSequence() {
-        orderRepository.addOrder(otc.VALID_ORDER_ENTITY);
+        orderRepository.addOrder(ORDER_VALID_ENTITY);
         orderRepository.truncateAndRestartSequence();
 
         assertTrue(orderRepository.getOrders().isEmpty());
 
-        Long id = orderRepository.addOrder(otc.VALID_ORDER_ENTITY);
+        Long id = orderRepository.addOrder(ORDER_VALID_ENTITY);
         assertEquals(1, id);
     }
 

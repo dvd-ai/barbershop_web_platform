@@ -72,7 +72,7 @@ public class JdbcOrderRepository implements OrderRepository {
     }
 
     @Override
-    public Optional<Order> findOrderByOrderId(Long orderId) {
+    public Optional<Order> findOrder(Long orderId) {
         Optional<Order> orderOptional;
 
         String sql =
@@ -123,7 +123,7 @@ public class JdbcOrderRepository implements OrderRepository {
 
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
-        return findOrderByOrderId(order.getOrderId());
+        return findOrder(order.getOrderId());
     }
 
     @Override
@@ -143,7 +143,7 @@ public class JdbcOrderRepository implements OrderRepository {
     }
 
     @Override
-    public void deleteOrderByOrderId(Long orderId) {
+    public void deleteOrder(Long orderId) {
         String sql = "DELETE FROM orders " +
                 "WHERE order_id = :orderId;";
 

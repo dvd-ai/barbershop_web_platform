@@ -1,12 +1,9 @@
 package com.app.barbershopweb.integrationtests.workspace;
 
-import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.user.UserTestConstants;
 import com.app.barbershopweb.user.repository.JdbcUsersRepository;
 import com.app.barbershopweb.workspace.WorkspaceDto;
-import com.app.barbershopweb.workspace.WorkspaceTestConstants;
 import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +13,18 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static com.app.barbershopweb.barbershop.BarbershopTestConstants.BARBERSHOPS_URL;
-import static com.app.barbershopweb.user.UserTestConstants.USERS_URL;
-import static com.app.barbershopweb.workspace.WorkspaceTestConstants.WORKSPACES_URL;
+import static com.app.barbershopweb.barbershop.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_DTO_LIST;
+import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOPS_URL;
+import static com.app.barbershopweb.user.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
+import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.USERS_URL;
+import static com.app.barbershopweb.workspace.constants.WorkspaceDto__TestConstants.WORKSPACE_VALID_DTO;
+import static com.app.barbershopweb.workspace.constants.WorkspaceDto__TestConstants.WORKSPACE_VALID_UPDATED_DTO;
+import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_DTO_LIST;
+import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Workspace IT without error handling")
@@ -42,21 +44,15 @@ class WorkspaceIT extends AbstractIT {
     private TestRestTemplate restTemplate;
 
 
-    private final WorkspaceTestConstants wtc = new WorkspaceTestConstants();
-    private static final BarbershopTestConstants btc = new BarbershopTestConstants();
-    private static final UserTestConstants utc = new UserTestConstants();
-
-
-
     //add barbershop and user rows into db once for workspace tests (post, put requests)
     void init() {
-        restTemplate.postForEntity(BARBERSHOPS_URL, btc.VALID_BARBERSHOP_DTO_LIST.get(0), Long.class);
-        restTemplate.postForEntity(BARBERSHOPS_URL, btc.VALID_BARBERSHOP_DTO_LIST.get(1), Long.class);
-        restTemplate.postForEntity(BARBERSHOPS_URL, btc.VALID_BARBERSHOP_DTO_LIST.get(2), Long.class);
+        restTemplate.postForEntity(BARBERSHOPS_URL, BARBERSHOP_VALID_DTO_LIST.get(0), Long.class);
+        restTemplate.postForEntity(BARBERSHOPS_URL, BARBERSHOP_VALID_DTO_LIST.get(1), Long.class);
+        restTemplate.postForEntity(BARBERSHOPS_URL, BARBERSHOP_VALID_DTO_LIST.get(2), Long.class);
 
-        restTemplate.postForEntity(USERS_URL, utc.VALID_USER_DTO_LIST.get(0), Long.class);
-        restTemplate.postForEntity(USERS_URL, utc.VALID_USER_DTO_LIST.get(1), Long.class);
-        restTemplate.postForEntity(USERS_URL, utc.VALID_USER_DTO_LIST.get(2), Long.class);
+        restTemplate.postForEntity(USERS_URL, USERS_USER_VALID_DTO_LIST.get(0), Long.class);
+        restTemplate.postForEntity(USERS_URL, USERS_USER_VALID_DTO_LIST.get(1), Long.class);
+        restTemplate.postForEntity(USERS_URL, USERS_USER_VALID_DTO_LIST.get(2), Long.class);
     }
 
 
@@ -79,10 +75,10 @@ class WorkspaceIT extends AbstractIT {
         init();
 
         ResponseEntity<Long> response = restTemplate.postForEntity(
-                WORKSPACES_URL, wtc.VALID_WORKSPACE_DTO, Long.class
+                WORKSPACES_URL, WORKSPACE_VALID_DTO, Long.class
         );
 
-        assertEquals(wtc.VALID_WORKSPACE_ID, response.getBody());
+        assertEquals(WORKSPACE_VALID_WORKSPACE_ID, response.getBody());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
@@ -92,15 +88,15 @@ class WorkspaceIT extends AbstractIT {
     @Order(3)
     void shouldReturnWorkspace() {
         ResponseEntity<WorkspaceDto> response = restTemplate.getForEntity(
-                WORKSPACES_URL + "/" + wtc.VALID_WORKSPACE_ID, WorkspaceDto.class
+                WORKSPACES_URL + "/" + WORKSPACE_VALID_WORKSPACE_ID, WorkspaceDto.class
         );
         WorkspaceDto body = response.getBody();
-        assertEquals(wtc.VALID_WORKSPACE_ID, Objects.requireNonNull(body).workspaceId());
-        assertEquals(wtc.VALID_WORKSPACE_DTO.barbershopId(), Objects.requireNonNull(body).barbershopId());
-        assertEquals(wtc.VALID_WORKSPACE_DTO.userId(), Objects.requireNonNull(body).userId());
-        assertEquals(wtc.VALID_WORKSPACE_DTO.active(), Objects.requireNonNull(body).active());
+        assertEquals(WORKSPACE_VALID_WORKSPACE_ID, Objects.requireNonNull(body).workspaceId());
+        assertEquals(WORKSPACE_VALID_DTO.barbershopId(), Objects.requireNonNull(body).barbershopId());
+        assertEquals(WORKSPACE_VALID_DTO.userId(), Objects.requireNonNull(body).userId());
+        assertEquals(WORKSPACE_VALID_DTO.active(), Objects.requireNonNull(body).active());
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(wtc.WORKSPACE_FIELD_AMOUNT, WorkspaceDto.class.getDeclaredFields().length);
+        assertEquals(WORKSPACE_FIELD_AMOUNT, WorkspaceDto.class.getDeclaredFields().length);
     }
 
     @Test
@@ -108,16 +104,16 @@ class WorkspaceIT extends AbstractIT {
             " should return updated workspace (dto)")
     @Order(4)
     void shouldReturnUpdatedWorkspace() {
-        HttpEntity<WorkspaceDto> entity = new HttpEntity<>(wtc.VALID_UPDATED_WORKSPACE_DTO);
+        HttpEntity<WorkspaceDto> entity = new HttpEntity<>(WORKSPACE_VALID_UPDATED_DTO);
         ResponseEntity<WorkspaceDto> response = restTemplate.exchange(WORKSPACES_URL, HttpMethod.PUT, entity, WorkspaceDto.class);
         WorkspaceDto body = response.getBody();
 
 
-        assertEquals(wtc.VALID_UPDATED_WORKSPACE_DTO.workspaceId(), Objects.requireNonNull(body).workspaceId());
-        assertEquals(wtc.VALID_UPDATED_WORKSPACE_DTO.barbershopId(), Objects.requireNonNull(body).barbershopId());
-        assertEquals(wtc.VALID_UPDATED_WORKSPACE_DTO.userId(), Objects.requireNonNull(body).userId());
-        assertEquals(wtc.VALID_UPDATED_WORKSPACE_DTO.active(), Objects.requireNonNull(body).active());
-        assertEquals(wtc.WORKSPACE_FIELD_AMOUNT, WorkspaceDto.class.getDeclaredFields().length);
+        assertEquals(WORKSPACE_VALID_UPDATED_DTO.workspaceId(), Objects.requireNonNull(body).workspaceId());
+        assertEquals(WORKSPACE_VALID_UPDATED_DTO.barbershopId(), Objects.requireNonNull(body).barbershopId());
+        assertEquals(WORKSPACE_VALID_UPDATED_DTO.userId(), Objects.requireNonNull(body).userId());
+        assertEquals(WORKSPACE_VALID_UPDATED_DTO.active(), Objects.requireNonNull(body).active());
+        assertEquals(WORKSPACE_FIELD_AMOUNT, WorkspaceDto.class.getDeclaredFields().length);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -126,18 +122,18 @@ class WorkspaceIT extends AbstractIT {
     @Test
     @Order(5)
     void shouldReturnAllWorkspace() {
-        workspaceRepository.addWorkspace(wtc.VALID_WORKSPACE_ENTITY_LIST.get(1));
-        workspaceRepository.addWorkspace(wtc.VALID_WORKSPACE_ENTITY_LIST.get(2));
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(1));
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(2));
 
         ResponseEntity<WorkspaceDto[]> response = restTemplate.getForEntity(WORKSPACES_URL, WorkspaceDto[].class);
         List<WorkspaceDto> body = List.of(Objects.requireNonNull(response.getBody()));
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(wtc.VALID_WORKSPACE_DTO_LIST.size(), Objects.requireNonNull(body).size());
+        assertEquals(WORKSPACE_VALID_DTO_LIST.size(), Objects.requireNonNull(body).size());
 
-        assertTrue(body.contains(wtc.VALID_WORKSPACE_DTO_LIST.get(1)));
-        assertTrue(body.contains(wtc.VALID_WORKSPACE_DTO_LIST.get(2)));
-        assertTrue(body.contains(wtc.VALID_UPDATED_WORKSPACE_DTO));
+        assertTrue(body.contains(WORKSPACE_VALID_DTO_LIST.get(1)));
+        assertTrue(body.contains(WORKSPACE_VALID_DTO_LIST.get(2)));
+        assertTrue(body.contains(WORKSPACE_VALID_UPDATED_DTO));
 
     }
 
@@ -148,14 +144,14 @@ class WorkspaceIT extends AbstractIT {
     @Order(6)
     void shouldDeleteWorkspaceById() {
         ResponseEntity<Object> response = restTemplate.exchange(
-                WORKSPACES_URL + "/" + wtc.VALID_WORKSPACE_ID,
+                WORKSPACES_URL + "/" + WORKSPACE_VALID_WORKSPACE_ID,
                 HttpMethod.DELETE, null, Object.class
         );
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNull(response.getBody());
 
-        assertTrue(workspaceRepository.findWorkspaceById(wtc.VALID_WORKSPACE_ID).isEmpty());
+        assertTrue(workspaceRepository.findWorkspaceById(WORKSPACE_VALID_WORKSPACE_ID).isEmpty());
     }
 
     @AfterAll

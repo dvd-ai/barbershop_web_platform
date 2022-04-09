@@ -5,10 +5,11 @@ import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.workspace.WorkspaceController;
 import com.app.barbershopweb.workspace.WorkspaceConverter;
 import com.app.barbershopweb.workspace.WorkspaceService;
-import com.app.barbershopweb.workspace.WorkspaceTestConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,9 +19,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.Optional;
 
-import static com.app.barbershopweb.workspace.WorkspaceTestConstants.WORKSPACES_URL;
+import static com.app.barbershopweb.workspace.constants.WorkspaceDto__TestConstants.WORKSPACE_NOT_EXISTED_ID_DTO;
+import static com.app.barbershopweb.workspace.constants.WorkspaceDto__TestConstants.WORKSPACE_VALID_DTO;
+import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_NOT_EXISTED_ID_ENTITY;
+import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_ENTITY;
+import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.WORKSPACES_URL;
+import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.WORKSPACE_NOT_EXISTED_WORKSPACE_ID;
+import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMessage_Fk__TestConstants.WORKSPACE_ERR_FK_BARBERSHOP_ID;
+import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMessage_Fk__TestConstants.WORKSPACE_ERR_FK_USER_ID;
+import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMessage_Uk__TestConstants.WORKSPACE_ERR_UK_USER_ID__BARBERSHOP_ID;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -29,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(WorkspaceController.class)
 @DisplayName("Testing PUT: " + WORKSPACES_URL)
+@ExtendWith(MockitoExtension.class)
 class WorkspaceControllerUpdateWorkspaceTest {
     @Autowired
     MockMvc mockMvc;
@@ -42,44 +51,19 @@ class WorkspaceControllerUpdateWorkspaceTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    WorkspaceTestConstants wtc = new WorkspaceTestConstants();
-
-
-    @DisplayName("when workspace dto isn't valid " +
-            "returns status code 400 & error dto")
-    @Test
-    void whenWorkspaceDtoNotValid() throws Exception {
-
-
-        String json = objectMapper.writeValueAsString(
-                wtc.INVALID_WORKSPACE_DTO
-        );
-
-        mockMvc
-                .perform(put(WORKSPACES_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors").isArray())
-                .andExpect(jsonPath("$.errors", hasSize(3)))
-                .andExpect(jsonPath("$.errors", hasItem(wtc.DTO_CV_USER_ID_ERR_MSG)))
-                .andExpect(jsonPath("$.errors", hasItem(wtc.DTO_CV_BARBERSHOP_ID_ERR_MSG)))
-                .andExpect(jsonPath("$.errors", hasItem(wtc.DTO_CV_WORKSPACE_ID_ERR_MSG)));
-    }
-
 
     @Test
     @DisplayName("when entity with 'id' in workspaceDto doesn't exist " +
             "returns status code 404 and error dto")
     void whenNotFoundWorkspaceId() throws Exception {
         String json = objectMapper.writeValueAsString(
-                wtc.WORKSPACE_DTO_NOT_EXISTED_ID
+                WORKSPACE_NOT_EXISTED_ID_DTO
         );
 
-        when(workspaceConverter.mapToEntity(any())).thenReturn(
-                wtc.WORKSPACE_ENTITY_NOT_EXISTED_ID
+        when(workspaceConverter.mapToEntity(WORKSPACE_NOT_EXISTED_ID_DTO)).thenReturn(
+                WORKSPACE_NOT_EXISTED_ID_ENTITY
         );
-        when(workspaceService.updateWorkspace(any())).thenReturn(Optional.empty());
+        when(workspaceService.updateWorkspace(WORKSPACE_NOT_EXISTED_ID_ENTITY)).thenReturn(Optional.empty());
 
         mockMvc
                 .perform(put(WORKSPACES_URL)
@@ -90,7 +74,7 @@ class WorkspaceControllerUpdateWorkspaceTest {
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
                 .andExpect(jsonPath("$.errors[0]", is(
-                        "Workspace with id '" + wtc.NOT_EXISTED_WORKSPACE_ID + "' not found."
+                        "Workspace with id '" + WORKSPACE_NOT_EXISTED_WORKSPACE_ID + "' not found."
                 )))
                 .andExpect(jsonPath("$", aMapWithSize(1)));
     }
@@ -100,17 +84,17 @@ class WorkspaceControllerUpdateWorkspaceTest {
     @Test
     void whenWorkspaceDtoViolatesDbFkConstraints() throws Exception {
         String json = objectMapper.writeValueAsString(
-                wtc.VALID_WORKSPACE_DTO
+                WORKSPACE_VALID_DTO
         );
 
-        when(workspaceConverter.mapToEntity(any())).thenReturn(
-                wtc.VALID_WORKSPACE_ENTITY);
+        when(workspaceConverter.mapToEntity(WORKSPACE_VALID_DTO)).thenReturn(
+                WORKSPACE_VALID_ENTITY);
 
-        when(workspaceService.updateWorkspace(any())).thenThrow(
+        when(workspaceService.updateWorkspace(WORKSPACE_VALID_ENTITY)).thenThrow(
                 new NotFoundException(
                         List.of(
-                                wtc.FK_CV_USER_ID_ERR_MSG,
-                                wtc.FK_CV_BARBERSHOP_ID_ERR_MSG
+                                WORKSPACE_ERR_FK_USER_ID,
+                                WORKSPACE_ERR_FK_BARBERSHOP_ID
                         )
                 )
         );
@@ -122,8 +106,8 @@ class WorkspaceControllerUpdateWorkspaceTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(2)))
-                .andExpect(jsonPath("$.errors", hasItem(wtc.FK_CV_USER_ID_ERR_MSG)))
-                .andExpect(jsonPath("$.errors", hasItem(wtc.FK_CV_BARBERSHOP_ID_ERR_MSG)));
+                .andExpect(jsonPath("$.errors", hasItem(WORKSPACE_ERR_FK_USER_ID)))
+                .andExpect(jsonPath("$.errors", hasItem(WORKSPACE_ERR_FK_BARBERSHOP_ID)));
     }
 
     @DisplayName("when workspace dto violates db uk constraints " +
@@ -131,15 +115,15 @@ class WorkspaceControllerUpdateWorkspaceTest {
     @Test
     void whenWorkspaceDtoViolatesDbUkConstraints() throws Exception {
         String json = objectMapper.writeValueAsString(
-                wtc.VALID_WORKSPACE_DTO
+                WORKSPACE_VALID_DTO
         );
 
-        when(workspaceConverter.mapToEntity(any())).thenReturn(
-                wtc.VALID_WORKSPACE_ENTITY);
+        when(workspaceConverter.mapToEntity(WORKSPACE_VALID_DTO)).thenReturn(
+                WORKSPACE_VALID_ENTITY);
 
-        when(workspaceService.updateWorkspace(any())).thenThrow(
+        when(workspaceService.updateWorkspace(WORKSPACE_VALID_ENTITY)).thenThrow(
                 new DbUniqueConstraintsViolationException(
-                        List.of(wtc.UK_CV_ERR_MSG)
+                        List.of(WORKSPACE_ERR_UK_USER_ID__BARBERSHOP_ID)
                 )
         );
 
@@ -150,24 +134,24 @@ class WorkspaceControllerUpdateWorkspaceTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
-                .andExpect(jsonPath("$.errors", hasItem(wtc.UK_CV_ERR_MSG)));
+                .andExpect(jsonPath("$.errors", hasItem(WORKSPACE_ERR_UK_USER_ID__BARBERSHOP_ID)));
     }
 
     @Test
     @DisplayName("should return updated workspace (dto)")
     void shouldReturnUpdatedWorkspace() throws Exception {
         String json = objectMapper.writeValueAsString(
-                wtc.VALID_WORKSPACE_DTO
+                WORKSPACE_VALID_DTO
         );
 
-        when(workspaceConverter.mapToEntity(any())).thenReturn(
-                wtc.VALID_WORKSPACE_ENTITY
+        when(workspaceConverter.mapToEntity(WORKSPACE_VALID_DTO)).thenReturn(
+                WORKSPACE_VALID_ENTITY
         );
-        when(workspaceService.updateWorkspace(any())).thenReturn(
-                Optional.of(wtc.VALID_WORKSPACE_ENTITY)
+        when(workspaceService.updateWorkspace(WORKSPACE_VALID_ENTITY)).thenReturn(
+                Optional.of(WORKSPACE_VALID_ENTITY)
         );
-        when(workspaceConverter.mapToDto(any())).thenReturn(
-                wtc.VALID_WORKSPACE_DTO
+        when(workspaceConverter.mapToDto(WORKSPACE_VALID_ENTITY)).thenReturn(
+                WORKSPACE_VALID_DTO
         );
 
         mockMvc
@@ -177,9 +161,9 @@ class WorkspaceControllerUpdateWorkspaceTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.barbershopId",  is(wtc.VALID_WORKSPACE_DTO.barbershopId().intValue())))
-                .andExpect(jsonPath("$.userId", is(wtc.VALID_WORKSPACE_DTO.userId().intValue())))
-                .andExpect(jsonPath("$.workspaceId", is(wtc.VALID_WORKSPACE_DTO.workspaceId().intValue())))
-                .andExpect(jsonPath("$.active", is(wtc.VALID_WORKSPACE_DTO.active())));
+                .andExpect(jsonPath("$.barbershopId", is(WORKSPACE_VALID_DTO.barbershopId().intValue())))
+                .andExpect(jsonPath("$.userId", is(WORKSPACE_VALID_DTO.userId().intValue())))
+                .andExpect(jsonPath("$.workspaceId", is(WORKSPACE_VALID_DTO.workspaceId().intValue())))
+                .andExpect(jsonPath("$.active", is(WORKSPACE_VALID_DTO.active())));
     }
 }

@@ -1,49 +1,41 @@
 package com.app.barbershopweb.database.order.reservation;
 
 import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
-import com.app.barbershopweb.database.AbstractJdbcRepositoryTest;
 import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
 import com.app.barbershopweb.exception.NotFoundException;
+import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.repository.JdbcOrderRepository;
-import com.app.barbershopweb.order.reservation.OrderReservationTestConstants;
 import com.app.barbershopweb.order.reservation.repository.JdbcOrderReservationRepository;
 import com.app.barbershopweb.user.repository.JdbcUsersRepository;
 import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.app.barbershopweb.order.reservation.constants.dto.OrderReservation_Dto__TestConstants.ORDER_RESERVATION_VALID_DTO;
+import static com.app.barbershopweb.order.reservation.constants.error.OrderReservation_ErrorMessage_Fk__TestConstants.ORDER_RESERVATION_ERR_FK_CUSTOMER_ID;
+import static com.app.barbershopweb.order.reservation.constants.error.OrderReservation_ErrorMessage_Fk__TestConstants.ORDER_RESERVATION_ERR_FK_ORDER_ID_LIST;
+import static com.app.barbershopweb.order.reservation.constants.error.OrderReservation_ErrorMessage_Uk__TestConstants.ORDER_RESERVATION_ERR_UK_CUSTOMER_ID__ORDER_DATE;
+import static com.app.barbershopweb.order.reservation.constants.list.entity.OrderReservation_List_OrderEntity__TestConstants.ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST;
+import static com.app.barbershopweb.order.reservation.constants.list.fk.OrderReservation_FkEntityList__TestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class JdbcOrderReservationEhTest extends AbstractJdbcRepositoryTest {
+class JdbcOrderReservationEhTest extends AbstractIT {
+    @Autowired
+    JdbcOrderReservationRepository orderReservationRepository;
+    @Autowired
+    JdbcUsersRepository usersRepository;
+    @Autowired
+    JdbcBarbershopRepository barbershopRepository;
+    @Autowired
+    JdbcOrderRepository orderRepository;
+    @Autowired
+    JdbcWorkspaceRepository workspaceRepository;
 
-    static JdbcOrderReservationRepository orderReservationRepository;
-    static JdbcUsersRepository usersRepository;
-    static JdbcBarbershopRepository barbershopRepository;
-    static JdbcOrderRepository orderRepository;
-    static JdbcWorkspaceRepository workspaceRepository;
-
-    OrderReservationTestConstants ortc = new OrderReservationTestConstants();
-
-    @BeforeAll
-    static void init() {
-        DataSource ds = getDataSource();
-        usersRepository = new JdbcUsersRepository(ds);
-        barbershopRepository = new JdbcBarbershopRepository(ds);
-        workspaceRepository = new JdbcWorkspaceRepository(
-                ds, usersRepository, barbershopRepository
-        );
-        orderRepository = new JdbcOrderRepository(
-                ds, usersRepository, barbershopRepository, workspaceRepository
-        );
-        orderReservationRepository = new JdbcOrderReservationRepository(
-                orderRepository, ds, usersRepository);
-    }
 
     @AfterEach
     void cleanUpDb() {
@@ -56,75 +48,75 @@ class JdbcOrderReservationEhTest extends AbstractJdbcRepositoryTest {
     @Test
     @DisplayName(
             """
-            When fk violation (customerId) in the dto,
-             throws NotFoundException 
-            """
+                    When fk violation (customerId) in the dto,
+                     throws NotFoundException 
+                    """
     )
-    void reserveOrderByOrderIdAndCustomerIdFkCv() {
+    void reserveOrderFkCv() {
 
         NotFoundException thrown = assertThrows(
                 NotFoundException.class,
                 () -> {
-                    orderReservationRepository.reserveOrdersByOrderIdsAndByCustomerId(
-                            ortc.VALID_ORDER_RESERV_DTO.orderIds(),
-                            ortc.VALID_ORDER_RESERV_DTO.customerId()
+                    orderReservationRepository.reserveOrders(
+                            ORDER_RESERVATION_VALID_DTO.orderIds(),
+                            ORDER_RESERVATION_VALID_DTO.customerId()
                     );
                 }
         );
         assertEquals(1, thrown.getMessages().size());
-        assertEquals(thrown.getMessages(), List.of(ortc.FK_CV_CUSTOMER_ID_ERR_MSG));
+        assertEquals(thrown.getMessages(), List.of(ORDER_RESERVATION_ERR_FK_CUSTOMER_ID));
     }
 
     @Test
     @DisplayName(
             """
-            When fk violation (orderIds) in the dto,
-             throws NotFoundException
-            """
+                    When fk violation (orderIds) in the dto,
+                     throws NotFoundException
+                    """
     )
-    void reserveOrderByOrderIdAndCustomerIdOrderIdsFkCv() {
-        ortc.FK_USER_ENTITY_LIST.forEach(usersRepository::addUser);
+    void reserveOrderOrderIdsFkCv() {
+        ORDER_RESERVATION_FK_USER_ENTITY_LIST.forEach(usersRepository::addUser);
 
         NotFoundException thrown = assertThrows(
                 NotFoundException.class,
                 () -> {
-                    orderReservationRepository.reserveOrdersByOrderIdsAndByCustomerId(
-                            ortc.VALID_ORDER_RESERV_DTO.orderIds(),
-                            ortc.VALID_ORDER_RESERV_DTO.customerId()
+                    orderReservationRepository.reserveOrders(
+                            ORDER_RESERVATION_VALID_DTO.orderIds(),
+                            ORDER_RESERVATION_VALID_DTO.customerId()
                     );
                 }
         );
         assertEquals(
-                ortc.VALID_ORDER_RESERV_DTO.orderIds().size(),
+                ORDER_RESERVATION_VALID_DTO.orderIds().size(),
                 thrown.getMessages().size()
         );
-        assertEquals(thrown.getMessages(), ortc.FK_CV_ORDER_ID_LIST_ERR_MSG);
+        assertEquals(thrown.getMessages(), ORDER_RESERVATION_ERR_FK_ORDER_ID_LIST);
     }
 
     @Test
     @DisplayName(
             """
-            When uk violation (customerId, orderDate) in the dto, 
-            throws DbUniqueConstraintsViolationException
-            """
+                    When uk violation (customerId, orderDate) in the dto, 
+                    throws DbUniqueConstraintsViolationException
+                    """
     )
-    void reserveOrderByOrderIdAndCustomerIdOrderIdsUkCv() {
-        ortc.FK_USER_ENTITY_LIST.forEach(usersRepository::addUser);
-        ortc.FK_BARBERSHOP_ENTITY_LIST.forEach(barbershopRepository::addBarbershop);
-        ortc.FK_WORKSPACE_ENTITY_LIST.forEach(workspaceRepository::addWorkspace);
-        ortc.UNRESERVED_ORDER_ENTITY_LIST.forEach(orderRepository::addOrder);
+    void reserveOrderUkCv() {
+        ORDER_RESERVATION_FK_USER_ENTITY_LIST.forEach(usersRepository::addUser);
+        ORDER_RESERVATION_FK_BARBERSHOP_ENTITY_LIST.forEach(barbershopRepository::addBarbershop);
+        ORDER_RESERVATION_FK_WORKSPACE_ENTITY_LIST.forEach(workspaceRepository::addWorkspace);
+        ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST.forEach(orderRepository::addOrder);
 
-        orderReservationRepository.reserveOrdersByOrderIdsAndByCustomerId(
-          ortc.VALID_ORDER_RESERV_DTO.orderIds(),
-          ortc.VALID_ORDER_RESERV_DTO.customerId()
+        orderReservationRepository.reserveOrders(
+                ORDER_RESERVATION_VALID_DTO.orderIds(),
+                ORDER_RESERVATION_VALID_DTO.customerId()
         );
 
         DbUniqueConstraintsViolationException thrown = assertThrows(
                 DbUniqueConstraintsViolationException.class,
                 () -> {
-                    orderReservationRepository.reserveOrdersByOrderIdsAndByCustomerId(
-                            ortc.VALID_ORDER_RESERV_DTO.orderIds(),
-                            ortc.VALID_ORDER_RESERV_DTO.customerId()
+                    orderReservationRepository.reserveOrders(
+                            ORDER_RESERVATION_VALID_DTO.orderIds(),
+                            ORDER_RESERVATION_VALID_DTO.customerId()
                     );
                 }
         );
@@ -132,7 +124,7 @@ class JdbcOrderReservationEhTest extends AbstractJdbcRepositoryTest {
                 1,
                 thrown.getMessages().size()
         );
-        assertEquals(thrown.getMessages(), List.of(ortc.UK_CV_CUSTOMER_ID_ORDER_DATE_ERR_MSG));
+        assertEquals(thrown.getMessages(), List.of(ORDER_RESERVATION_ERR_UK_CUSTOMER_ID__ORDER_DATE));
     }
 
 }
