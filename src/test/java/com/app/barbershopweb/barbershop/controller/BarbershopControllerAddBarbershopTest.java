@@ -3,28 +3,30 @@ package com.app.barbershopweb.barbershop.controller;
 import com.app.barbershopweb.barbershop.BarbershopController;
 import com.app.barbershopweb.barbershop.BarbershopConverter;
 import com.app.barbershopweb.barbershop.BarbershopService;
-
-import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-
-import static com.app.barbershopweb.barbershop.BarbershopTestConstants.*;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
+import static com.app.barbershopweb.barbershop.constants.BarbershopDto__TestConstants.BARBERSHOP_VALID_DTO;
+import static com.app.barbershopweb.barbershop.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
+import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOPS_URL;
+import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOP_VALID_BARBERSHOP_ID;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BarbershopController.class)
 @DisplayName("Testing POST: " + BARBERSHOPS_URL)
+@ExtendWith(MockitoExtension.class)
 class BarbershopControllerAddBarbershopTest {
 
     @Autowired
@@ -39,40 +41,19 @@ class BarbershopControllerAddBarbershopTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    private final BarbershopTestConstants btc = new BarbershopTestConstants();
-
-    @DisplayName("when barbershop dto isn't valid " +
-            "returns status code 400 & error dto")
-    @Test
-    void whenBarbershopDtoNotValid() throws Exception {
-        String json = objectMapper.writeValueAsString(
-                btc.INVALID_BARBERSHOP_DTO
-        );
-
-        mockMvc
-                .perform(post(BARBERSHOPS_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors").isArray())
-                .andExpect(jsonPath("$.errors", hasSize(3)))
-                .andExpect(jsonPath("$.errors", hasItem(btc.DTO_CV_ID_ERR_MSG)))
-                .andExpect(jsonPath("$.errors", hasItem(btc.DTO_CV_PHONE_NUMBER_ERR_MSG)))
-                .andExpect(jsonPath("$.errors", hasItem(btc.DTO_CV_NAME_ERR_MSG)));
-    }
 
     @DisplayName("after saving barbershop entity returns its id and status code 201")
     @Test
     void shouldAddBarbershop() throws Exception {
         String json = objectMapper.writeValueAsString(
-                btc.VALID_BARBERSHOP_DTO
+                BARBERSHOP_VALID_DTO
         );
 
-        when(barbershopConverter.mapToEntity(any())).thenReturn(
-                btc.VALID_BARBERSHOP_ENTITY
+        when(barbershopConverter.mapToEntity(BARBERSHOP_VALID_DTO)).thenReturn(
+                BARBERSHOP_VALID_ENTITY
         );
-        when(barbershopService.addBarbershop(any())).thenReturn(
-                btc.VALID_BARBERSHOP_ID
+        when(barbershopService.addBarbershop(BARBERSHOP_VALID_ENTITY)).thenReturn(
+                BARBERSHOP_VALID_BARBERSHOP_ID
         );
 
         mockMvc
@@ -82,6 +63,6 @@ class BarbershopControllerAddBarbershopTest {
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(content().string(String.valueOf(btc.VALID_BARBERSHOP_ID)));
+                .andExpect(content().string(String.valueOf(BARBERSHOP_VALID_BARBERSHOP_ID)));
     }
 }

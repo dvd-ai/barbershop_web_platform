@@ -19,16 +19,16 @@ public class OrderService {
         return orderRepository.addOrder(order);
     }
 
-    public void deleteOrderByOrderId(Long id) {
-        orderRepository.deleteOrderByOrderId(id);
+    public void deleteOrder(Long orderId) {
+        orderRepository.deleteOrder(orderId);
     }
 
     public Optional<Order> updateOrder(Order order) {
         return orderRepository.updateOrder(order);
     }
 
-    public Optional<Order> findOrderByOrderId(Long id) {
-        return orderRepository.findOrderByOrderId(id);
+    public Optional<Order> findOrder(Long orderId) {
+        return orderRepository.findOrder(orderId);
     }
 
     public List<Order> getOrders() {

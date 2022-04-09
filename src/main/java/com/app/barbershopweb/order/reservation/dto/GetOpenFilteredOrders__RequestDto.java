@@ -6,8 +6,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-
-public record ShowUnreservedOrdersRequestDto(
+public record GetOpenFilteredOrders__RequestDto(
         @Min(1)
         @NotNull
         Long barbershopId,
@@ -16,4 +15,6 @@ public record ShowUnreservedOrdersRequestDto(
         @NotNull
         OrderFilters orderFilters
 ) {
+
+
 }

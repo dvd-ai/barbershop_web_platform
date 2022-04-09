@@ -1,15 +1,11 @@
 package com.app.barbershopweb.integrationtests.order.crud;
 
-import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import com.app.barbershopweb.barbershop.repository.BarbershopRepository;
 import com.app.barbershopweb.error.ErrorDto;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.OrderDto;
-import com.app.barbershopweb.order.crud.OrderTestConstants;
 import com.app.barbershopweb.order.crud.repository.OrderRepository;
-import com.app.barbershopweb.user.UserTestConstants;
 import com.app.barbershopweb.user.repository.UserRepository;
-import com.app.barbershopweb.workspace.WorkspaceTestConstants;
 import com.app.barbershopweb.workspace.repository.WorkspaceRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +20,19 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Objects;
 
-import static com.app.barbershopweb.order.crud.OrderTestConstants.ORDERS_URL;
+import static com.app.barbershopweb.barbershop.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
+import static com.app.barbershopweb.order.crud.constants.OrderDto__TestConstants.*;
+import static com.app.barbershopweb.order.crud.constants.OrderEntity__TestConstants.ORDER_VALID_ENTITY;
+import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.ORDERS_URL;
+import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Business_TestConstants.*;
+import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Dto__TestConstants.*;
+import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Fk__TestConstants.ORDER_ERR_FK_BARBER_ID;
+import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Fk__TestConstants.ORDER_ERR_FK_CUSTOMER_ID;
+import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Uk__TestConstants.ORDER_ERR_UK_BARBER_ID__ORDER_DATE;
+import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Uk__TestConstants.ORDER_ERR_UK_CUSTOMER_ID__ORDER_DATE;
+import static com.app.barbershopweb.user.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_ENTITY;
+import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_ENTITY_LIST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -42,10 +50,6 @@ class OrderErrorHandlerIT extends AbstractIT {
     @Autowired
     TestRestTemplate restTemplate;
 
-    OrderTestConstants otc = new OrderTestConstants();
-    BarbershopTestConstants btc = new BarbershopTestConstants();
-    UserTestConstants utc = new UserTestConstants();
-    WorkspaceTestConstants wtc = new WorkspaceTestConstants();
 
     @AfterEach
     void cleanUpDb() {
@@ -61,17 +65,17 @@ class OrderErrorHandlerIT extends AbstractIT {
             " with invalid dto entity returns 400 and error message")
     void addOrderWhenInvalidDto() {
         ResponseEntity<ErrorDto> response = restTemplate.
-                postForEntity(ORDERS_URL, otc.INVALID_ORDER_DTO, ErrorDto.class);
+                postForEntity(ORDERS_URL, ORDER_INVALID_DTO, ErrorDto.class);
 
         List<String> errors = Objects.requireNonNull(response.getBody()).errors();
 
         assertEquals(4, errors.size());
         assertTrue(errors.containsAll(
                 List.of(
-                    otc.DTO_CV_BARBER_ID_ERR_MSG,
-                    otc.DTO_CV_CUSTOMER_ID_ERR_MSG,
-                    otc.DTO_CV_ORDER_ID_ERR_MSG,
-                    otc.DTO_CV_BARBERSHOP_ID_ERR_MSG
+                        ORDER_ERR_INVALID_DTO_BARBER_ID,
+                        ORDER_ERR_INVALID_DTO_CUSTOMER_ID,
+                        ORDER_ERR_INVALID_DTO_ORDER_ID,
+                        ORDER_ERR_INVALID_DTO_BARBERSHOP_ID
                 )
         ));
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -83,15 +87,15 @@ class OrderErrorHandlerIT extends AbstractIT {
             "returns status code 404 & error dto")
     void addOrderFkCv() {
         ResponseEntity<ErrorDto> response = restTemplate.
-                postForEntity(ORDERS_URL, otc.VALID_ORDER_DTO, ErrorDto.class);
+                postForEntity(ORDERS_URL, ORDER_VALID_DTO, ErrorDto.class);
 
-        List<String>errors = Objects.requireNonNull(response.getBody()).errors();
+        List<String> errors = Objects.requireNonNull(response.getBody()).errors();
 
         assertEquals(2, errors.size());
         assertTrue(errors.containsAll(
                 List.of(
-                    otc.FK_CV_BARBER_ID_ERR_MSG,
-                    otc.FK_CV_CUSTOMER_ID_ERR_MSG
+                        ORDER_ERR_FK_BARBER_ID,
+                        ORDER_ERR_FK_CUSTOMER_ID
                 )
         ));
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -102,25 +106,25 @@ class OrderErrorHandlerIT extends AbstractIT {
             " when order dto violates db uk constraints " +
             "returns status code 400 & error dto")
     void addOrderUkCv() {
-        userRepository.addUser(utc.VALID_USER_ENTITY);
-        userRepository.addUser(utc.VALID_USER_ENTITY);
-        barbershopRepository.addBarbershop(btc.VALID_BARBERSHOP_ENTITY);
-        barbershopRepository.addBarbershop(btc.VALID_BARBERSHOP_ENTITY);
-        workspaceRepository.addWorkspace(wtc.VALID_WORKSPACE_ENTITY);
-        workspaceRepository.addWorkspace(wtc.VALID_WORKSPACE_ENTITY_LIST.get(1));
-        orderRepository.addOrder(otc.VALID_ORDER_ENTITY);
+        userRepository.addUser(USERS_VALID_ENTITY);
+        userRepository.addUser(USERS_VALID_ENTITY);
+        barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
+        barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(1));
+        orderRepository.addOrder(ORDER_VALID_ENTITY);
 
 
         ResponseEntity<ErrorDto> response = restTemplate.
-                postForEntity(ORDERS_URL, otc.VALID_ORDER_DTO, ErrorDto.class);
+                postForEntity(ORDERS_URL, ORDER_VALID_DTO, ErrorDto.class);
 
-        List<String>errors = Objects.requireNonNull(response.getBody()).errors();
+        List<String> errors = Objects.requireNonNull(response.getBody()).errors();
 
         assertEquals(2, errors.size());
         assertTrue(errors.containsAll(
                 List.of(
-                    otc.UK_CV_BARBER_ID_ORDER_DATE_ERR_MSG,
-                    otc.UK_CV_CUSTOMER_ID_ORDER_DATE_ERR_MSG
+                        ORDER_ERR_UK_BARBER_ID__ORDER_DATE,
+                        ORDER_ERR_UK_CUSTOMER_ID__ORDER_DATE
                 )
         ));
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -131,26 +135,25 @@ class OrderErrorHandlerIT extends AbstractIT {
             " when order dto violates business data format " +
             "returns status code 400 & error dto")
     void addOrderBdfCv() {
-        userRepository.addUser(utc.VALID_USER_ENTITY);
-        userRepository.addUser(utc.VALID_USER_ENTITY);
-        barbershopRepository.addBarbershop(btc.VALID_BARBERSHOP_ENTITY);
-        barbershopRepository.addBarbershop(btc.VALID_BARBERSHOP_ENTITY);
-        workspaceRepository.addWorkspace(wtc.VALID_WORKSPACE_ENTITY);
-        workspaceRepository.addWorkspace(wtc.VALID_WORKSPACE_ENTITY_LIST.get(1));
-
+        userRepository.addUser(USERS_VALID_ENTITY);
+        userRepository.addUser(USERS_VALID_ENTITY);
+        barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
+        barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(1));
 
 
         ResponseEntity<ErrorDto> response = restTemplate.
-                postForEntity(ORDERS_URL, otc.INVALID_BDF_ORDER_DTO, ErrorDto.class);
+                postForEntity(ORDERS_URL, ORDER_INVALID_BUSINESS_DTO, ErrorDto.class);
 
-        List<String>errors = Objects.requireNonNull(response.getBody()).errors();
+        List<String> errors = Objects.requireNonNull(response.getBody()).errors();
 
         assertEquals(3, errors.size());
         assertTrue(errors.containsAll(
                 List.of(
-                        otc.BDF_CV_TIME_FORMAT_ERR_MSG,
-                        otc.BDF_CV_CUSTOMER_ID_BARBER_ID_EQ_ERR_MSG,
-                        otc.BDF_CV_BARBERSHOP_HOURS_ERR_MSG
+                        ORDER_ERR_BUSINESS_TIME_FORMAT,
+                        ORDER_ERR_BUSINESS_CUSTOMER_ID_BARBER_ID,
+                        ORDER_ERR_BUSINESS_BARBERSHOP_HOURS
                 )
         ));
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -161,7 +164,7 @@ class OrderErrorHandlerIT extends AbstractIT {
             " with invalid dto entity returns 400 and error message")
     void updateOrderWhenInvalidDto() {
 
-        HttpEntity<OrderDto>entity = new HttpEntity<>(otc.INVALID_ORDER_DTO);
+        HttpEntity<OrderDto> entity = new HttpEntity<>(ORDER_INVALID_DTO);
         ResponseEntity<ErrorDto> response = restTemplate.
                 exchange(ORDERS_URL, HttpMethod.PUT, entity, ErrorDto.class);
 
@@ -170,10 +173,10 @@ class OrderErrorHandlerIT extends AbstractIT {
         assertEquals(4, errors.size());
         assertTrue(errors.containsAll(
                 List.of(
-                        otc.DTO_CV_BARBER_ID_ERR_MSG,
-                        otc.DTO_CV_CUSTOMER_ID_ERR_MSG,
-                        otc.DTO_CV_ORDER_ID_ERR_MSG,
-                        otc.DTO_CV_BARBERSHOP_ID_ERR_MSG
+                        ORDER_ERR_INVALID_DTO_BARBER_ID,
+                        ORDER_ERR_INVALID_DTO_CUSTOMER_ID,
+                        ORDER_ERR_INVALID_DTO_ORDER_ID,
+                        ORDER_ERR_INVALID_DTO_BARBERSHOP_ID
                 )
         ));
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -184,17 +187,17 @@ class OrderErrorHandlerIT extends AbstractIT {
             " when order dto violates db fk constraints " +
             "returns status code 404 & error dto")
     void updateOrderFkCv() {
-        HttpEntity<OrderDto> entity = new HttpEntity<>(otc.VALID_ORDER_DTO);
+        HttpEntity<OrderDto> entity = new HttpEntity<>(ORDER_VALID_DTO);
         ResponseEntity<ErrorDto> response = restTemplate.
                 exchange(ORDERS_URL, HttpMethod.PUT, entity, ErrorDto.class);
 
-        List<String>errors = Objects.requireNonNull(response.getBody()).errors();
+        List<String> errors = Objects.requireNonNull(response.getBody()).errors();
 
         assertEquals(2, errors.size());
         assertTrue(errors.containsAll(
                 List.of(
-                        otc.FK_CV_BARBER_ID_ERR_MSG,
-                        otc.FK_CV_CUSTOMER_ID_ERR_MSG
+                        ORDER_ERR_FK_BARBER_ID,
+                        ORDER_ERR_FK_CUSTOMER_ID
                 )
         ));
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -205,26 +208,26 @@ class OrderErrorHandlerIT extends AbstractIT {
             " when order dto violates db uk constraints " +
             "returns status code 400 & error dto")
     void updateOrderUkCv() {
-        userRepository.addUser(utc.VALID_USER_ENTITY);
-        userRepository.addUser(utc.VALID_USER_ENTITY);
-        barbershopRepository.addBarbershop(btc.VALID_BARBERSHOP_ENTITY);
-        barbershopRepository.addBarbershop(btc.VALID_BARBERSHOP_ENTITY);
-        workspaceRepository.addWorkspace(wtc.VALID_WORKSPACE_ENTITY);
-        workspaceRepository.addWorkspace(wtc.VALID_WORKSPACE_ENTITY_LIST.get(1));
+        userRepository.addUser(USERS_VALID_ENTITY);
+        userRepository.addUser(USERS_VALID_ENTITY);
+        barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
+        barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(1));
 
-        orderRepository.addOrder(otc.VALID_ORDER_ENTITY);
+        orderRepository.addOrder(ORDER_VALID_ENTITY);
 
-        HttpEntity<OrderDto> entity = new HttpEntity<>(otc.VALID_ORDER_DTO);
+        HttpEntity<OrderDto> entity = new HttpEntity<>(ORDER_VALID_DTO);
         ResponseEntity<ErrorDto> response = restTemplate.
                 exchange(ORDERS_URL, HttpMethod.PUT, entity, ErrorDto.class);
 
-        List<String>errors = Objects.requireNonNull(response.getBody()).errors();
+        List<String> errors = Objects.requireNonNull(response.getBody()).errors();
 
         assertEquals(2, errors.size());
         assertTrue(errors.containsAll(
                 List.of(
-                        otc.UK_CV_CUSTOMER_ID_ORDER_DATE_ERR_MSG,
-                        otc.UK_CV_BARBER_ID_ORDER_DATE_ERR_MSG
+                        ORDER_ERR_UK_CUSTOMER_ID__ORDER_DATE,
+                        ORDER_ERR_UK_BARBER_ID__ORDER_DATE
                 )
         ));
 
@@ -236,26 +239,26 @@ class OrderErrorHandlerIT extends AbstractIT {
             " when order dto violates business data format " +
             "returns status code 400 & error dto")
     void updateOrderBdfCv() {
-        userRepository.addUser(utc.VALID_USER_ENTITY);
-        userRepository.addUser(utc.VALID_USER_ENTITY);
-        barbershopRepository.addBarbershop(btc.VALID_BARBERSHOP_ENTITY);
-        barbershopRepository.addBarbershop(btc.VALID_BARBERSHOP_ENTITY);
-        workspaceRepository.addWorkspace(wtc.VALID_WORKSPACE_ENTITY);
-        workspaceRepository.addWorkspace(wtc.VALID_WORKSPACE_ENTITY_LIST.get(1));
+        userRepository.addUser(USERS_VALID_ENTITY);
+        userRepository.addUser(USERS_VALID_ENTITY);
+        barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
+        barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(1));
 
 
-        HttpEntity<OrderDto> entity = new HttpEntity<>(otc.INVALID_BDF_ORDER_DTO);
+        HttpEntity<OrderDto> entity = new HttpEntity<>(ORDER_INVALID_BUSINESS_DTO);
         ResponseEntity<ErrorDto> response = restTemplate.
                 exchange(ORDERS_URL, HttpMethod.PUT, entity, ErrorDto.class);
 
-        List<String>errors = Objects.requireNonNull(response.getBody()).errors();
+        List<String> errors = Objects.requireNonNull(response.getBody()).errors();
 
         assertEquals(3, errors.size());
         assertTrue(errors.containsAll(
                 List.of(
-                        otc.BDF_CV_TIME_FORMAT_ERR_MSG,
-                        otc.BDF_CV_CUSTOMER_ID_BARBER_ID_EQ_ERR_MSG,
-                        otc.BDF_CV_BARBERSHOP_HOURS_ERR_MSG
+                        ORDER_ERR_BUSINESS_TIME_FORMAT,
+                        ORDER_ERR_BUSINESS_CUSTOMER_ID_BARBER_ID,
+                        ORDER_ERR_BUSINESS_BARBERSHOP_HOURS
                 )
         ));
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());

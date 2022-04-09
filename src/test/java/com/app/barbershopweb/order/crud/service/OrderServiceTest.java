@@ -2,20 +2,24 @@ package com.app.barbershopweb.order.crud.service;
 
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.OrderService;
-import com.app.barbershopweb.order.crud.OrderTestConstants;
 import com.app.barbershopweb.order.crud.repository.OrderRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.Optional;
 
+import static com.app.barbershopweb.order.crud.constants.OrderEntity__TestConstants.ORDER_VALID_ENTITY;
+import static com.app.barbershopweb.order.crud.constants.OrderEntity__TestConstants.ORDER_VALID_UPDATED_ENTITY;
+import static com.app.barbershopweb.order.crud.constants.OrderList__TestConstants.ORDER_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.ORDER_VALID_ORDER_ID;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
@@ -26,50 +30,55 @@ class OrderServiceTest {
     @InjectMocks
     OrderService orderService;
 
-    OrderTestConstants otc = new OrderTestConstants();
 
     @Test
     void addOrder() {
         when(orderRepository.addOrder(any(Order.class)))
-                .thenReturn(otc.VALID_ORDER_ID);
+                .thenReturn(ORDER_VALID_ORDER_ID);
 
-        Long orderId = orderService.addOrder(otc.VALID_ORDER_ENTITY);
+        Long orderId = orderService.addOrder(ORDER_VALID_ENTITY);
 
-        assertEquals(otc.VALID_ORDER_ID, orderId);
+        assertEquals(ORDER_VALID_ORDER_ID, orderId);
     }
 
     @Test
     void updateOrder() {
         when(orderRepository.updateOrder(any(Order.class)))
-                .thenReturn(Optional.of(otc.VALID_UPDATED_ORDER_ENTITY));
+                .thenReturn(Optional.of(ORDER_VALID_UPDATED_ENTITY));
 
         Optional<Order> optionalOrder = orderService
-                .updateOrder(otc.VALID_UPDATED_ORDER_ENTITY);
+                .updateOrder(ORDER_VALID_UPDATED_ENTITY);
 
         assertTrue(optionalOrder.isPresent());
-        assertEquals(otc.VALID_UPDATED_ORDER_ENTITY, optionalOrder.get());
+        assertEquals(ORDER_VALID_UPDATED_ENTITY, optionalOrder.get());
     }
 
     @Test
-    void findOrderByOrderId() {
+    void findOrder() {
 
-        when(orderRepository.findOrderByOrderId(any(Long.class)))
-                .thenReturn(Optional.of(otc.VALID_ORDER_ENTITY));
+        when(orderRepository.findOrder(any(Long.class)))
+                .thenReturn(Optional.of(ORDER_VALID_ENTITY));
 
-        Optional<Order> foundOrder = orderService.findOrderByOrderId(1L);
+        Optional<Order> foundOrder = orderService.findOrder(1L);
 
         assertTrue(foundOrder.isPresent());
-        assertEquals(otc.VALID_ORDER_ENTITY, foundOrder.get());
+        assertEquals(ORDER_VALID_ENTITY, foundOrder.get());
     }
 
     @Test
     void getOrders() {
         when(orderRepository.getOrders())
-                .thenReturn(otc.VALID_ORDER_ENTITY_LIST);
+                .thenReturn(ORDER_VALID_ENTITY_LIST);
 
         List<Order> orderList = orderService.getOrders();
 
-        assertEquals(otc.VALID_ORDER_ENTITY_LIST.size(), orderList.size());
-        assertEquals(otc.VALID_ORDER_ENTITY_LIST, orderList);
+        assertEquals(ORDER_VALID_ENTITY_LIST.size(), orderList.size());
+        assertEquals(ORDER_VALID_ENTITY_LIST, orderList);
+    }
+
+    @Test
+    void deleteOrder() {
+        orderService.deleteOrder(ORDER_VALID_ORDER_ID);
+        verify(orderRepository, times(1)).deleteOrder(ORDER_VALID_ORDER_ID);
     }
 }

@@ -16,5 +16,5 @@ public interface OrderReservationRepository {
     List<Order> getAvailableFilteredOrders(
             Long barbershopId, LocalDateTime dateToStartWeekFrom, List<Long>barberIds
     );
-    List<Order> reserveOrdersByOrderIdsAndByCustomerId(List<Long>orderIds, Long customerId);
+    List<Order> reserveOrders(List<Long>orderIds, Long customerId);
 }

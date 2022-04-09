@@ -3,22 +3,26 @@ package com.app.barbershopweb.workspace.converter;
 import com.app.barbershopweb.workspace.Workspace;
 import com.app.barbershopweb.workspace.WorkspaceConverter;
 import com.app.barbershopweb.workspace.WorkspaceDto;
-import com.app.barbershopweb.workspace.WorkspaceTestConstants;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.app.barbershopweb.workspace.constants.WorkspaceDto__TestConstants.WORKSPACE_VALID_DTO;
+import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_ENTITY;
+import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_DTO_LIST;
+import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.WORKSPACE_FIELD_AMOUNT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class WorkspaceConverterTest {
 
     private final WorkspaceConverter workspaceConverter = new WorkspaceConverter();
-    private final WorkspaceTestConstants wtc = new WorkspaceTestConstants();
+
 
     @Test
     void workspaceDtoListToEntityList() {
 
-        List<Workspace> workspaces = wtc.VALID_WORKSPACE_DTO_LIST.stream()
+        List<Workspace> workspaces = WORKSPACE_VALID_DTO_LIST.stream()
                 .map(dto -> new Workspace(
                         dto.workspaceId(),
                         dto.userId(),
@@ -30,14 +34,14 @@ class WorkspaceConverterTest {
         assertEquals(
                 workspaces,
                 workspaceConverter.workspaceDtoListToEntityList(
-                        wtc.VALID_WORKSPACE_DTO_LIST
+                        WORKSPACE_VALID_DTO_LIST
                 )
         );
     }
 
     @Test
     void workspaceEntityListToDtoList() {
-        List<WorkspaceDto> dtos = wtc.VALID_WORKSPACE_ENTITY_LIST.stream()
+        List<WorkspaceDto> dtos = WORKSPACE_VALID_ENTITY_LIST.stream()
                 .map(entity -> new WorkspaceDto(
                         entity.getWorkspaceId(),
                         entity.getUserId(),
@@ -49,7 +53,7 @@ class WorkspaceConverterTest {
         assertEquals(
                 dtos,
                 workspaceConverter.workspaceEntityListToDtoList(
-                        wtc.VALID_WORKSPACE_ENTITY_LIST
+                        WORKSPACE_VALID_ENTITY_LIST
                 )
         );
     }
@@ -57,21 +61,21 @@ class WorkspaceConverterTest {
     @Test
     void mapToEntity() {
         assertEquals(
-                wtc.VALID_WORKSPACE_ENTITY,
-                workspaceConverter.mapToEntity(wtc.VALID_WORKSPACE_DTO)
+                WORKSPACE_VALID_ENTITY,
+                workspaceConverter.mapToEntity(WORKSPACE_VALID_DTO)
         );
     }
 
     @Test
     void mapToDto() {
         assertEquals(
-                wtc.VALID_WORKSPACE_DTO,
-                workspaceConverter.mapToDto(wtc.VALID_WORKSPACE_ENTITY)
+                WORKSPACE_VALID_DTO,
+                workspaceConverter.mapToDto(WORKSPACE_VALID_ENTITY)
         );
     }
 
     @Test
     void actualFieldAmount() {
-        assertEquals(Workspace.class.getDeclaredFields().length, wtc.WORKSPACE_FIELD_AMOUNT);
+        assertEquals(Workspace.class.getDeclaredFields().length, WORKSPACE_FIELD_AMOUNT);
     }
 }

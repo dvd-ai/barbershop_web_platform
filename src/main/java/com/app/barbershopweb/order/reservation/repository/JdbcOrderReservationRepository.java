@@ -100,11 +100,11 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
                 .addValue("orderId", orderId);
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
-        return orderRepository.findOrderByOrderId(orderId);
+        return orderRepository.findOrder(orderId);
     }
 
     private void checkOrderUk(Long orderId, Long customerId) {
-        Order order = orderRepository.findOrderByOrderId(orderId).get();
+        Order order = orderRepository.findOrder(orderId).get();
 
         if(orderRepository.orderExistsByCustomerIdAndOrderDate(
                 customerId, order.getOrderDate())
@@ -123,7 +123,7 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
     }
 
     @Override
-    public List<Order> reserveOrdersByOrderIdsAndByCustomerId(List<Long> orderIds, Long customerId) {
+    public List<Order> reserveOrders(List<Long> orderIds, Long customerId) {
         checkCustomerExistence(customerId);
         checkOrdersExistence(orderIds);
 

@@ -1,24 +1,32 @@
 package com.app.barbershopweb.integrationtests.workspace;
 
-import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
 import com.app.barbershopweb.error.ErrorDto;
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.user.UserTestConstants;
 import com.app.barbershopweb.user.repository.JdbcUsersRepository;
 import com.app.barbershopweb.workspace.WorkspaceDto;
-import com.app.barbershopweb.workspace.WorkspaceTestConstants;
 import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Objects;
 
-import static com.app.barbershopweb.barbershop.BarbershopTestConstants.BARBERSHOPS_URL;
-import static com.app.barbershopweb.user.UserTestConstants.USERS_URL;
-import static com.app.barbershopweb.workspace.WorkspaceTestConstants.WORKSPACES_URL;
+import static com.app.barbershopweb.barbershop.constants.BarbershopDto__TestConstants.BARBERSHOP_VALID_DTO;
+import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOPS_URL;
+import static com.app.barbershopweb.user.constants.UserDto__TestConstants.USERS_VALID_USER_DTO;
+import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.USERS_URL;
+import static com.app.barbershopweb.workspace.constants.WorkspaceDto__TestConstants.*;
+import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.*;
+import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMessage_Dto__TestConstants.*;
+import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMessage_Fk__TestConstants.WORKSPACE_ERR_FK_BARBERSHOP_ID;
+import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMessage_Fk__TestConstants.WORKSPACE_ERR_FK_USER_ID;
+import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMessage_PathVar__TestConstants.WORKSPACE_ERR_INVALID_PATH_VAR_WORKSPACE_ID;
+import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMessage_Uk__TestConstants.WORKSPACE_ERR_UK_USER_ID__BARBERSHOP_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -29,9 +37,6 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private final WorkspaceTestConstants wtc = new WorkspaceTestConstants();
-    private final BarbershopTestConstants btc = new BarbershopTestConstants();
-    private final UserTestConstants utc = new UserTestConstants();
 
     @Autowired
     private JdbcBarbershopRepository barbershopRepository;
@@ -41,8 +46,8 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
     private JdbcWorkspaceRepository workspaceRepository;
 
     void initFk() {
-         restTemplate.postForEntity(BARBERSHOPS_URL, btc.VALID_BARBERSHOP_DTO, Long.class);
-         restTemplate.postForEntity(USERS_URL, utc.VALID_USER_DTO, Long.class);
+        restTemplate.postForEntity(BARBERSHOPS_URL, BARBERSHOP_VALID_DTO, Long.class);
+        restTemplate.postForEntity(USERS_URL, USERS_VALID_USER_DTO, Long.class);
     }
 
     @DisplayName("POST: " + WORKSPACES_URL +
@@ -51,16 +56,16 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
     @Test
     @Order(1)
     void whenWorkspaceDtoNotValidPost() {
-        final ResponseEntity<ErrorDto> response = restTemplate.postForEntity(WORKSPACES_URL, wtc.INVALID_WORKSPACE_DTO, ErrorDto.class);
+        final ResponseEntity<ErrorDto> response = restTemplate.postForEntity(WORKSPACES_URL, WORKSPACE_INVALID_DTO, ErrorDto.class);
         ErrorDto body = response.getBody();
-        
-        
+
+
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(3, Objects.requireNonNull(body).errors().size());
 
-        assertTrue(body.errors().contains(wtc.DTO_CV_BARBERSHOP_ID_ERR_MSG));
-        assertTrue(body.errors().contains(wtc.DTO_CV_WORKSPACE_ID_ERR_MSG));
-        assertTrue(body.errors().contains(wtc.DTO_CV_USER_ID_ERR_MSG));
+        assertTrue(body.errors().contains(WORKSPACE_ERR_INVALID_DTO_BARBERSHOP_ID));
+        assertTrue(body.errors().contains(WORKSPACE_ERR_INVALID_DTO_WORKSPACE_ID));
+        assertTrue(body.errors().contains(WORKSPACE_ERR_INVALID_DTO_USER_ID));
     }
 
     @DisplayName("GET: " + WORKSPACES_URL + "/{workspaceId} " +
@@ -70,13 +75,13 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
     @Order(2)
     void whenWorkspaceIdNotValidGet() {
         ResponseEntity<ErrorDto> response = restTemplate.getForEntity(
-                WORKSPACES_URL + "/" + wtc.INVALID_WORKSPACE_ID,
+                WORKSPACES_URL + "/" + WORKSPACE_INVALID_WORKSPACE_ID,
                 ErrorDto.class
         );
 
-        
+
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals(wtc.PV_WORKSPACE_ID_ERR_MSG, Objects.requireNonNull(response.getBody()).errors().get(0));
+        assertEquals(WORKSPACE_ERR_INVALID_PATH_VAR_WORKSPACE_ID, Objects.requireNonNull(response.getBody()).errors().get(0));
         assertEquals(1, response.getBody().errors().size());
     }
 
@@ -86,11 +91,11 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
     @Test
     @Order(3)
     void whenNotExistedWorkspaceId() {
-        ResponseEntity<ErrorDto> response = restTemplate.getForEntity(WORKSPACES_URL + "/" + wtc.NOT_EXISTED_WORKSPACE_ID, ErrorDto.class);
-        
-        
+        ResponseEntity<ErrorDto> response = restTemplate.getForEntity(WORKSPACES_URL + "/" + WORKSPACE_NOT_EXISTED_WORKSPACE_ID, ErrorDto.class);
+
+
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("Workspace with id '" + wtc.NOT_EXISTED_WORKSPACE_ID + "' not found.",
+        assertEquals("Workspace with id '" + WORKSPACE_NOT_EXISTED_WORKSPACE_ID + "' not found.",
                 Objects.requireNonNull(response.getBody()).errors().get(0));
         assertEquals(1, response.getBody().errors().size());
     }
@@ -101,17 +106,17 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
     @Test
     @Order(4)
     void whenWorkspaceDtoNotValidPut() {
-        HttpEntity<WorkspaceDto> requestEntity = new HttpEntity<>(wtc.INVALID_WORKSPACE_DTO);
+        HttpEntity<WorkspaceDto> requestEntity = new HttpEntity<>(WORKSPACE_INVALID_DTO);
         ResponseEntity<ErrorDto> response = restTemplate.exchange(WORKSPACES_URL, HttpMethod.PUT, requestEntity, ErrorDto.class);
         ErrorDto body = response.getBody();
-        
-        
+
+
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(3, Objects.requireNonNull(body).errors().size());
 
-        assertTrue(body.errors().contains(wtc.DTO_CV_USER_ID_ERR_MSG));
-        assertTrue(body.errors().contains(wtc.DTO_CV_WORKSPACE_ID_ERR_MSG));
-        assertTrue(body.errors().contains(wtc.DTO_CV_BARBERSHOP_ID_ERR_MSG));
+        assertTrue(body.errors().contains(WORKSPACE_ERR_INVALID_DTO_USER_ID));
+        assertTrue(body.errors().contains(WORKSPACE_ERR_INVALID_DTO_WORKSPACE_ID));
+        assertTrue(body.errors().contains(WORKSPACE_ERR_INVALID_DTO_BARBERSHOP_ID));
     }
 
     @DisplayName("DELETE: " + WORKSPACES_URL + "/{workspaceId}" +
@@ -120,13 +125,13 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
     @Test
     @Order(5)
     void whenWorkspaceIdNotValidDelete() {
-        ResponseEntity<ErrorDto> response = restTemplate.exchange(WORKSPACES_URL + "/" + wtc.INVALID_WORKSPACE_ID, HttpMethod.DELETE, null, ErrorDto.class);
+        ResponseEntity<ErrorDto> response = restTemplate.exchange(WORKSPACES_URL + "/" + WORKSPACE_INVALID_WORKSPACE_ID, HttpMethod.DELETE, null, ErrorDto.class);
         ErrorDto body = response.getBody();
 
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(1, Objects.requireNonNull(body).errors().size());
-        assertEquals(wtc.PV_WORKSPACE_ID_ERR_MSG, body.errors().get(0));
+        assertEquals(WORKSPACE_ERR_INVALID_PATH_VAR_WORKSPACE_ID, body.errors().get(0));
     }
 
     @DisplayName("POST: " + WORKSPACES_URL +
@@ -136,15 +141,15 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
     @Order(6)
     void whenWorkspaceDtoViolatesDbFkConstraintsPost() {
 
-        final ResponseEntity<ErrorDto> response = restTemplate.postForEntity(WORKSPACES_URL, wtc.VALID_WORKSPACE_DTO, ErrorDto.class);
+        final ResponseEntity<ErrorDto> response = restTemplate.postForEntity(WORKSPACES_URL, WORKSPACE_VALID_DTO, ErrorDto.class);
         ErrorDto body = response.getBody();
 
 
         assertEquals(2, Objects.requireNonNull(body).errors().size());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
-        assertTrue(body.errors().contains(wtc.FK_CV_BARBERSHOP_ID_ERR_MSG));
-        assertTrue(body.errors().contains(wtc.FK_CV_USER_ID_ERR_MSG));
+        assertTrue(body.errors().contains(WORKSPACE_ERR_FK_BARBERSHOP_ID));
+        assertTrue(body.errors().contains(WORKSPACE_ERR_FK_USER_ID));
 
     }
 
@@ -154,15 +159,15 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
     @Test
     @Order(7)
     void whenWorkspaceDtoViolatesDbFkConstraintsPut() {
-        HttpEntity<WorkspaceDto> requestEntity = new HttpEntity<>(wtc.VALID_WORKSPACE_DTO);
+        HttpEntity<WorkspaceDto> requestEntity = new HttpEntity<>(WORKSPACE_VALID_DTO);
         ResponseEntity<ErrorDto> response = restTemplate.exchange(WORKSPACES_URL, HttpMethod.PUT, requestEntity, ErrorDto.class);
         ErrorDto body = response.getBody();
 
         assertEquals(2, Objects.requireNonNull(body).errors().size());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
-        assertTrue(body.errors().contains(wtc.FK_CV_BARBERSHOP_ID_ERR_MSG));
-        assertTrue(body.errors().contains(wtc.FK_CV_USER_ID_ERR_MSG));
+        assertTrue(body.errors().contains(WORKSPACE_ERR_FK_BARBERSHOP_ID));
+        assertTrue(body.errors().contains(WORKSPACE_ERR_FK_USER_ID));
     }
 
     @Test
@@ -173,16 +178,16 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
     void whenNotFoundWorkspaceId() {
         initFk();
 
-        HttpEntity<WorkspaceDto> requestEntity = new HttpEntity<>(wtc.WORKSPACE_DTO_NOT_EXISTED_ID);
+        HttpEntity<WorkspaceDto> requestEntity = new HttpEntity<>(WORKSPACE_NOT_EXISTED_ID_DTO);
         ResponseEntity<ErrorDto> response = restTemplate.exchange(WORKSPACES_URL, HttpMethod.PUT, requestEntity, ErrorDto.class);
         ErrorDto body = response.getBody();
         System.out.println(body);
 
-        
+
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals(1, Objects.requireNonNull(body).errors().size());
         assertEquals(
-                "Workspace with id '" + wtc.WORKSPACE_DTO_NOT_EXISTED_ID.workspaceId() + "' not found.",
+                "Workspace with id '" + WORKSPACE_NOT_EXISTED_ID_DTO.workspaceId() + "' not found.",
                 Objects.requireNonNull(Objects.requireNonNull(body).errors().get(0))
         );
 
@@ -196,14 +201,14 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
     void whenWorkspaceDtoViolatesDbUkConstraintsPost() {
         addWorkspaceWithUnusedUk();
 
-        final ResponseEntity<ErrorDto> response = restTemplate.postForEntity(WORKSPACES_URL, wtc.VALID_WORKSPACE_DTO, ErrorDto.class);
+        final ResponseEntity<ErrorDto> response = restTemplate.postForEntity(WORKSPACES_URL, WORKSPACE_VALID_DTO, ErrorDto.class);
         ErrorDto body = response.getBody();
 
 
         assertEquals(1, Objects.requireNonNull(body).errors().size());
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
-        assertTrue(body.errors().contains(wtc.UK_CV_ERR_MSG));
+        assertTrue(body.errors().contains(WORKSPACE_ERR_UK_USER_ID__BARBERSHOP_ID));
 
     }
 
@@ -213,7 +218,7 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
     @Test
     @Order(10)
     void whenWorkspaceDtoViolatesDbUkConstraintsPut() {
-        HttpEntity<WorkspaceDto> requestEntity = new HttpEntity<>(wtc.VALID_WORKSPACE_DTO);
+        HttpEntity<WorkspaceDto> requestEntity = new HttpEntity<>(WORKSPACE_VALID_DTO);
         ResponseEntity<ErrorDto> response = restTemplate.exchange(WORKSPACES_URL, HttpMethod.PUT, requestEntity, ErrorDto.class);
         ErrorDto body = response.getBody();
 
@@ -222,11 +227,11 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
         assertEquals(1, Objects.requireNonNull(body).errors().size());
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
-        assertTrue(body.errors().contains(wtc.UK_CV_ERR_MSG));
+        assertTrue(body.errors().contains(WORKSPACE_ERR_UK_USER_ID__BARBERSHOP_ID));
     }
 
     void addWorkspaceWithUnusedUk() {
-        restTemplate.postForEntity(WORKSPACES_URL, wtc.VALID_WORKSPACE_DTO, Long.class);
+        restTemplate.postForEntity(WORKSPACES_URL, WORKSPACE_VALID_DTO, Long.class);
     }
 
     @AfterAll

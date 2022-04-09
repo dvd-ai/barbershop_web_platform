@@ -1,53 +1,49 @@
 package com.app.barbershopweb.database.order.reservation;
 
 import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
-import com.app.barbershopweb.database.AbstractJdbcRepositoryTest;
+import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.repository.JdbcOrderRepository;
-import com.app.barbershopweb.order.reservation.OrderReservationTestConstants;
 import com.app.barbershopweb.order.reservation.repository.JdbcOrderReservationRepository;
 import com.app.barbershopweb.user.repository.JdbcUsersRepository;
 import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.sql.DataSource;
 import java.util.List;
 
+import static com.app.barbershopweb.order.reservation.constants.dto.OrderReservation_Dto__TestConstants.ORDER_RESERVATION_VALID_DTO;
+import static com.app.barbershopweb.order.reservation.constants.dto.OrderReservation_GetOpenOrders_Dto__TestConstants.GET_OPEN_ORDERS__REQUEST_VALID_DTO;
+import static com.app.barbershopweb.order.reservation.constants.dto.OrderReservation_GetOpenOrders_Filtered_Dto__TestConstants.GET_OPEN_FILTERED_ORDERS__REQUEST_DTO;
+import static com.app.barbershopweb.order.reservation.constants.list.entity.OrderReservation_List_OrderEntity__TestConstants.*;
+import static com.app.barbershopweb.order.reservation.constants.list.fk.OrderReservation_FkEntityList__TestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @DisplayName("jdbc order reservation repository test without error handling")
-class JdbcOrderReservationRepoTest extends AbstractJdbcRepositoryTest {
+class JdbcOrderReservationRepoTest extends AbstractIT {
 
-    static JdbcOrderReservationRepository orderReservationRepository;
-    static JdbcUsersRepository usersRepository;
-    static JdbcBarbershopRepository barbershopRepository;
-    static JdbcOrderRepository orderRepository;
-    static JdbcWorkspaceRepository workspaceRepository;
+    @Autowired
+    JdbcOrderReservationRepository orderReservationRepository;
+    @Autowired
+    JdbcUsersRepository usersRepository;
+    @Autowired
+    JdbcBarbershopRepository barbershopRepository;
+    @Autowired
+    JdbcOrderRepository orderRepository;
+    @Autowired
+    JdbcWorkspaceRepository workspaceRepository;
 
-    OrderReservationTestConstants ortc = new OrderReservationTestConstants();
-
-    @BeforeAll
-    static void init() {
-        DataSource ds = getDataSource();
-        usersRepository = new JdbcUsersRepository(ds);
-        barbershopRepository = new JdbcBarbershopRepository(ds);
-        workspaceRepository = new JdbcWorkspaceRepository(
-                ds, usersRepository, barbershopRepository
-        );
-        orderRepository = new JdbcOrderRepository(
-                ds, usersRepository, barbershopRepository, workspaceRepository
-        );
-        orderReservationRepository = new JdbcOrderReservationRepository(
-                orderRepository, ds, usersRepository);
-    }
 
     @BeforeEach
     void initFks() {
-        ortc.FK_USER_ENTITY_LIST.forEach(usersRepository::addUser);
-        ortc.FK_BARBERSHOP_ENTITY_LIST.forEach(barbershopRepository::addBarbershop);
-        ortc.FK_WORKSPACE_ENTITY_LIST.forEach(workspaceRepository::addWorkspace);
+        ORDER_RESERVATION_FK_USER_ENTITY_LIST.forEach(usersRepository::addUser);
+        ORDER_RESERVATION_FK_BARBERSHOP_ENTITY_LIST.forEach(barbershopRepository::addBarbershop);
+        ORDER_RESERVATION_FK_WORKSPACE_ENTITY_LIST.forEach(workspaceRepository::addWorkspace);
     }
 
     @AfterEach
@@ -62,24 +58,24 @@ class JdbcOrderReservationRepoTest extends AbstractJdbcRepositoryTest {
     void getAvailableOrders() {
         assertTrue(
                 orderReservationRepository.getAvailableOrders(
-                    ortc.SUOR_DTO_NO_FILTERS.barbershopId(),
-                    ortc.SUOR_DTO_NO_FILTERS.startWeekDate()
+                        GET_OPEN_ORDERS__REQUEST_VALID_DTO.barbershopId(),
+                        GET_OPEN_ORDERS__REQUEST_VALID_DTO.startWeekDate()
                 ).isEmpty()
         );
 
-        ortc.UNRESERVED_ORDER_ENTITY_LIST.forEach(orderRepository::addOrder);
+        ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST.forEach(orderRepository::addOrder);
 
         List<Order> availableOrders = orderReservationRepository.getAvailableOrders(
-                ortc.SUOR_DTO_NO_FILTERS.barbershopId(),
-                ortc.SUOR_DTO_NO_FILTERS.startWeekDate()
+                GET_OPEN_ORDERS__REQUEST_VALID_DTO.barbershopId(),
+                GET_OPEN_ORDERS__REQUEST_VALID_DTO.startWeekDate()
         );
 
         //database returns '0' instead of null, but it was saved as null before
         assertTrue(availableOrders.stream().allMatch(order -> order.getCustomerId() == 0));
         availableOrders.forEach(order -> order.setCustomerId(null));
 
-        assertEquals(ortc.UNRESERVED_ORDER_ENTITY_LIST.size(), availableOrders.size());
-        assertTrue(ortc.UNRESERVED_ORDER_ENTITY_LIST.containsAll(availableOrders));
+        assertEquals(ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST.size(), availableOrders.size());
+        assertTrue(ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST.containsAll(availableOrders));
     }
 
     @Test
@@ -89,16 +85,16 @@ class JdbcOrderReservationRepoTest extends AbstractJdbcRepositoryTest {
     void getAvailableOrdersNotSuitableOrders() {
         assertTrue(
                 orderReservationRepository.getAvailableOrders(
-                        ortc.SUOR_DTO_NO_FILTERS.barbershopId(),
-                        ortc.SUOR_DTO_NO_FILTERS.startWeekDate()
+                        GET_OPEN_ORDERS__REQUEST_VALID_DTO.barbershopId(),
+                        GET_OPEN_ORDERS__REQUEST_VALID_DTO.startWeekDate()
                 ).isEmpty()
         );
 
-        ortc.NOT_SUITABLE_UNRESERVED_ORDER_ENTITY_LIST.forEach(orderRepository::addOrder);
+        ORDER_RESERVATION_UNFIT_OPEN_ORDER_ENTITY_LIST.forEach(orderRepository::addOrder);
 
         List<Order> availableOrders = orderReservationRepository.getAvailableOrders(
-                ortc.SUOR_DTO_NO_FILTERS.barbershopId(),
-                ortc.SUOR_DTO_NO_FILTERS.startWeekDate()
+                GET_OPEN_ORDERS__REQUEST_VALID_DTO.barbershopId(),
+                GET_OPEN_ORDERS__REQUEST_VALID_DTO.startWeekDate()
         );
 
         assertTrue(availableOrders.isEmpty());
@@ -109,18 +105,18 @@ class JdbcOrderReservationRepoTest extends AbstractJdbcRepositoryTest {
     void getAvailableFilteredOrders() {
         assertTrue(
                 orderReservationRepository.getAvailableFilteredOrders(
-                        ortc.SUOR_DTO_WITH_FILTERS.barbershopId(),
-                        ortc.SUOR_DTO_WITH_FILTERS.startWeekDate(),
-                        ortc.SUOR_DTO_WITH_FILTERS.orderFilters().getBarberIds()
+                        GET_OPEN_FILTERED_ORDERS__REQUEST_DTO.barbershopId(),
+                        GET_OPEN_FILTERED_ORDERS__REQUEST_DTO.startWeekDate(),
+                        GET_OPEN_FILTERED_ORDERS__REQUEST_DTO.orderFilters().getBarberIds()
                 ).isEmpty()
         );
 
-        ortc.UNRESERVED_FILTERED_ORDER_ENTITY_LIST.forEach(orderRepository::addOrder);
+        ORDER_RESERVATION_OPEN_FILTERED_ORDER_ENTITY_LIST.forEach(orderRepository::addOrder);
 
         List<Order> filteredOrders = orderReservationRepository.getAvailableFilteredOrders(
-                ortc.SUOR_DTO_WITH_FILTERS.barbershopId(),
-                ortc.SUOR_DTO_WITH_FILTERS.startWeekDate(),
-                ortc.SUOR_DTO_WITH_FILTERS.orderFilters().getBarberIds()
+                GET_OPEN_FILTERED_ORDERS__REQUEST_DTO.barbershopId(),
+                GET_OPEN_FILTERED_ORDERS__REQUEST_DTO.startWeekDate(),
+                GET_OPEN_FILTERED_ORDERS__REQUEST_DTO.orderFilters().getBarberIds()
         );
 
 
@@ -128,8 +124,8 @@ class JdbcOrderReservationRepoTest extends AbstractJdbcRepositoryTest {
         assertTrue(filteredOrders.stream().allMatch(order -> order.getCustomerId() == 0));
         filteredOrders.forEach(order -> order.setCustomerId(null));
 
-        assertEquals(ortc.UNRESERVED_FILTERED_ORDER_ENTITY_LIST.size(), filteredOrders.size());
-        assertTrue(ortc.UNRESERVED_FILTERED_ORDER_ENTITY_LIST.containsAll(filteredOrders));
+        assertEquals(ORDER_RESERVATION_OPEN_FILTERED_ORDER_ENTITY_LIST.size(), filteredOrders.size());
+        assertTrue(ORDER_RESERVATION_OPEN_FILTERED_ORDER_ENTITY_LIST.containsAll(filteredOrders));
 
     }
 
@@ -140,18 +136,18 @@ class JdbcOrderReservationRepoTest extends AbstractJdbcRepositoryTest {
     void getFilteredAvailableOrdersNotSuitableOrders() {
         assertTrue(
                 orderReservationRepository.getAvailableFilteredOrders(
-                        ortc.SUOR_DTO_WITH_FILTERS.barbershopId(),
-                        ortc.SUOR_DTO_WITH_FILTERS.startWeekDate(),
-                        ortc.SUOR_DTO_WITH_FILTERS.orderFilters().getBarberIds()
+                        GET_OPEN_FILTERED_ORDERS__REQUEST_DTO.barbershopId(),
+                        GET_OPEN_FILTERED_ORDERS__REQUEST_DTO.startWeekDate(),
+                        GET_OPEN_FILTERED_ORDERS__REQUEST_DTO.orderFilters().getBarberIds()
                 ).isEmpty()
         );
 
-        ortc.NOT_SUITABLE_UNRESERVED_ORDER_ENTITY_LIST.forEach(orderRepository::addOrder);
+        ORDER_RESERVATION_UNFIT_OPEN_ORDER_ENTITY_LIST.forEach(orderRepository::addOrder);
 
         List<Order> availableOrders = orderReservationRepository.getAvailableFilteredOrders(
-                ortc.SUOR_DTO_WITH_FILTERS.barbershopId(),
-                ortc.SUOR_DTO_WITH_FILTERS.startWeekDate(),
-                ortc.SUOR_DTO_WITH_FILTERS.orderFilters().getBarberIds()
+                GET_OPEN_FILTERED_ORDERS__REQUEST_DTO.barbershopId(),
+                GET_OPEN_FILTERED_ORDERS__REQUEST_DTO.startWeekDate(),
+                GET_OPEN_FILTERED_ORDERS__REQUEST_DTO.orderFilters().getBarberIds()
         );
 
         assertTrue(availableOrders.isEmpty());
@@ -159,15 +155,15 @@ class JdbcOrderReservationRepoTest extends AbstractJdbcRepositoryTest {
 
 
     @Test
-    void reserveOrdersByOrderIdsAndByCustomerId() {
-        ortc.UNRESERVED_ORDER_ENTITY_LIST.forEach(orderRepository::addOrder);
+    void reserveOrders() {
+        ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST.forEach(orderRepository::addOrder);
 
-        List<Order> reservedOrders = orderReservationRepository.reserveOrdersByOrderIdsAndByCustomerId(
-                ortc.VALID_ORDER_RESERV_DTO.orderIds(),
-                ortc.VALID_ORDER_RESERV_DTO.customerId()
+        List<Order> reservedOrders = orderReservationRepository.reserveOrders(
+                ORDER_RESERVATION_VALID_DTO.orderIds(),
+                ORDER_RESERVATION_VALID_DTO.customerId()
         );
 
-        assertEquals(ortc.RESERVED_ORDER_ENTITY_LIST.size(), reservedOrders.size());
-        assertTrue(ortc.RESERVED_ORDER_ENTITY_LIST.containsAll(reservedOrders));
+        assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.size(), reservedOrders.size());
+        assertTrue(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.containsAll(reservedOrders));
     }
 }

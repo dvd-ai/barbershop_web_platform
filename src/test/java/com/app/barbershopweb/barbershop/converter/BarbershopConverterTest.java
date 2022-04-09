@@ -3,22 +3,25 @@ package com.app.barbershopweb.barbershop.converter;
 import com.app.barbershopweb.barbershop.Barbershop;
 import com.app.barbershopweb.barbershop.BarbershopConverter;
 import com.app.barbershopweb.barbershop.BarbershopDto;
-import com.app.barbershopweb.barbershop.BarbershopTestConstants;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.app.barbershopweb.barbershop.constants.BarbershopDto__TestConstants.BARBERSHOP_VALID_DTO;
+import static com.app.barbershopweb.barbershop.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
+import static com.app.barbershopweb.barbershop.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_DTO_LIST;
+import static com.app.barbershopweb.barbershop.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOP_FIELD_AMOUNT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BarbershopConverterTest {
 
     private final BarbershopConverter barbershopConverter = new BarbershopConverter();
-    private final BarbershopTestConstants btc = new BarbershopTestConstants();
 
     @Test
     void barbershopDtoListToEntityList() {
 
-        List<Barbershop> barbershops = btc.VALID_BARBERSHOP_DTO_LIST.stream()
+        List<Barbershop> barbershops = BARBERSHOP_VALID_DTO_LIST.stream()
                 .map(dto -> new Barbershop(
                         dto.id(),
                         dto.address(),
@@ -33,14 +36,14 @@ class BarbershopConverterTest {
         assertEquals(
                 barbershops,
                 barbershopConverter.barbershopDtoListToEntityList(
-                        btc.VALID_BARBERSHOP_DTO_LIST
+                        BARBERSHOP_VALID_DTO_LIST
                 )
         );
     }
 
     @Test
     void barbershopEntityListToDtoList() {
-        List<BarbershopDto> dtos = btc.VALID_BARBERSHOP_ENTITY_LIST.stream()
+        List<BarbershopDto> dtos = BARBERSHOP_VALID_ENTITY_LIST.stream()
                 .map(entity -> new BarbershopDto(
                         entity.getId(),
                         entity.getAddress(),
@@ -55,7 +58,7 @@ class BarbershopConverterTest {
         assertEquals(
                 dtos,
                 barbershopConverter.barbershopEntityListToDtoList(
-                        btc.VALID_BARBERSHOP_ENTITY_LIST
+                        BARBERSHOP_VALID_ENTITY_LIST
                 )
         );
     }
@@ -63,21 +66,21 @@ class BarbershopConverterTest {
     @Test
     void mapToEntity() {
         assertEquals(
-                btc.VALID_BARBERSHOP_ENTITY,
-                barbershopConverter.mapToEntity(btc.VALID_BARBERSHOP_DTO)
+                BARBERSHOP_VALID_ENTITY,
+                barbershopConverter.mapToEntity(BARBERSHOP_VALID_DTO)
         );
     }
 
     @Test
     void mapToDto() {
         assertEquals(
-                btc.VALID_BARBERSHOP_DTO,
-                barbershopConverter.mapToDto(btc.VALID_BARBERSHOP_ENTITY)
+                BARBERSHOP_VALID_DTO,
+                barbershopConverter.mapToDto(BARBERSHOP_VALID_ENTITY)
         );
     }
 
     @Test
     void actualFieldAmount() {
-        assertEquals(Barbershop.class.getDeclaredFields().length, btc.BARBERSHOP_FIELD_AMOUNT);
+        assertEquals(Barbershop.class.getDeclaredFields().length, BARBERSHOP_FIELD_AMOUNT);
     }
 }

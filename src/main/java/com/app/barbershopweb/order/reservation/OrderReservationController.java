@@ -4,7 +4,8 @@ import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.OrderConverter;
 import com.app.barbershopweb.order.crud.OrderDto;
 import com.app.barbershopweb.order.reservation.dto.OrderReservationDto;
-import com.app.barbershopweb.order.reservation.dto.ShowUnreservedOrdersRequestDto;
+import com.app.barbershopweb.order.reservation.dto.GetOpenFilteredOrders__RequestDto;
+import com.app.barbershopweb.order.reservation.dto.GetOpenOrders__RequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,8 +30,8 @@ public class OrderReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<List<OrderDto>>getBarbershopActiveUnreservedOrdersForWeek(
-            @RequestBody @Valid ShowUnreservedOrdersRequestDto showUnreservedOrdersRequestDto
+    public ResponseEntity<List<OrderDto>> getAvailableOrders(
+            @RequestBody @Valid GetOpenOrders__RequestDto showUnreservedOrdersRequestDto
     ) {
         List<Order> orders = orderReservationService.getAvailableOrders(
                 showUnreservedOrdersRequestDto.barbershopId(),
@@ -42,8 +43,8 @@ public class OrderReservationController {
     }
 
     @PostMapping("/filtered")
-    public ResponseEntity<List<OrderDto>> getBarbershopActiveFilteredUnreservedOrdersForWeek(
-            @RequestBody @Valid ShowUnreservedOrdersRequestDto showUnreservedOrdersRequestDto
+    public ResponseEntity<List<OrderDto>> getFilteredAvailableOrders(
+            @RequestBody @Valid GetOpenFilteredOrders__RequestDto showUnreservedOrdersRequestDto
     ) {
         List<Order> orders = orderReservationService.getFilteredAvailableOrders(
                 showUnreservedOrdersRequestDto.barbershopId(),
@@ -56,9 +57,9 @@ public class OrderReservationController {
     }
 
     @PutMapping()
-    public ResponseEntity<List<OrderDto>> reserveCustomerOrders(@RequestBody @Valid OrderReservationDto orderReservationDto) {
+    public ResponseEntity<List<OrderDto>> reserveOrders(@RequestBody @Valid OrderReservationDto orderReservationDto) {
         List<Order> reservedOrders =
-                orderReservationService.reserveCustomerOrders(
+                orderReservationService.reserveOrders(
                         orderReservationDto.orderIds(),
                         orderReservationDto.customerId()
                 );

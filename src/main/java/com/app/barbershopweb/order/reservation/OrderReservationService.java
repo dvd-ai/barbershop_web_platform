@@ -34,7 +34,7 @@ public class OrderReservationService {
         else return orderReservationRepository.getAvailableOrders(barbershopId, dateToStartWeekFrom);
     }
 
-    public List<Order> reserveCustomerOrders(List<Long> orderIds, Long customerId) {
-        return orderReservationRepository.reserveOrdersByOrderIdsAndByCustomerId(orderIds, customerId);
+    public List<Order> reserveOrders(List<Long> orderIds, Long customerId) {
+        return orderReservationRepository.reserveOrders(orderIds, customerId);
     }
 }
