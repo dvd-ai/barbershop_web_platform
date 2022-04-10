@@ -17,7 +17,8 @@ services:
     environment:
       - DATASOURCE_HOST=db
       - DATASOURCE_PORT=5432
-      - AWS_S3_ACCESS_KEY_ID=AKIAYBKCLG4M235G4WSV
-      - AWS_S3_SECRET_ACCESS_KEY=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
+      - AWS_ACCESS_KEY_ID=AKIAYBKCLG4M235G4WSV
+      - AWS_SECRET_ACCESS_KEY=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
+      - AWS_S3_BUCKET_NAME=barbershop--web-web
     depends_on:
       - db
