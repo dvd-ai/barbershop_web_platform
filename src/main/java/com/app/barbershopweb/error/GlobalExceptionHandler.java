@@ -1,5 +1,6 @@
 package com.app.barbershopweb.error;
 
+import com.amazonaws.AmazonServiceException;
 import com.app.barbershopweb.exception.InvalidBusinessDataFormatException;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
@@ -58,5 +59,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidBusinessDataFormatException.class)
     public ResponseEntity<ErrorDto> onInvalidBusinessDataFormat(InvalidBusinessDataFormatException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDto(e.getMessages()));
+    }
+
+    @ExceptionHandler(AmazonServiceException.class)
+    public ResponseEntity<ErrorDto> onAmazonServiceException(AmazonServiceException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(List.of(e.getErrorMessage())));
     }
 }

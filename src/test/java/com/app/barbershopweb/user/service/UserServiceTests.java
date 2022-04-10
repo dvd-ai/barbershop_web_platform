@@ -3,6 +3,7 @@ package com.app.barbershopweb.user.service;
 import com.app.barbershopweb.user.UserService;
 import com.app.barbershopweb.user.Users;
 import com.app.barbershopweb.user.repository.UserRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -84,5 +85,17 @@ class UserServiceTests {
 
         assertEquals(USERS_USER_VALID_ENTITY_LIST.size(), users.size());
         assertEquals(USERS_USER_VALID_ENTITY_LIST, users);
+    }
+
+    @Test
+    @DisplayName("uploads profile avatar successfully")
+    void uploadProfileAvatar() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Test
+    @DisplayName("throws NotFoundException if user doesn't exist")
+    void uploadProfileAvatarUserNotExist() {
+        throw new UnsupportedOperationException();
     }
 }
