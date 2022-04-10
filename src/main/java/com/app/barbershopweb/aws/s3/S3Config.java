@@ -1,4 +1,4 @@
-package com.app.barbershopweb.config.aws.s3;
+package com.app.barbershopweb.aws.s3;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class S3StorageConfig {
+public class S3Config {
     @Value("${aws.service.credentials.access.key.id}")
     private String accessKeyId;
 
@@ -23,7 +23,7 @@ public class S3StorageConfig {
         AWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretAccessKey);
         return AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(Regions.EU_CENTRAL_1)
+                .withRegion(Regions.US_EAST_1)
                 .build();
     }
 
