@@ -42,13 +42,25 @@ public class UserService {
     }
 
     public void uploadProfileAvatar(Long userId, MultipartFile profileAvatar) {
-        //check profileAvatarImage content Type! in validator
         if (!userRepository.userExistsById(userId)) {
             throw new NotFoundException(
                     List.of("Profile avatar upload: User with id " + userId + " wasn't found")
             );
         }
+
         String key = "profile_avatar_" + userId;
+        s3Service.deleteFile(key);
         s3Service.uploadFile(key, profileAvatar);
+    }
+
+    public MultipartFile downloadProfileAvatar(Long userId) {
+        if (!userRepository.userExistsById(userId)) {
+            throw new NotFoundException(
+                    List.of("Profile avatar download: User with id " + userId + " wasn't found")
+            );
+        }
+
+        String key = "profile_avatar_" + userId;
+        return s3Service.downloadFile(key);
     }
 }
