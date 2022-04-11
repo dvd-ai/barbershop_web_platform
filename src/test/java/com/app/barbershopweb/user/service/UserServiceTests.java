@@ -11,11 +11,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.ByteArrayResource;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import static com.app.barbershopweb.aws.s3.constants.S3Service_Metadata__TestConstants.S3_SERVICE_BUCKET_NAME;
 import static com.app.barbershopweb.user.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
 import static com.app.barbershopweb.user.constants.UserEntity__TestConstants.USERS_VALID_UPDATED_USER_ENTITY;
 import static com.app.barbershopweb.user.constants.UserErrorMessage__TestConstants.USER_ERR_FILE_DOWNLOAD_USER_ID;
@@ -100,9 +102,11 @@ class UserServiceTests {
         when(userRepository.userExistsById(USERS_VALID_USER_ID)).thenReturn(true);
         userService.uploadProfileAvatar(USERS_VALID_USER_ID, USERS_AVATAR_IMAGE_MOCK);
 
-        verify(s3Service, times(1)).deleteFile(USERS_S3_KEY);
+        verify(s3Service, times(1)).deleteFile(
+                S3_SERVICE_BUCKET_NAME, USERS_S3_KEY);
         verify(s3Service, times(1)).uploadFile(
-                USERS_S3_KEY, USERS_AVATAR_IMAGE_MOCK
+                S3_SERVICE_BUCKET_NAME, USERS_S3_KEY,
+                USERS_AVATAR_IMAGE_MOCK
         );
         assertDoesNotThrow(() -> userService.uploadProfileAvatar(USERS_VALID_USER_ID, USERS_AVATAR_IMAGE_MOCK));
     }
@@ -126,21 +130,26 @@ class UserServiceTests {
             userService.uploadProfileAvatar(USERS_VALID_USER_ID, USERS_AVATAR_IMAGE_MOCK);
         }
         catch (NotFoundException ex){
-            verify(s3Service, times(0)).deleteFile(USERS_S3_KEY);
+            verify(s3Service, times(0)).deleteFile(
+                    S3_SERVICE_BUCKET_NAME,
+                    USERS_S3_KEY
+            );
             verify(s3Service, times(0)).uploadFile(
-                    USERS_S3_KEY, USERS_AVATAR_IMAGE_MOCK
+                    USERS_S3_KEY, S3_SERVICE_BUCKET_NAME,
+                    USERS_AVATAR_IMAGE_MOCK
             );
         }
     }
 
     @Test
-    void downloadProfileAvatar() {
+    void downloadProfileAvatar() throws IOException {
         when(userRepository.userExistsById(USERS_VALID_USER_ID)).thenReturn(true);
-        when(s3Service.downloadFile(USERS_S3_KEY)).thenReturn(USERS_AVATAR_IMAGE_MOCK);
+        when(s3Service.downloadFile(S3_SERVICE_BUCKET_NAME, USERS_S3_KEY)).thenReturn(
+                USERS_AVATAR_IMAGE_MOCK.getBytes()
+        );
 
-        MultipartFile avatar = userService.downloadProfileAvatar(USERS_VALID_USER_ID);
-
-        assertEquals(USERS_AVATAR_IMAGE_MOCK, avatar);
+        ByteArrayResource avatar = userService.downloadProfileAvatar(USERS_VALID_USER_ID);
+        assertEquals(USERS_AVATAR_IMAGE_MOCK.getBytes(), avatar.getByteArray());
     }
 
     @Test
@@ -160,7 +169,7 @@ class UserServiceTests {
         }
         catch (NotFoundException ex){
             verify(s3Service, times(0)).downloadFile(
-                    USERS_S3_KEY
+                    S3_SERVICE_BUCKET_NAME,  USERS_S3_KEY
             );
         }
     }

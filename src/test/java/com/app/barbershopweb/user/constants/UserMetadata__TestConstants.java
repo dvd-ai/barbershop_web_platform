@@ -23,9 +23,11 @@ public final class UserMetadata__TestConstants {
                     30
             );
 
-    public static final MultipartFile USERS_AVATAR_IMAGE_MOCK = new MockMultipartFile("avatar.png",
+    public static final MultipartFile USERS_AVATAR_IMAGE_MOCK = new MockMultipartFile(
+            "avatar.png",
             "avatar.png",
             "image/png",
-            "image file content".getBytes());
+            "image file content".getBytes()
+    );
 
 }
