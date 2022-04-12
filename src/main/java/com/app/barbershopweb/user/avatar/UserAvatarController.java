@@ -1,5 +1,6 @@
 package com.app.barbershopweb.user.avatar;
 
+import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.user.avatar.validator.AvatarImage;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users/avatars")
@@ -22,12 +24,20 @@ public class UserAvatarController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<ByteArrayResource> downloadAvatar(@PathVariable @Min(1) Long userId) {
+        ByteArrayResource content = userAvatarService.downloadProfileAvatar(userId);
+
+        if (content.contentLength() == 0) {
+            throw new NotFoundException(
+                    List.of(
+                            "No profile avatar for user with id " + userId
+                    )
+            );
+        }
+
         return ResponseEntity
                 .ok()
                 .header("Content-type", "application/octet-stream")
-                .header("Content-disposition", "inline")
-                .body(userAvatarService.downloadProfileAvatar(userId));
-
+                .body(content);
     }
 
     @PostMapping("/{userId}")
