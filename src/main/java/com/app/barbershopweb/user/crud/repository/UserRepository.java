@@ -9,10 +9,16 @@ import java.util.Optional;
 @Repository
 public interface UserRepository {
     Long addUser(Users barbershop);
+
     Optional<Users> findUserById(Long id);
-    Optional<Users>updateUser(Users barbershop);
+
+    Optional<Users> updateUser(Users barbershop);
+
     List<Users> getUsers();
+
     void deleteUserById(Long id);
+
     boolean userExistsById(Long id);
+
     void truncateAndRestartSequence();
 }

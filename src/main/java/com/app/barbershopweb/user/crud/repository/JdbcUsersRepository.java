@@ -91,10 +91,10 @@ public class JdbcUsersRepository implements UserRepository {
                 .addValue("first_name", users.getFirstName())
                 .addValue("last_name", users.getLastName())
                 .addValue("phone_number", users.getPhoneNumber())
-                .addValue(  "email", users.getEmail())
-                .addValue(  "role", users.getRole())
-                .addValue(  "registration_date", users.getRegistrationDate())
-                .addValue(  "id", users.getId());
+                .addValue("email", users.getEmail())
+                .addValue("role", users.getRole())
+                .addValue("registration_date", users.getRegistrationDate())
+                .addValue("id", users.getId());
 
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);

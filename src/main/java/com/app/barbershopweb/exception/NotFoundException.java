@@ -2,7 +2,7 @@ package com.app.barbershopweb.exception;
 
 import java.util.List;
 
-public class NotFoundException extends RuntimeException{
+public class NotFoundException extends RuntimeException {
 
     private final List<String> messages;
 

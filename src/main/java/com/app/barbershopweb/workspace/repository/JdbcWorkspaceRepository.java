@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Repository
-public class JdbcWorkspaceRepository implements WorkspaceRepository{
+public class JdbcWorkspaceRepository implements WorkspaceRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final UserRepository userRepository;
@@ -58,7 +58,6 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
     }
 
 
-
     @Override
     public Optional<Workspace> findWorkspaceById(Long id) {
         Optional<Workspace> workspaceOptional;
@@ -86,8 +85,8 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
     public boolean workspaceExistsByBarbershopIdAndUserId(Long barbershopId, Long userId) {
         String sql =
                 "SELECT COUNT(*) " +
-                "FROM workspace " +
-                "WHERE barbershop_id = :barbershopId " +
+                        "FROM workspace " +
+                        "WHERE barbershop_id = :barbershopId " +
                         "AND user_id = :userId";
 
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
@@ -116,7 +115,7 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
     }
 
     @Override
-    public Optional<Workspace>updateWorkspace(Workspace workspace) {
+    public Optional<Workspace> updateWorkspace(Workspace workspace) {
         checkFkConstraints(workspace.getBarbershopId(), workspace.getUserId());
         checkUkConstraints(workspace.getBarbershopId(), workspace.getUserId());
 
@@ -132,7 +131,7 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
                 .addValue("barbershop_id", workspace.getBarbershopId())
                 .addValue("user_id", workspace.getUserId())
                 .addValue("active", workspace.getActive())
-                .addValue(  "id", workspace.getWorkspaceId());
+                .addValue("id", workspace.getWorkspaceId());
 
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
@@ -140,7 +139,7 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
     }
 
     @Override
-    public List<Workspace>getWorkspaces() {
+    public List<Workspace> getWorkspaces() {
         String sql =
                 "SELECT " +
                         "workspace_id, " +
@@ -192,10 +191,10 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
     private void checkUkConstraints(Long barbershopId, Long userId) {
         String sql =
                 "SELECT count(*) " +
-                "FROM workspace " +
-                "WHERE barbershop_id = :barbershop_id " +
-                "AND " +
-                "user_id = :user_id;";
+                        "FROM workspace " +
+                        "WHERE barbershop_id = :barbershop_id " +
+                        "AND " +
+                        "user_id = :user_id;";
 
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("barbershop_id", barbershopId)
@@ -206,10 +205,10 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository{
         if (Objects.requireNonNull(count) > 0) {
             throw new DbUniqueConstraintsViolationException(List.of(
                     "uk violation: " +
-                    "workspace with user id " + userId +
-                    " and barbershop id " + barbershopId +
-                    " already exists."
-                )
+                            "workspace with user id " + userId +
+                            " and barbershop id " + barbershopId +
+                            " already exists."
+            )
             );
         }
     }

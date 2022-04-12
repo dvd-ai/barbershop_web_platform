@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class JdbcOrderReservationRepository implements OrderReservationRepository{
+public class JdbcOrderReservationRepository implements OrderReservationRepository {
 
     private final OrderRepository orderRepository;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -36,17 +36,17 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
     ) {
         String sql =
                 "SELECT " +
-                    "order_id, " +
-                    "barbershop_id, " +
-                    "barber_id, " +
-                    "customer_id, " +
-                    "order_date, " +
-                    "is_active " +
-                "FROM orders " +
-                "WHERE is_active = true " +
-                    "AND barbershop_id = :barbershopId " +
-                    "AND customer_id IS NULL " +
-                    "AND (order_date BETWEEN" +
+                        "order_id, " +
+                        "barbershop_id, " +
+                        "barber_id, " +
+                        "customer_id, " +
+                        "order_date, " +
+                        "is_active " +
+                        "FROM orders " +
+                        "WHERE is_active = true " +
+                        "AND barbershop_id = :barbershopId " +
+                        "AND customer_id IS NULL " +
+                        "AND (order_date BETWEEN" +
                         " :dateToStartWeekFrom AND ( :dateToStartWeekFrom + INTERVAL '7 DAYS' )" +
                         ");";
 
@@ -71,12 +71,12 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
                         "is_active " +
                         "FROM orders " +
                         "WHERE is_active = true " +
-                            "AND barbershop_id = :barbershopId " +
-                            "AND customer_id IS NULL " +
-                            "AND barber_id IN ( :barberIds)" +
-                            "AND (order_date BETWEEN" +
-                            " :dateToStartWeekFrom AND ( :dateToStartWeekFrom + INTERVAL '7 DAYS' )" +
-                            ");";
+                        "AND barbershop_id = :barbershopId " +
+                        "AND customer_id IS NULL " +
+                        "AND barber_id IN ( :barberIds)" +
+                        "AND (order_date BETWEEN" +
+                        " :dateToStartWeekFrom AND ( :dateToStartWeekFrom + INTERVAL '7 DAYS' )" +
+                        ");";
 
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("barbershopId", barbershopId)
@@ -92,8 +92,8 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
 
         String sql =
                 "UPDATE orders " +
-                    "SET customer_id = :customerId " +
-                    "WHERE order_id = :orderId;";
+                        "SET customer_id = :customerId " +
+                        "WHERE order_id = :orderId;";
 
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("customerId", customerId)
@@ -106,17 +106,17 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
     private void checkOrderUk(Long orderId, Long customerId) {
         Order order = orderRepository.findOrder(orderId).get();
 
-        if(orderRepository.orderExistsByCustomerIdAndOrderDate(
+        if (orderRepository.orderExistsByCustomerIdAndOrderDate(
                 customerId, order.getOrderDate())
         ) {
             throw new DbUniqueConstraintsViolationException(
                     List.of(
                             "uk violation during order reservation (" +
-                            "orderId " + order.getOrderId() + ") :" +
-                            " order with" +
-                            " customerId " + customerId +
-                            " and orderDate " + order.getOrderDate() +
-                            " already exists"
+                                    "orderId " + order.getOrderId() + ") :" +
+                                    " order with" +
+                                    " customerId " + customerId +
+                                    " and orderDate " + order.getOrderDate() +
+                                    " already exists"
                     )
             );
         }
@@ -138,8 +138,8 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
         if (!userRepository.userExistsById(customerId))
             throw new NotFoundException(
                     List.of(
-                        "Customer with id " + customerId +
-                                " wasn't found during order reservation"
+                            "Customer with id " + customerId +
+                                    " wasn't found during order reservation"
                     )
             );
     }
@@ -149,7 +149,7 @@ public class JdbcOrderReservationRepository implements OrderReservationRepositor
 
         orderIds.stream()
                 .filter(orderId -> !orderRepository.orderExistsByOrderId(orderId))
-                .forEach(oId -> messages.add("Order with id " + oId +  " wasn't found during order reservation"));
+                .forEach(oId -> messages.add("Order with id " + oId + " wasn't found during order reservation"));
 
         if (!messages.isEmpty()) {
             throw new NotFoundException(messages);

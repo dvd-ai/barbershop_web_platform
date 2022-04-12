@@ -26,7 +26,7 @@ public class BarbershopController {
     @GetMapping
     public ResponseEntity<List<BarbershopDto>> getBarbershops() {
         return new ResponseEntity<>(
-          barbershopConverter.barbershopEntityListToDtoList(barbershopService.getBarbershops()), HttpStatus.OK
+                barbershopConverter.barbershopEntityListToDtoList(barbershopService.getBarbershops()), HttpStatus.OK
         );
     }
 

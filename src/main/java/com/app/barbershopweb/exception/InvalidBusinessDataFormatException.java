@@ -2,7 +2,7 @@ package com.app.barbershopweb.exception;
 
 import java.util.List;
 
-public class InvalidBusinessDataFormatException extends RuntimeException{
+public class InvalidBusinessDataFormatException extends RuntimeException {
 
     private final List<String> messages;
 

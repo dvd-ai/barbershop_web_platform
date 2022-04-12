@@ -11,12 +11,12 @@ public class OrderRowMapper implements RowMapper<Order> {
     @Override
     public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new Order(
-          rs.getLong("order_id"),
-          rs.getLong("barbershop_id"),
-          rs.getLong("barber_id"),
-          rs.getLong("customer_id"),
-          rs.getTimestamp("order_date").toLocalDateTime(),
-          rs.getBoolean("is_active")
+                rs.getLong("order_id"),
+                rs.getLong("barbershop_id"),
+                rs.getLong("barber_id"),
+                rs.getLong("customer_id"),
+                rs.getTimestamp("order_date").toLocalDateTime(),
+                rs.getBoolean("is_active")
         );
     }
 }

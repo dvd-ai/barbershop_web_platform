@@ -19,10 +19,9 @@ import static com.app.barbershopweb.user.avatar.constants.UserAvatar__TestConsta
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar__TestConstants.USER_AVATAR_S3_KEY;
 import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.USER_ERR_FILE_DOWNLOAD_USER_ID;
 import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.USER_ERR_FILE_UPLOAD_USER_ID;
-import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.*;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class UserAvatarServiceTest {
@@ -69,8 +68,7 @@ class UserAvatarServiceTest {
 
         try {
             userAvatarService.uploadProfileAvatar(USERS_VALID_USER_ID, USERS_AVATAR_IMAGE_MOCK);
-        }
-        catch (NotFoundException ex){
+        } catch (NotFoundException ex) {
             verify(s3Service, times(0)).deleteFile(
                     S3_SERVICE_BUCKET_NAME,
                     USER_AVATAR_S3_KEY
@@ -107,8 +105,7 @@ class UserAvatarServiceTest {
 
         try {
             userAvatarService.downloadProfileAvatar(USERS_VALID_USER_ID);
-        }
-        catch (NotFoundException ex){
+        } catch (NotFoundException ex) {
             verify(s3Service, times(0)).downloadFile(
                     S3_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY
             );

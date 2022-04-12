@@ -2,7 +2,7 @@ package com.app.barbershopweb.exception;
 
 import java.util.List;
 
-public class FileException extends RuntimeException{
+public class FileException extends RuntimeException {
     private final List<String> messages;
 
     public FileException(List<String> messages) {

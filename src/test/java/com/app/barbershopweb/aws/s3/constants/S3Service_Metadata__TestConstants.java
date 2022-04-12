@@ -10,8 +10,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public final class S3Service_Metadata__TestConstants {
-    @Value("$(AWS_S3_BUCKET_NAME)")
-    public static String S3_SERVICE_BUCKET_NAME; //= "barbershop-web";
     public final static String S3_SERVICE_OBJECT_KEY = "key";
     public final static MultipartFile S3_SERVICE_MULTIPART_FILE_MOCK = new MockMultipartFile(
             "image.png",
@@ -19,8 +17,9 @@ public final class S3Service_Metadata__TestConstants {
             "image/png",
             "image file content".getBytes()
     );
-
     public final static S3Object S3_SERVICE_OBJECT_MOCK = setS3Object();
+    @Value("$(AWS_S3_BUCKET_NAME)")
+    public static String S3_SERVICE_BUCKET_NAME; //= "barbershop-web";
 
     private static S3Object setS3Object() {
         S3Object obj = new S3Object();

@@ -7,13 +7,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BarbershopRepository{
+public interface BarbershopRepository {
 
     Long addBarbershop(Barbershop barbershop);
+
     Optional<Barbershop> findBarbershopById(Long id);
-    Optional<Barbershop>updateBarbershop(Barbershop barbershop);
+
+    Optional<Barbershop> updateBarbershop(Barbershop barbershop);
+
     List<Barbershop> getBarbershops();
+
     void deleteBarbershopById(Long id);
+
     boolean barbershopExistsById(Long id);
+
     void truncateAndRestartSequence();
 }

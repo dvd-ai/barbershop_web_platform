@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Service
 public class WorkspaceService {
-    
+
     public final WorkspaceRepository workspaceRepository;
 
     public WorkspaceService(WorkspaceRepository workspaceRepository) {

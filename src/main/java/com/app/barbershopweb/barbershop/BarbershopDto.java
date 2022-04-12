@@ -1,7 +1,10 @@
 package com.app.barbershopweb.barbershop;
 
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 
 public record BarbershopDto(

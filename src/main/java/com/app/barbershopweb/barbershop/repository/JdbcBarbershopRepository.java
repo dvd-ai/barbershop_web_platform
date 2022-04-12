@@ -29,14 +29,14 @@ public class JdbcBarbershopRepository implements BarbershopRepository {
 
         String sql =
                 "INSERT INTO barbershop(address, name, phone_number, email, work_time_from, work_time_to) " +
-                "VALUES (" +
-                ":address," +
-                ":name," +
-                ":phone_number," +
-                ":email," +
-                ":work_time_from," +
-                ":work_time_to" +
-                ");";
+                        "VALUES (" +
+                        ":address," +
+                        ":name," +
+                        ":phone_number," +
+                        ":email," +
+                        ":work_time_from," +
+                        ":work_time_to" +
+                        ");";
 
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("address", barbershop.getAddress())
@@ -56,8 +56,8 @@ public class JdbcBarbershopRepository implements BarbershopRepository {
 
         String sql =
                 "SELECT barbershop_id, address, name, phone_number, email, work_time_from, work_time_to " +
-                "FROM barbershop " +
-                "WHERE barbershop_id = :id;";
+                        "FROM barbershop " +
+                        "WHERE barbershop_id = :id;";
 
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("id", id);
@@ -74,26 +74,26 @@ public class JdbcBarbershopRepository implements BarbershopRepository {
     }
 
     @Override
-    public Optional<Barbershop>updateBarbershop(Barbershop barbershop) {
+    public Optional<Barbershop> updateBarbershop(Barbershop barbershop) {
         String sql =
                 "UPDATE barbershop " +
-                "SET " +
-                "address = :address, " +
-                "name = :name, " +
-                "phone_number = :phone_number, " +
-                "email = :email, " +
-                "work_time_from = :work_time_from, " +
-                "work_time_to = :work_time_to " +
-                "WHERE barbershop_id = :id;";
+                        "SET " +
+                        "address = :address, " +
+                        "name = :name, " +
+                        "phone_number = :phone_number, " +
+                        "email = :email, " +
+                        "work_time_from = :work_time_from, " +
+                        "work_time_to = :work_time_to " +
+                        "WHERE barbershop_id = :id;";
 
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("address", barbershop.getAddress())
                 .addValue("name", barbershop.getName())
                 .addValue("phone_number", barbershop.getPhoneNumber())
-                .addValue(  "email", barbershop.getEmail())
-                .addValue(  "id", barbershop.getId())
-                .addValue(  "work_time_from", barbershop.getWorkTimeFrom())
-                .addValue(  "work_time_to", barbershop.getWorkTimeTo());
+                .addValue("email", barbershop.getEmail())
+                .addValue("id", barbershop.getId())
+                .addValue("work_time_from", barbershop.getWorkTimeFrom())
+                .addValue("work_time_to", barbershop.getWorkTimeTo());
 
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
@@ -101,17 +101,17 @@ public class JdbcBarbershopRepository implements BarbershopRepository {
     }
 
     @Override
-    public List<Barbershop>getBarbershops() {
+    public List<Barbershop> getBarbershops() {
         String sql =
                 "SELECT " +
-                "barbershop_id, " +
-                "address, " +
-                "name," +
-                "phone_number," +
-                "email, " +
-                "work_time_from, " +
-                "work_time_to " +
-                "FROM barbershop;";
+                        "barbershop_id, " +
+                        "address, " +
+                        "name," +
+                        "phone_number," +
+                        "email, " +
+                        "work_time_from, " +
+                        "work_time_to " +
+                        "FROM barbershop;";
 
 
         return namedParameterJdbcTemplate.query(sql, new BarbershopRowMapper());
@@ -120,7 +120,7 @@ public class JdbcBarbershopRepository implements BarbershopRepository {
     @Override
     public void deleteBarbershopById(Long id) {
         String sql = "DELETE FROM barbershop " +
-                        "WHERE barbershop_id = :id;";
+                "WHERE barbershop_id = :id;";
 
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("id", id);
@@ -132,7 +132,7 @@ public class JdbcBarbershopRepository implements BarbershopRepository {
     public boolean barbershopExistsById(Long id) {
         String sql =
                 "SELECT COUNT(*) FROM barbershop " +
-                "WHERE barbershop_id = :id;";
+                        "WHERE barbershop_id = :id;";
 
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("id", id);

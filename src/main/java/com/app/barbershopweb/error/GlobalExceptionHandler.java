@@ -1,9 +1,9 @@
 package com.app.barbershopweb.error;
 
 import com.amazonaws.AmazonServiceException;
+import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
 import com.app.barbershopweb.exception.InvalidBusinessDataFormatException;
 import com.app.barbershopweb.exception.NotFoundException;
-import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         List<String> errors = e.getConstraintViolations()
                 .stream()
                 .map(
-                        cv ->"'" + cv.getPropertyPath().toString().split("\\.")[1]
+                        cv -> "'" + cv.getPropertyPath().toString().split("\\.")[1]
                                 + "' " + cv.getMessage()
                 )
                 .toList();

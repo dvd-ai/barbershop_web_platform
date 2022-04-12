@@ -2,7 +2,7 @@ package com.app.barbershopweb.exception;
 
 import java.util.List;
 
-public class DbUniqueConstraintsViolationException extends RuntimeException{
+public class DbUniqueConstraintsViolationException extends RuntimeException {
 
     private final List<String> messages;
 

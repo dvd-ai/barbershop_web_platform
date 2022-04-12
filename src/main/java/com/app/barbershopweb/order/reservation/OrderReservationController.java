@@ -3,9 +3,9 @@ package com.app.barbershopweb.order.reservation;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.OrderConverter;
 import com.app.barbershopweb.order.crud.OrderDto;
-import com.app.barbershopweb.order.reservation.dto.OrderReservationDto;
 import com.app.barbershopweb.order.reservation.dto.GetOpenFilteredOrders__RequestDto;
 import com.app.barbershopweb.order.reservation.dto.GetOpenOrders__RequestDto;
+import com.app.barbershopweb.order.reservation.dto.OrderReservationDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,8 +23,7 @@ public class OrderReservationController {
     private final OrderConverter orderConverter;
 
     public OrderReservationController(OrderReservationService orderReservationService,
-                                      OrderConverter orderConverter)
-    {
+                                      OrderConverter orderConverter) {
         this.orderReservationService = orderReservationService;
         this.orderConverter = orderConverter;
     }

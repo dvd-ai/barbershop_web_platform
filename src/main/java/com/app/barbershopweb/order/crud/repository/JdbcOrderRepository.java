@@ -41,14 +41,14 @@ public class JdbcOrderRepository implements OrderRepository {
 
     @Override
     public Long addOrder(Order order) {
-        checkFkConstraints(order.getBarbershopId(), order.getBarberId(), 
+        checkFkConstraints(order.getBarbershopId(), order.getBarberId(),
                 order.getCustomerId());
-        
+
         checkUkConstraints(order.getBarberId(), order.getCustomerId(),
                 order.getOrderDate());
         checkBusinessDataFormat(order);
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        
+
         String sql =
                 "INSERT INTO orders(barbershop_id, barber_id," +
                         " customer_id, order_date, is_active) " +
@@ -66,7 +66,7 @@ public class JdbcOrderRepository implements OrderRepository {
                 .addValue("customerId", order.getCustomerId())
                 .addValue("orderDate", order.getOrderDate())
                 .addValue("active", order.getActive());
-        
+
         namedParameterJdbcTemplate.update(sql, sqlParameterSource, keyHolder);
         return Long.valueOf((Integer) keyHolder.getKeys().get("order_id"));
     }
@@ -117,9 +117,9 @@ public class JdbcOrderRepository implements OrderRepository {
                 .addValue("barberId", order.getBarberId())
                 .addValue("barbershopId", order.getBarbershopId())
                 .addValue("customerId", order.getCustomerId())
-                .addValue(  "orderDate", order.getOrderDate())
-                .addValue(  "active", order.getActive())
-                .addValue(  "orderId", order.getOrderId());
+                .addValue("orderDate", order.getOrderDate())
+                .addValue("active", order.getActive())
+                .addValue("orderId", order.getOrderId());
 
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
@@ -157,7 +157,7 @@ public class JdbcOrderRepository implements OrderRepository {
     public boolean orderExistsByOrderId(Long orderId) {
         String sql =
                 "SELECT COUNT(*) FROM orders " +
-                "WHERE order_id = :orderId;";
+                        "WHERE order_id = :orderId;";
 
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("orderId", orderId);
@@ -167,12 +167,12 @@ public class JdbcOrderRepository implements OrderRepository {
     }
 
     @Override
-    public boolean orderExistsByCustomerIdAndOrderDate(Long customerId, 
+    public boolean orderExistsByCustomerIdAndOrderDate(Long customerId,
                                                        LocalDateTime orderDate) {
         String sql =
                 "SELECT COUNT(*) FROM orders " +
-                "WHERE customer_id = :customerId " +
-                "AND order_date = :orderDate;";
+                        "WHERE customer_id = :customerId " +
+                        "AND order_date = :orderDate;";
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("customerId", customerId)
@@ -212,7 +212,7 @@ public class JdbcOrderRepository implements OrderRepository {
         if (!workspaceRepository.workspaceIsActiveByBarbershopIdAndUserId(barbershopId, barberId))
             messages.add(
                     fkViolation + "barber with id " + barberId +
-                    " doesn't work at barbershop with id " + barbershopId
+                            " doesn't work at barbershop with id " + barbershopId
             );
 
         if (customerId != null && !userRepository.userExistsById(customerId)) {
@@ -265,7 +265,7 @@ public class JdbcOrderRepository implements OrderRepository {
 
         if ((orderTime.getHour() * 3600 + orderTime.getMinute() * 60 + orderTime.getSecond()) % 3600 != 0) {
             messages.add(
-              "orderDate with time " + orderTime + " should be hourly formatted"
+                    "orderDate with time " + orderTime + " should be hourly formatted"
             );
         }
 

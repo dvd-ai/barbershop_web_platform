@@ -8,13 +8,14 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class MultipartFileUtil {
-    private MultipartFileUtil(){}
+    private MultipartFileUtil() {
+    }
 
     public static File convertMultipartFileToFile(MultipartFile multipartFile) {
         String fileName = multipartFile.getOriginalFilename();
         File file = new File(Objects.requireNonNull(fileName));
 
-        try (FileOutputStream fos = new FileOutputStream(file)){
+        try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(multipartFile.getBytes());
         } catch (IOException e) {
             e.printStackTrace();

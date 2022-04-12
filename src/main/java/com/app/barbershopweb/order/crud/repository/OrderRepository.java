@@ -11,13 +11,21 @@ import java.util.Optional;
 public interface OrderRepository {
 
     Long addOrder(Order order);
+
     Optional<Order> findOrder(Long orderId);
-    Optional<Order>updateOrder(Order order);
+
+    Optional<Order> updateOrder(Order order);
+
     List<Order> getOrders();
+
     void deleteOrder(Long orderId);
+
     boolean orderExistsByOrderId(Long orderId);
+
     boolean orderExistsByCustomerIdAndOrderDate(Long customerId, LocalDateTime orderDate);
+
     boolean orderExistsByBarberIdAndOrderDate(Long barberId, LocalDateTime orderDate);
+
     void truncateAndRestartSequence();
 
 }

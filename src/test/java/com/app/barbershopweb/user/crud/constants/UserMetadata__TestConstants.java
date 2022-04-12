@@ -1,8 +1,5 @@
 package com.app.barbershopweb.user.crud.constants;
 
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.time.LocalDateTime;
 
 public final class UserMetadata__TestConstants {

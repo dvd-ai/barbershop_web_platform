@@ -53,7 +53,7 @@ public class WorkspaceController {
         Workspace entity = workspaceService.updateWorkspace(workspaceConverter.mapToEntity(workspaceDto))
                 .orElseThrow(() ->
                         new NotFoundException(
-                            List.of("Workspace with id '" + workspaceDto.workspaceId() + "' not found.")
+                                List.of("Workspace with id '" + workspaceDto.workspaceId() + "' not found.")
                         )
                 );
         return new ResponseEntity<>(workspaceConverter.mapToDto(entity), HttpStatus.OK);
@@ -64,5 +64,5 @@ public class WorkspaceController {
         workspaceService.deleteWorkspaceById(workspaceId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    
+
 }
