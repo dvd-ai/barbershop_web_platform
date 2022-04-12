@@ -47,8 +47,5 @@ public class UserAvatarController {
     }
 
     @DeleteMapping("/{userId}")
-    public void removeAvatar(@PathVariable @Min(1) Long userId) {
-        userAvatarService.deleteProfileAvatar(userId);
-    }
-
+    public void removeAvatar(@PathVariable @Min(1) Long userId) {userAvatarService.deleteProfileAvatar(userId);}
 }
