@@ -8,7 +8,7 @@ public final class UserMetadata__TestConstants {
 
     public static final long USERS_INVALID_USER_ID = -100L;
     public static final long USERS_VALID_USER_ID = 1L;
-    public static final long USERS_NOT_EXISTED_USER_ID = 100_000L;
+    public static final long USERS_NOT_EXISTING_USER_ID = 100_000L;
     public static final String USERS_ROLE = "admin";
     public static final LocalDateTime USERS_REGISTRATION_DATE =
             LocalDateTime.of(
