@@ -1,6 +1,7 @@
 package com.app.barbershopweb.user.avatar.controller;
 
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.app.barbershopweb.exception.FileException;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.user.avatar.UserAvatarController;
@@ -108,6 +109,21 @@ class UserAvatarController__downloadAvatarTest {
         when(avatarService.downloadProfileAvatar(USERS_VALID_USER_ID))
                 .thenThrow(
                         new AmazonServiceException(anyString())
+                );
+        mockMvc.perform(get(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)).andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$", aMapWithSize(1)))
+                .andExpect(jsonPath("$.errors").isArray())
+                .andExpect(jsonPath("$.errors", hasSize(1)))
+        ;
+    }
+
+    @Test
+    @DisplayName("when SdkClientException, returns 500 & error dto")
+    void downloadAvatar__SdkClientException() throws Exception {
+        when(avatarService.downloadProfileAvatar(USERS_VALID_USER_ID))
+                .thenThrow(
+                        new SdkClientException(anyString())
                 );
         mockMvc.perform(get(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)).andDo(print())
                 .andExpect(status().isInternalServerError())
