@@ -68,7 +68,7 @@ class UserControllerUpdateUserTest {
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
                 .andExpect(jsonPath("$.errors[0]", is(
-                        "User with id '" + USERS_NOT_EXISTED_USER_ID + "' not found."
+                        "User with id '" + USERS_NOT_EXISTING_USER_ID + "' not found."
                 )))
                 .andExpect(jsonPath("$", aMapWithSize(1)));
     }

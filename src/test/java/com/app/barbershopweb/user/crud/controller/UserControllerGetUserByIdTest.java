@@ -60,14 +60,14 @@ class UserControllerGetUserByIdTest {
     @Test
     void whenNotExistedUserId() throws Exception {
         mockMvc
-                .perform(get(USERS_URL + "/" + USERS_NOT_EXISTED_USER_ID))
+                .perform(get(USERS_URL + "/" + USERS_NOT_EXISTING_USER_ID))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$", aMapWithSize(1)))
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
                 .andExpect(jsonPath("$.errors[0]", is(
-                        "Users with id '" + USERS_NOT_EXISTED_USER_ID + "' not found.")
+                        "Users with id '" + USERS_NOT_EXISTING_USER_ID + "' not found.")
                 ));
     }
 

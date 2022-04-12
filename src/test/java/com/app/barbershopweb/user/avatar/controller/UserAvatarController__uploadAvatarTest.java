@@ -1,5 +1,8 @@
 package com.app.barbershopweb.user.avatar.controller;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
+import com.app.barbershopweb.exception.FileException;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.user.avatar.UserAvatarController;
 import com.app.barbershopweb.user.avatar.UserAvatarService;
@@ -38,8 +41,8 @@ class UserAvatarController__uploadAvatarTest {
         doThrow(new NotFoundException(List.of(USER_ERR_NOT_EXISTING_USER_ID)))
                 .when(avatarService).uploadProfileAvatar(USERS_NOT_EXISTING_USER_ID, USERS_AVATAR_IMAGE_MOCK);
 
-        mockMvc.perform(multipart(USER_AVATARS_URL + "/" + USER_ERR_NOT_EXISTING_USER_ID)
-                        .file(USERS_AVATAR_TEXT_FILE_MOCK))
+        mockMvc.perform(multipart(USER_AVATARS_URL + "/" + USERS_NOT_EXISTING_USER_ID)
+                        .file(USERS_AVATAR_IMAGE_MOCK))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$", aMapWithSize(1)))
@@ -47,8 +50,63 @@ class UserAvatarController__uploadAvatarTest {
                 .andExpect(jsonPath("$.errors", hasSize(1)))
                 .andExpect(jsonPath("$.errors", hasItem(USER_ERR_NOT_EXISTING_USER_ID)))
         ;
-
     }
 
+    @Test
+    @DisplayName("when FileException, returns 500 & error dto")
+    void uploadAvatar__FileException() throws Exception {
+        doThrow(new FileException(List.of("")))
+                .when(avatarService).uploadProfileAvatar(USERS_VALID_USER_ID, USERS_AVATAR_IMAGE_MOCK);
 
+        mockMvc.perform(multipart(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)
+                        .file(USERS_AVATAR_IMAGE_MOCK))
+                .andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$", aMapWithSize(1)))
+                .andExpect(jsonPath("$.errors").isArray())
+                .andExpect(jsonPath("$.errors", hasSize(1)))
+        ;
+    }
+
+    @Test
+    @DisplayName("when AmazonServiceException, returns 500 & error dto")
+    void uploadAvatar__AmazonServiceException() throws Exception {
+        doThrow(new AmazonServiceException(""))
+                .when(avatarService).uploadProfileAvatar(USERS_VALID_USER_ID, USERS_AVATAR_IMAGE_MOCK);
+
+        mockMvc.perform(multipart(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)
+                        .file(USERS_AVATAR_IMAGE_MOCK))
+                .andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$", aMapWithSize(1)))
+                .andExpect(jsonPath("$.errors").isArray())
+                .andExpect(jsonPath("$.errors", hasSize(1)))
+        ;
+    }
+
+    @Test
+    @DisplayName("when SdkClientException, returns 500 & error dto")
+    void uploadAvatar__SdkClientException() throws Exception {
+        doThrow(new SdkClientException(""))
+                .when(avatarService).uploadProfileAvatar(USERS_VALID_USER_ID, USERS_AVATAR_IMAGE_MOCK);
+
+        mockMvc.perform(multipart(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)
+                        .file(USERS_AVATAR_IMAGE_MOCK))
+                .andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$", aMapWithSize(1)))
+                .andExpect(jsonPath("$.errors").isArray())
+                .andExpect(jsonPath("$.errors", hasSize(1)))
+        ;
+    }
+
+    @Test
+    @DisplayName("uploads avatar")
+    void uploadAvatar() throws Exception {
+        mockMvc.perform(multipart(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)
+                        .file(USERS_AVATAR_IMAGE_MOCK))
+                .andDo(print())
+                .andExpect(status().isOk())
+        ;
+    }
 }

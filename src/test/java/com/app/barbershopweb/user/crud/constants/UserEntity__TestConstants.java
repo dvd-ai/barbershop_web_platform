@@ -13,7 +13,7 @@ public final class UserEntity__TestConstants {
     );
 
     public static final Users USERS_ENTITY_NOT_EXISTED_ID = new Users(
-            USERS_NOT_EXISTED_USER_ID, USERS_VALID_ENTITY.getFirstName(),
+            USERS_NOT_EXISTING_USER_ID, USERS_VALID_ENTITY.getFirstName(),
             USERS_VALID_ENTITY.getLastName(), USERS_VALID_ENTITY.getPhoneNumber(),
             USERS_VALID_ENTITY.getEmail(), USERS_VALID_ENTITY.getRole(), USERS_REGISTRATION_DATE
     );

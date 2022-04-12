@@ -17,7 +17,7 @@ import static com.app.barbershopweb.aws.s3.constants.S3Service_Metadata__TestCon
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.USERS_AVATAR_IMAGE_MOCK;
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.USER_AVATAR_S3_KEY;
 import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.*;
-import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_NOT_EXISTED_USER_ID;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_NOT_EXISTING_USER_ID;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -51,12 +51,12 @@ class UserAvatarServiceTest {
     @Test
     @DisplayName("throws NotFoundException if user doesn't exist")
     void uploadProfileAvatar__UserNotExist() throws NotFoundException {
-        when(userRepository.userExistsById(USERS_NOT_EXISTED_USER_ID)).thenReturn(false);
+        when(userRepository.userExistsById(USERS_NOT_EXISTING_USER_ID)).thenReturn(false);
 
         NotFoundException thrown = assertThrows(NotFoundException.class,
                 () ->
                         userAvatarService.uploadProfileAvatar(
-                                USERS_NOT_EXISTED_USER_ID, USERS_AVATAR_IMAGE_MOCK
+                                USERS_NOT_EXISTING_USER_ID, USERS_AVATAR_IMAGE_MOCK
                         )
         );
 
@@ -64,7 +64,7 @@ class UserAvatarServiceTest {
         assertEquals(USER_ERR_NOT_EXISTING_USER_ID, thrown.getMessages().get(0));
 
         try {
-            userAvatarService.uploadProfileAvatar(USERS_NOT_EXISTED_USER_ID, USERS_AVATAR_IMAGE_MOCK);
+            userAvatarService.uploadProfileAvatar(USERS_NOT_EXISTING_USER_ID, USERS_AVATAR_IMAGE_MOCK);
         } catch (NotFoundException ex) {
             verify(s3Service, times(0)).deleteFile(
                     S3_SERVICE_BUCKET_NAME,
@@ -91,17 +91,17 @@ class UserAvatarServiceTest {
     @Test
     @DisplayName("throws NotFoundException if user doesn't exist")
     void downloadProfileAvatar__UserNotExist() {
-        when(userRepository.userExistsById(USERS_NOT_EXISTED_USER_ID)).thenReturn(false);
+        when(userRepository.userExistsById(USERS_NOT_EXISTING_USER_ID)).thenReturn(false);
 
         NotFoundException thrown = assertThrows(NotFoundException.class,
-                () -> userAvatarService.downloadProfileAvatar(USERS_NOT_EXISTED_USER_ID)
+                () -> userAvatarService.downloadProfileAvatar(USERS_NOT_EXISTING_USER_ID)
         );
 
         assertEquals(1, thrown.getMessages().size());
         assertEquals(USER_ERR_NOT_EXISTING_USER_ID, thrown.getMessages().get(0));
 
         try {
-            userAvatarService.downloadProfileAvatar(USERS_NOT_EXISTED_USER_ID);
+            userAvatarService.downloadProfileAvatar(USERS_NOT_EXISTING_USER_ID);
         } catch (NotFoundException ex) {
             verify(s3Service, times(0)).downloadFile(
                     S3_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY
@@ -112,17 +112,17 @@ class UserAvatarServiceTest {
     @Test
     @DisplayName("throws NotFoundException if user doesn't exist")
     void deleteProfileAvatar__UserNotExist() {
-        when(userRepository.userExistsById(USERS_NOT_EXISTED_USER_ID)).thenReturn(false);
+        when(userRepository.userExistsById(USERS_NOT_EXISTING_USER_ID)).thenReturn(false);
 
         NotFoundException thrown = assertThrows(NotFoundException.class,
-                () -> userAvatarService.deleteProfileAvatar(USERS_NOT_EXISTED_USER_ID)
+                () -> userAvatarService.deleteProfileAvatar(USERS_NOT_EXISTING_USER_ID)
         );
 
         assertEquals(1, thrown.getMessages().size());
         assertEquals(USER_ERR_NOT_EXISTING_USER_ID, thrown.getMessages().get(0));
 
         try {
-            userAvatarService.deleteProfileAvatar(USERS_NOT_EXISTED_USER_ID);
+            userAvatarService.deleteProfileAvatar(USERS_NOT_EXISTING_USER_ID);
         } catch (NotFoundException ex) {
             verify(s3Service, times(0)).downloadFile(
                     S3_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY

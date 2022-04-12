@@ -13,7 +13,7 @@ import java.util.Optional;
 import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
 import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_UPDATED_USER_ENTITY;
 import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_ENTITY_LIST;
-import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_NOT_EXISTED_USER_ID;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_NOT_EXISTING_USER_ID;
 import static org.junit.jupiter.api.Assertions.*;
 
 class JdbcUsersRepositoryTest extends AbstractIT {
@@ -40,7 +40,7 @@ class JdbcUsersRepositoryTest extends AbstractIT {
     @Test
     void findUserByNotExistingId() {
         Optional<Users> userOptional = usersRepository.findUserById(
-                USERS_NOT_EXISTED_USER_ID
+                USERS_NOT_EXISTING_USER_ID
         );
 
         assertTrue(userOptional.isEmpty());
@@ -93,7 +93,7 @@ class JdbcUsersRepositoryTest extends AbstractIT {
 
     @Test
     void userExistsById() {
-        assertFalse(usersRepository.userExistsById(USERS_NOT_EXISTED_USER_ID));
+        assertFalse(usersRepository.userExistsById(USERS_NOT_EXISTING_USER_ID));
 
         Long id = usersRepository.addUser(USERS_VALID_ENTITY);
 

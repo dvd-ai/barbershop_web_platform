@@ -66,11 +66,11 @@ class UserErrorHandlerIT extends AbstractIT {
             "returns status code 404 & error dto")
     @Test
     void whenNotExistedUserId() {
-        ResponseEntity<ErrorDto> response = restTemplate.getForEntity(USERS_URL + "/" + USERS_NOT_EXISTED_USER_ID, ErrorDto.class);
+        ResponseEntity<ErrorDto> response = restTemplate.getForEntity(USERS_URL + "/" + USERS_NOT_EXISTING_USER_ID, ErrorDto.class);
 
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("Users with id '" + USERS_NOT_EXISTED_USER_ID + "' not found.",
+        assertEquals("Users with id '" + USERS_NOT_EXISTING_USER_ID + "' not found.",
                 Objects.requireNonNull(response.getBody()).errors().get(0));
         assertEquals(1, response.getBody().errors().size());
     }

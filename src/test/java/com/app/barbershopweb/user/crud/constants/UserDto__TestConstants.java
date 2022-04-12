@@ -20,7 +20,7 @@ public final class UserDto__TestConstants {
     );
 
     public static final UsersDto USERS_USER_DTO_NOT_EXISTED_ID = new UsersDto(
-            USERS_NOT_EXISTED_USER_ID, USERS_VALID_USER_DTO.firstName(),
+            USERS_NOT_EXISTING_USER_ID, USERS_VALID_USER_DTO.firstName(),
             USERS_VALID_USER_DTO.lastName(), USERS_VALID_USER_DTO.phoneNumber(),
             USERS_VALID_USER_DTO.email(), USERS_VALID_USER_DTO.role(), USERS_REGISTRATION_DATE
     );
