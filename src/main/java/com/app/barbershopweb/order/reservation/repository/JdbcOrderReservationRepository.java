@@ -5,7 +5,7 @@ import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.repository.OrderRepository;
 import com.app.barbershopweb.order.crud.repository.OrderRowMapper;
-import com.app.barbershopweb.user.repository.UserRepository;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;

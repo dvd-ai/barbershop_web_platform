@@ -7,7 +7,7 @@ import com.app.barbershopweb.order.crud.OrderConverter;
 import com.app.barbershopweb.order.crud.OrderDto;
 import com.app.barbershopweb.order.crud.repository.OrderRepository;
 import com.app.barbershopweb.order.reservation.dto.OrderReservationDto;
-import com.app.barbershopweb.user.repository.UserRepository;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
 import com.app.barbershopweb.workspace.repository.WorkspaceRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

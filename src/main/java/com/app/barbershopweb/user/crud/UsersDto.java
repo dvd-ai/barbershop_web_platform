@@ -1,4 +1,4 @@
-package com.app.barbershopweb.user;
+package com.app.barbershopweb.user.crud;
 
 
 import javax.validation.constraints.Min;

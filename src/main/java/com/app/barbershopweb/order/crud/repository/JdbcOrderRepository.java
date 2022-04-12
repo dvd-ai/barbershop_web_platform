@@ -6,7 +6,7 @@ import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
 import com.app.barbershopweb.exception.InvalidBusinessDataFormatException;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.order.crud.Order;
-import com.app.barbershopweb.user.repository.UserRepository;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
 import com.app.barbershopweb.workspace.repository.WorkspaceRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;

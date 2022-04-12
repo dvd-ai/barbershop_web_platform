@@ -3,7 +3,7 @@ package com.app.barbershopweb.workspace.constants;
 import com.app.barbershopweb.workspace.WorkspaceDto;
 
 import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOP_VALID_BARBERSHOP_ID;
-import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
 import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.*;
 
 public final class WorkspaceDto__TestConstants {

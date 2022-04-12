@@ -5,7 +5,7 @@ import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.repository.JdbcOrderRepository;
 import com.app.barbershopweb.order.reservation.repository.JdbcOrderReservationRepository;
-import com.app.barbershopweb.user.repository.JdbcUsersRepository;
+import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
 import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

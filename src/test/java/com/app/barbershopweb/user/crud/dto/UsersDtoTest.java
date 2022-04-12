@@ -1,8 +1,8 @@
-package com.app.barbershopweb.user.dto;
+package com.app.barbershopweb.user.crud.dto;
 
-import com.app.barbershopweb.user.UserController;
-import com.app.barbershopweb.user.UserConverter;
-import com.app.barbershopweb.user.UserService;
+import com.app.barbershopweb.user.crud.UserController;
+import com.app.barbershopweb.user.crud.UserConverter;
+import com.app.barbershopweb.user.crud.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,9 +12,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.app.barbershopweb.user.constants.UserDto__TestConstants.USERS_INVALID_USER_DTO;
-import static com.app.barbershopweb.user.constants.UserErrorMessage__TestConstants.*;
-import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.USERS_URL;
+import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_INVALID_USER_DTO;
+import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.*;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_URL;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

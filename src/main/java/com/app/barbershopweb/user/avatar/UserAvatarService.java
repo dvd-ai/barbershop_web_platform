@@ -1,49 +1,26 @@
-package com.app.barbershopweb.user;
+package com.app.barbershopweb.user.avatar;
 
 import com.app.barbershopweb.aws.s3.S3Service;
 import com.app.barbershopweb.exception.NotFoundException;
-import com.app.barbershopweb.user.repository.UserRepository;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
-
 
 @Service
-public class UserService {
-    
+public class UserAvatarService {
+
     private final UserRepository userRepository;
     private final S3Service s3Service;
     private final String bucketName;
 
-    public UserService(UserRepository userRepository, S3Service s3Service,
-                       @Value("${AWS_S3_BUCKET_NAME}")String bucketName) {
+    public UserAvatarService(UserRepository userRepository, S3Service s3Service, @Value("${AWS_S3_BUCKET_NAME}") String bucketName) {
         this.userRepository = userRepository;
         this.s3Service = s3Service;
         this.bucketName = bucketName;
-    }
-
-    public Long addUser(Users users) {
-        return userRepository.addUser(users);
-    }
-
-    public void deleteUserById(Long id) {
-        userRepository.deleteUserById(id);
-    }
-
-    public Optional<Users> updateUser(Users users) {
-        return userRepository.updateUser(users);
-    }
-
-    public Optional<Users> findUserById(Long id) {
-        return userRepository.findUserById(id);
-    }
-
-    public List<Users> getUsers() {
-        return userRepository.getUsers();
     }
 
     public void uploadProfileAvatar(Long userId, MultipartFile profileAvatar) {

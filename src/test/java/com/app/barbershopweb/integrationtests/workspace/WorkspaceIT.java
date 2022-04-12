@@ -2,7 +2,7 @@ package com.app.barbershopweb.integrationtests.workspace;
 
 import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.user.repository.JdbcUsersRepository;
+import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
 import com.app.barbershopweb.workspace.WorkspaceDto;
 import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
 import org.junit.jupiter.api.*;
@@ -18,8 +18,8 @@ import java.util.Objects;
 
 import static com.app.barbershopweb.barbershop.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_DTO_LIST;
 import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOPS_URL;
-import static com.app.barbershopweb.user.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
-import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.USERS_URL;
+import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_URL;
 import static com.app.barbershopweb.workspace.constants.WorkspaceDto__TestConstants.WORKSPACE_VALID_DTO;
 import static com.app.barbershopweb.workspace.constants.WorkspaceDto__TestConstants.WORKSPACE_VALID_UPDATED_DTO;
 import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_DTO_LIST;

@@ -1,8 +1,8 @@
-package com.app.barbershopweb.user.controller;
+package com.app.barbershopweb.user.crud.controller;
 
-import com.app.barbershopweb.user.UserController;
-import com.app.barbershopweb.user.UserConverter;
-import com.app.barbershopweb.user.UserService;
+import com.app.barbershopweb.user.crud.UserController;
+import com.app.barbershopweb.user.crud.UserConverter;
+import com.app.barbershopweb.user.crud.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.app.barbershopweb.user.constants.UserErrorMessage__TestConstants.USER_ERR_INVALID_PATH_VAR_USER_ID;
-import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.*;
+import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.USER_ERR_INVALID_PATH_VAR_USER_ID;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.*;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

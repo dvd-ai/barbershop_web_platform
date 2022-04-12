@@ -4,7 +4,7 @@ import com.app.barbershopweb.barbershop.repository.BarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.OrderDto;
 import com.app.barbershopweb.order.crud.repository.OrderRepository;
-import com.app.barbershopweb.user.repository.UserRepository;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
 import com.app.barbershopweb.workspace.repository.WorkspaceRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +27,7 @@ import static com.app.barbershopweb.order.crud.constants.OrderEntity__TestConsta
 import static com.app.barbershopweb.order.crud.constants.OrderList__TestConstants.ORDER_VALID_DTO_LIST;
 import static com.app.barbershopweb.order.crud.constants.OrderList__TestConstants.ORDER_VALID_ENTITY_LIST;
 import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.*;
-import static com.app.barbershopweb.user.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
 import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_ENTITY;
 import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_ENTITY_LIST;
 import static org.junit.jupiter.api.Assertions.*;

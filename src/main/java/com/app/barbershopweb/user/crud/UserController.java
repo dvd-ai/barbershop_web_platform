@@ -1,4 +1,4 @@
-package com.app.barbershopweb.user;
+package com.app.barbershopweb.user.crud;
 
 import com.app.barbershopweb.exception.NotFoundException;
 import org.springframework.http.HttpStatus;

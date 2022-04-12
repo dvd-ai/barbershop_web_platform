@@ -1,8 +1,8 @@
 package com.app.barbershopweb.integrationtests.user;
 
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.user.UsersDto;
-import com.app.barbershopweb.user.repository.JdbcUsersRepository;
+import com.app.barbershopweb.user.crud.UsersDto;
+import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -14,11 +14,11 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Objects;
 
-import static com.app.barbershopweb.user.constants.UserDto__TestConstants.USERS_VALID_UPDATED_USER_DTO;
-import static com.app.barbershopweb.user.constants.UserDto__TestConstants.USERS_VALID_USER_DTO;
-import static com.app.barbershopweb.user.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
-import static com.app.barbershopweb.user.constants.UserList__TestConstants.USERS_USER_VALID_ENTITY_LIST;
-import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.*;
+import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_VALID_UPDATED_USER_DTO;
+import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_VALID_USER_DTO;
+import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
+import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

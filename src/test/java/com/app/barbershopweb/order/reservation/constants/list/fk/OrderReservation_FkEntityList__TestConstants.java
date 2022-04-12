@@ -1,7 +1,7 @@
 package com.app.barbershopweb.order.reservation.constants.list.fk;
 
 import com.app.barbershopweb.barbershop.Barbershop;
-import com.app.barbershopweb.user.Users;
+import com.app.barbershopweb.user.crud.Users;
 import com.app.barbershopweb.workspace.Workspace;
 
 import java.time.LocalDateTime;

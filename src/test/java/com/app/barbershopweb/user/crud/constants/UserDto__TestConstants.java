@@ -1,9 +1,9 @@
-package com.app.barbershopweb.user.constants;
+package com.app.barbershopweb.user.crud.constants;
 
-import com.app.barbershopweb.user.UsersDto;
+import com.app.barbershopweb.user.crud.UsersDto;
 
-import static com.app.barbershopweb.user.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
-import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.*;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.*;
 
 public final class UserDto__TestConstants {
 

@@ -1,8 +1,8 @@
-package com.app.barbershopweb.user.constants;
+package com.app.barbershopweb.user.crud.constants;
 
-import com.app.barbershopweb.user.Users;
+import com.app.barbershopweb.user.crud.Users;
 
-import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.*;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.*;
 
 public final class UserEntity__TestConstants {
 

@@ -1,7 +1,7 @@
-package com.app.barbershopweb.user.repository;
+package com.app.barbershopweb.user.crud.repository;
 
 
-import com.app.barbershopweb.user.Users;
+import com.app.barbershopweb.user.crud.Users;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

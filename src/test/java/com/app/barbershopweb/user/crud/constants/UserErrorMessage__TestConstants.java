@@ -1,6 +1,6 @@
-package com.app.barbershopweb.user.constants;
+package com.app.barbershopweb.user.crud.constants;
 
-import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
 
 public final class UserErrorMessage__TestConstants {
 

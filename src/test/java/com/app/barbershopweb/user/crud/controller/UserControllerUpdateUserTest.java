@@ -1,8 +1,8 @@
-package com.app.barbershopweb.user.controller;
+package com.app.barbershopweb.user.crud.controller;
 
-import com.app.barbershopweb.user.UserController;
-import com.app.barbershopweb.user.UserConverter;
-import com.app.barbershopweb.user.UserService;
+import com.app.barbershopweb.user.crud.UserController;
+import com.app.barbershopweb.user.crud.UserConverter;
+import com.app.barbershopweb.user.crud.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,11 +17,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import static com.app.barbershopweb.user.constants.UserDto__TestConstants.USERS_USER_DTO_NOT_EXISTED_ID;
-import static com.app.barbershopweb.user.constants.UserDto__TestConstants.USERS_VALID_USER_DTO;
-import static com.app.barbershopweb.user.constants.UserEntity__TestConstants.USERS_ENTITY_NOT_EXISTED_ID;
-import static com.app.barbershopweb.user.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
-import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.*;
+import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_USER_DTO_NOT_EXISTED_ID;
+import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_VALID_USER_DTO;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_ENTITY_NOT_EXISTED_ID;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;

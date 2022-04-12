@@ -1,6 +1,6 @@
-package com.app.barbershopweb.user.repository;
+package com.app.barbershopweb.user.crud.repository;
 
-import com.app.barbershopweb.user.Users;
+import com.app.barbershopweb.user.crud.Users;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

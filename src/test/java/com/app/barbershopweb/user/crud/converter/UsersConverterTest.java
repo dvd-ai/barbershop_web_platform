@@ -1,17 +1,17 @@
-package com.app.barbershopweb.user.converter;
+package com.app.barbershopweb.user.crud.converter;
 
-import com.app.barbershopweb.user.UserConverter;
-import com.app.barbershopweb.user.Users;
-import com.app.barbershopweb.user.UsersDto;
+import com.app.barbershopweb.user.crud.UserConverter;
+import com.app.barbershopweb.user.crud.Users;
+import com.app.barbershopweb.user.crud.UsersDto;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.app.barbershopweb.user.constants.UserDto__TestConstants.USERS_VALID_USER_DTO;
-import static com.app.barbershopweb.user.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
-import static com.app.barbershopweb.user.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
-import static com.app.barbershopweb.user.constants.UserList__TestConstants.USERS_USER_VALID_ENTITY_LIST;
-import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.USERS_FIELD_AMOUNT;
+import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_VALID_USER_DTO;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
+import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_FIELD_AMOUNT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UsersConverterTest {

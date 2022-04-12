@@ -2,7 +2,7 @@ package com.app.barbershopweb.integrationtests.user;
 
 import com.app.barbershopweb.error.ErrorDto;
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.user.UsersDto;
+import com.app.barbershopweb.user.crud.UsersDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +14,10 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Objects;
 
-import static com.app.barbershopweb.user.constants.UserDto__TestConstants.USERS_INVALID_USER_DTO;
-import static com.app.barbershopweb.user.constants.UserDto__TestConstants.USERS_USER_DTO_NOT_EXISTED_ID;
-import static com.app.barbershopweb.user.constants.UserErrorMessage__TestConstants.*;
-import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.*;
+import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_INVALID_USER_DTO;
+import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_USER_DTO_NOT_EXISTED_ID;
+import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.*;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

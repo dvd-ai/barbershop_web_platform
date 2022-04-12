@@ -1,8 +1,8 @@
-package com.app.barbershopweb.user.controller;
+package com.app.barbershopweb.user.crud.controller;
 
-import com.app.barbershopweb.user.UserController;
-import com.app.barbershopweb.user.UserConverter;
-import com.app.barbershopweb.user.UserService;
+import com.app.barbershopweb.user.crud.UserController;
+import com.app.barbershopweb.user.crud.UserConverter;
+import com.app.barbershopweb.user.crud.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,10 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 
-import static com.app.barbershopweb.user.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
-import static com.app.barbershopweb.user.constants.UserList__TestConstants.USERS_USER_VALID_ENTITY_LIST;
-import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.USERS_FIELD_AMOUNT;
-import static com.app.barbershopweb.user.constants.UserMetadata__TestConstants.USERS_URL;
+import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
+import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_FIELD_AMOUNT;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_URL;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
