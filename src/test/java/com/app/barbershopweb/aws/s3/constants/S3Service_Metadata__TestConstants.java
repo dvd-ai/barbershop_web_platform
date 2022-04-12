@@ -2,7 +2,6 @@ package com.app.barbershopweb.aws.s3.constants;
 
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,15 +17,15 @@ public final class S3Service_Metadata__TestConstants {
             "image file content".getBytes()
     );
     public final static S3Object S3_SERVICE_OBJECT_MOCK = setS3Object();
-    @Value("$(AWS_S3_BUCKET_NAME)")
-    public static String S3_SERVICE_BUCKET_NAME; //= "barbershop-web";
+    public static String S3_SERVICE_BUCKET_NAME = "barbershop-web";
 
     private static S3Object setS3Object() {
         S3Object obj = new S3Object();
         try {
             obj.setObjectContent(
                     new S3ObjectInputStream(
-                            new ByteArrayInputStream(S3_SERVICE_MULTIPART_FILE_MOCK.getBytes()),
+                            new ByteArrayInputStream(
+                                    S3_SERVICE_MULTIPART_FILE_MOCK.getBytes()),
                             null
                     )
             );

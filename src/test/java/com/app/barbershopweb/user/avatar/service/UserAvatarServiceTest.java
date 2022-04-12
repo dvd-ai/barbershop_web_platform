@@ -4,11 +4,11 @@ import com.app.barbershopweb.aws.s3.S3Service;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.user.avatar.UserAvatarService;
 import com.app.barbershopweb.user.crud.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ByteArrayResource;
 
@@ -26,15 +26,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserAvatarServiceTest {
 
-    @Mock
-    UserRepository userRepository;
+    UserRepository userRepository = Mockito.mock(UserRepository.class);
 
-    @Mock
-    S3Service s3Service;
+    S3Service s3Service = Mockito.mock(S3Service.class);
 
-    @InjectMocks
-    UserAvatarService userAvatarService;
-
+    UserAvatarService userAvatarService = new UserAvatarService(
+            userRepository, s3Service, S3_SERVICE_BUCKET_NAME
+    );
 
     @Test
     @DisplayName("uploads profile avatar successfully")
