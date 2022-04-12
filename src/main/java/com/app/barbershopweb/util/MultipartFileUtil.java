@@ -1,10 +1,12 @@
 package com.app.barbershopweb.util;
 
+import com.app.barbershopweb.exception.FileException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 public class MultipartFileUtil {
@@ -18,7 +20,7 @@ public class MultipartFileUtil {
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(multipartFile.getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new FileException(List.of(e.getMessage()));
         }
         return file;
     }
