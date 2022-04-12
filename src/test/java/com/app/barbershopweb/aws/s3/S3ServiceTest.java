@@ -42,7 +42,7 @@ class S3ServiceTest {
         File file = convertMultipartFileToFile(S3_SERVICE_MULTIPART_FILE_MOCK);
 
         s3Service.uploadFile(
-                S3_SERVICE_OBJECT_KEY, S3_SERVICE_BUCKET_NAME,
+                S3_SERVICE_BUCKET_NAME, S3_SERVICE_OBJECT_KEY,
                 S3_SERVICE_MULTIPART_FILE_MOCK
         );
         verify(amazonS3).putObject(

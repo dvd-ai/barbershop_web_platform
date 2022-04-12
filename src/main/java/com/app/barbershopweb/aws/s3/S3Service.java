@@ -29,7 +29,7 @@ public class S3Service {
 
     public void uploadFile(String bucketName, String key, MultipartFile multipartFile) {
         File file = convertMultipartFileToFile(multipartFile);
-        amazonS3.putObject(key, bucketName, file);
+        amazonS3.putObject(bucketName, key, file);
         file.delete();
     }
 
