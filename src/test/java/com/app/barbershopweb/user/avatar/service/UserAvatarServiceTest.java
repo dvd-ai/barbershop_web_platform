@@ -15,8 +15,8 @@ import org.springframework.core.io.ByteArrayResource;
 import java.io.IOException;
 
 import static com.app.barbershopweb.aws.s3.constants.S3Service_Metadata__TestConstants.S3_SERVICE_BUCKET_NAME;
-import static com.app.barbershopweb.user.avatar.constants.UserAvatar__TestConstants.USERS_AVATAR_IMAGE_MOCK;
-import static com.app.barbershopweb.user.avatar.constants.UserAvatar__TestConstants.USER_AVATAR_S3_KEY;
+import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.USERS_AVATAR_IMAGE_MOCK;
+import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.USER_AVATAR_S3_KEY;
 import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.*;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_NOT_EXISTED_USER_ID;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
