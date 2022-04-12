@@ -2,6 +2,7 @@ package com.app.barbershopweb.error;
 
 import com.amazonaws.AmazonServiceException;
 import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
+import com.app.barbershopweb.exception.FileException;
 import com.app.barbershopweb.exception.InvalidBusinessDataFormatException;
 import com.app.barbershopweb.exception.NotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -64,5 +65,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AmazonServiceException.class)
     public ResponseEntity<ErrorDto> onAmazonServiceException(AmazonServiceException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(List.of(e.getErrorMessage())));
+    }
+
+    @ExceptionHandler(FileException.class)
+    public ResponseEntity<ErrorDto> onAmazonServiceException(FileException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(e.getMessages()));
     }
 }
