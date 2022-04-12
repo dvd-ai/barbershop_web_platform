@@ -68,7 +68,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(FileException.class)
-    public ResponseEntity<ErrorDto> onAmazonServiceException(FileException e) {
+    public ResponseEntity<ErrorDto> onFileException(FileException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(e.getMessages()));
     }
 }

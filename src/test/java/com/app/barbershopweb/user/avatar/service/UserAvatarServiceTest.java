@@ -4,7 +4,6 @@ import com.app.barbershopweb.aws.s3.S3Service;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.user.avatar.UserAvatarService;
 import com.app.barbershopweb.user.crud.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,7 +61,7 @@ class UserAvatarServiceTest {
         );
 
         assertEquals(1, thrown.getMessages().size());
-        assertEquals(USER_ERR_NOT_EXISTED_USER_ID, thrown.getMessages().get(0));
+        assertEquals(USER_ERR_NOT_EXISTING_USER_ID, thrown.getMessages().get(0));
 
         try {
             userAvatarService.uploadProfileAvatar(USERS_NOT_EXISTED_USER_ID, USERS_AVATAR_IMAGE_MOCK);
@@ -99,7 +98,7 @@ class UserAvatarServiceTest {
         );
 
         assertEquals(1, thrown.getMessages().size());
-        assertEquals(USER_ERR_NOT_EXISTED_USER_ID, thrown.getMessages().get(0));
+        assertEquals(USER_ERR_NOT_EXISTING_USER_ID, thrown.getMessages().get(0));
 
         try {
             userAvatarService.downloadProfileAvatar(USERS_NOT_EXISTED_USER_ID);
@@ -120,7 +119,7 @@ class UserAvatarServiceTest {
         );
 
         assertEquals(1, thrown.getMessages().size());
-        assertEquals(USER_ERR_NOT_EXISTED_USER_ID, thrown.getMessages().get(0));
+        assertEquals(USER_ERR_NOT_EXISTING_USER_ID, thrown.getMessages().get(0));
 
         try {
             userAvatarService.deleteProfileAvatar(USERS_NOT_EXISTED_USER_ID);
