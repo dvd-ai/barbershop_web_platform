@@ -24,25 +24,25 @@ public class UserAvatarService {
     }
 
     public void uploadProfileAvatar(Long userId, MultipartFile profileAvatar) {
-        if (!userRepository.userExistsById(userId)) {
-            throw new NotFoundException(
-                    List.of("Profile avatar upload: User with id " + userId + " wasn't found")
-            );
-        }
-
-        String key = "profile_avatar_" + userId;
-        s3Service.deleteFile(bucketName, key);
-        s3Service.uploadFile(bucketName, key, profileAvatar);
+        String objectKey = getObjectKeyIfUserExists(userId);
+        s3Service.deleteFile(bucketName, objectKey);
+        s3Service.uploadFile(bucketName, objectKey, profileAvatar);
     }
 
     public ByteArrayResource downloadProfileAvatar(Long userId) {
+        return new ByteArrayResource(s3Service.downloadFile(bucketName, getObjectKeyIfUserExists(userId)));
+    }
+
+    public void deleteProfileAvatar(Long userId) {
+        s3Service.deleteFile(bucketName, getObjectKeyIfUserExists(userId));
+    }
+
+    private String getObjectKeyIfUserExists(Long userId) {
         if (!userRepository.userExistsById(userId)) {
             throw new NotFoundException(
-                    List.of("Profile avatar download: User with id " + userId + " wasn't found")
+                    List.of("User with id " + userId + " not found")
             );
         }
-
-        String key = "profile_avatar_" + userId;
-        return new ByteArrayResource(s3Service.downloadFile(bucketName, key));
+        return "profile_avatar_" + userId;
     }
 }
