@@ -1,5 +1,7 @@
 package com.app.barbershopweb.aws.s3;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
@@ -34,13 +36,19 @@ public class S3Service {
     }
 
     public byte[] downloadFile(String bucketName, String key) {
-        S3Object s3Object = amazonS3.getObject(bucketName, key);
-        S3ObjectInputStream inputStream = s3Object.getObjectContent();
+        byte[] bytes = new byte[0];
+
         try {
+            S3Object s3Object = amazonS3.getObject(bucketName, key);
+            S3ObjectInputStream inputStream = s3Object.getObjectContent();
             return IOUtils.toByteArray(inputStream);
         } catch (IOException e) {
             throw new FileException(List.of(e.getMessage()));
-        }
 
+        } catch (SdkClientException e) {
+            if (e.getMessage().contains("The specified key does not exist."))
+                return bytes;
+            else throw new AmazonServiceException(e.getMessage());
+        }
     }
 }

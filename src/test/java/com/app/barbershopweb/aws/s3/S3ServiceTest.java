@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
 import com.app.barbershopweb.exception.FileException;
+import org.junit.Ignore;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -85,5 +86,12 @@ class S3ServiceTest {
         );
 
         mockStatic.close();
+    }
+
+    @Ignore("needs to be implemented")
+    @Test
+    @DisplayName("from #52 row")
+    void downloadFile__SdkClientException() {
+
     }
 }
