@@ -1,4 +1,4 @@
-package com.app.barbershopweb.integrationtests.user;
+package com.app.barbershopweb.integrationtests.user.crud;
 
 import com.app.barbershopweb.error.ErrorDto;
 import com.app.barbershopweb.integrationtests.AbstractIT;
