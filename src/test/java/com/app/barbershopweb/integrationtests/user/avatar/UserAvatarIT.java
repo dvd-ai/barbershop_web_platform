@@ -7,19 +7,22 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.*;
 import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
 import static com.app.barbershopweb.util.MultipartFileUtil.convertMultipartFileToFile;
-import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
@@ -34,6 +37,8 @@ class UserAvatarIT extends AbstractAwsIT {
 
     @Autowired
     private AmazonS3 s3;
+
+    private static File file;
 
     @BeforeAll
     void createBucket() {
@@ -53,24 +58,12 @@ class UserAvatarIT extends AbstractAwsIT {
 
     @Test
     void uploadsAvatar() throws IOException {
-        HttpHeaders header = new HttpHeaders();
-        header.setContentType(MediaType.IMAGE_PNG);
-
-        ByteArrayResource bar = new ByteArrayResource(USERS_AVATAR_IMAGE_MOCK.getBytes()) {
-            @Override
-            public String getFilename() {
-                return USERS_AVATAR_IMAGE_MOCK.getOriginalFilename();
-            }
-        };
-
-        final HttpEntity<ByteArrayResource> entity = new HttpEntity<>(bar, header);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         MultiValueMap<String, Object> requestMap = new LinkedMultiValueMap<>();
-        requestMap.add("file", entity);
+        requestMap.add("file", createTempFileResource(USERS_AVATAR_IMAGE_MOCK.getBytes()));
 
         ResponseEntity<Object> response = restTemplate.postForEntity(
                 USER_AVATARS_URL + "/" + USERS_VALID_USER_ID,
@@ -79,14 +72,19 @@ class UserAvatarIT extends AbstractAwsIT {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(s3.doesObjectExist(getBucketName(), USER_AVATAR_OBJECT_KEY));
+        assertEquals(
+                new ByteArrayResource(s3.getObject(getBucketName(), USER_AVATAR_OBJECT_KEY).getObjectContent().readAllBytes()),
+                new ByteArrayResource(USERS_AVATAR_IMAGE_MOCK.getBytes())
+        );
     }
 
     @Test
     void downloadAvatar() throws IOException {
+        file = convertMultipartFileToFile(USERS_AVATAR_IMAGE_MOCK);
         s3.putObject(
                 getBucketName(),
                 USER_AVATAR_OBJECT_KEY,
-                convertMultipartFileToFile(USERS_AVATAR_IMAGE_MOCK)
+                file
         );
 
         ResponseEntity<ByteArrayResource> response = restTemplate.getForEntity(
@@ -100,10 +98,11 @@ class UserAvatarIT extends AbstractAwsIT {
 
     @Test
     void removeAvatar() {
+        file = convertMultipartFileToFile(USERS_AVATAR_IMAGE_MOCK);
         s3.putObject(
                 getBucketName(),
                 USER_AVATAR_OBJECT_KEY,
-                convertMultipartFileToFile(USERS_AVATAR_IMAGE_MOCK)
+                file
         );
 
         ResponseEntity<Object> response = restTemplate.exchange(
@@ -115,5 +114,16 @@ class UserAvatarIT extends AbstractAwsIT {
 
         assertFalse(s3.doesObjectExist(getBucketName(), USER_AVATAR_OBJECT_KEY));
         assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    static Resource createTempFileResource(byte [] content) throws IOException {
+        Path tempFile = Files.createTempFile("avatar", ".png");
+        Files.write(tempFile, content);
+        return new FileSystemResource(tempFile.toFile());
+    }
+
+    @AfterAll
+    static void removeFile() {
+        file.delete();
     }
 }
