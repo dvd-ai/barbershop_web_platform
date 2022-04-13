@@ -11,6 +11,8 @@ public final class UserAvatar_Metadata__TestConstants {
     public static final String USER_AVATARS_URL = USERS_URL + "/avatars";
     public static final String USER_AVATAR_S3_KEY_PREFIX = "profile_avatar_";
     public static final String USER_AVATAR_S3_KEY = USER_AVATAR_S3_KEY_PREFIX + USERS_VALID_USER_ID;
+    public static final String USER_AVATAR_OBJECT_KEY = "profile_avatar_" + USERS_VALID_USER_ID;
+
 
     public static final MockMultipartFile USERS_AVATAR_IMAGE_MOCK =
             new MockMultipartFile(
