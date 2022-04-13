@@ -27,6 +27,9 @@ class S3ServiceTest {
     @Mock
     AmazonS3 amazonS3;
 
+    @Mock
+    S3ServiceUtils utils;
+
     @InjectMocks
     S3Service s3Service;
 
