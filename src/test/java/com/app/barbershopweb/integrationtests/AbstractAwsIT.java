@@ -16,18 +16,11 @@ public abstract class AbstractAwsIT extends AbstractIT{
             .withServices(S3);
 
     private static AmazonS3 amazonS3;
-    private static final String bucketName = "bucketName";
+    private static final String bucketName = "barbershop--web";
 
     static {
         localstack.start();
         setAmazonS3();
-    }
-
-    @DynamicPropertySource
-    public static void awsTestProperties(DynamicPropertyRegistry registry) {
-        registry.add("aws.service.credentials.access.key.id=", AbstractAwsIT::getAccessKey);
-        registry.add("aws.service.credentials.secret.access.key=", AbstractAwsIT::getSecretAccessKey);
-        registry.add("aws.s3.bucket.name=", AbstractAwsIT::getBucketName);
     }
 
     private static void setAmazonS3() {
@@ -38,16 +31,8 @@ public abstract class AbstractAwsIT extends AbstractIT{
                 .build();
     }
 
-    private static String getBucketName() {
+    public static String getBucketName() {
         return bucketName;
-    }
-
-    private static String getAccessKey() {
-        return localstack.getAccessKey();
-    }
-
-    private static String getSecretAccessKey() {
-        return localstack.getSecretKey();
     }
 
     public static AmazonS3 getAmazonS3() {
