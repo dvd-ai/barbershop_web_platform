@@ -3,6 +3,7 @@ package com.app.barbershopweb.order.reservation.controller;
 import com.app.barbershopweb.order.crud.OrderConverter;
 import com.app.barbershopweb.order.reservation.OrderReservationController;
 import com.app.barbershopweb.order.reservation.OrderReservationService;
+import com.app.barbershopweb.order.testutils.OrderController__TestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
@@ -115,23 +116,7 @@ class OrderReservationController__getAvailableOrdersTest {
         ).andReturn().getResponse();
         
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        
-        DocumentContext context = JsonPath.parse(response.getContentAsString());
-        List<Object> object = context.read("$");
-        
-        assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.size(), object.size());
 
-        for (var i = 0; i < ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.size(); i++) {
-            Map<String, Object> dto = context.read("$[" + i + "]");
-            assertEquals(ORDER_FIELD_AMOUNT, dto.size());
-            assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.get(i).orderId().intValue(), (Integer) context.read("$["+ i + "].orderId"));
-            assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.get(i).barbershopId().intValue(), (Integer) context.read("$["+ i + "].barbershopId"));
-            assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.get(i).barberId().intValue(), (Integer) context.read("$["+ i + "].barberId"));
-            assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.get(i).customerId(), context.read("$["+ i + "].customerId"));
-            assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.get(i).orderDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), context.read("$["+ i + "].orderDate"));
-            assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.get(i).active(), context.read("$[" + i + "].active"));
-        }
+        OrderController__TestUtils.checkOrderDtoJson(response.getContentAsString(), ORDER_RESERVATION_OPEN_ORDER_DTO_LIST, true);
     }
-
-
 }
