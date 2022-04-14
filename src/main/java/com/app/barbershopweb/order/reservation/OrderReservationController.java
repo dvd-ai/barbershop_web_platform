@@ -3,8 +3,8 @@ package com.app.barbershopweb.order.reservation;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.OrderConverter;
 import com.app.barbershopweb.order.crud.OrderDto;
-import com.app.barbershopweb.order.reservation.dto.GetOpenFilteredOrders__RequestDto;
-import com.app.barbershopweb.order.reservation.dto.GetOpenOrders__RequestDto;
+import com.app.barbershopweb.order.reservation.dto.GetOpenFilteredOrdersRequestDto;
+import com.app.barbershopweb.order.reservation.dto.GetOpenOrdersRequestDto;
 import com.app.barbershopweb.order.reservation.dto.OrderReservationDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class OrderReservationController {
 
     @PostMapping
     public ResponseEntity<List<OrderDto>> getAvailableOrders(
-            @RequestBody @Valid GetOpenOrders__RequestDto showUnreservedOrdersRequestDto
+            @RequestBody @Valid GetOpenOrdersRequestDto showUnreservedOrdersRequestDto
     ) {
         List<Order> orders = orderReservationService.getAvailableOrders(
                 showUnreservedOrdersRequestDto.barbershopId(),
@@ -43,7 +43,7 @@ public class OrderReservationController {
 
     @PostMapping("/filtered")
     public ResponseEntity<List<OrderDto>> getFilteredAvailableOrders(
-            @RequestBody @Valid GetOpenFilteredOrders__RequestDto showUnreservedOrdersRequestDto
+            @RequestBody @Valid GetOpenFilteredOrdersRequestDto showUnreservedOrdersRequestDto
     ) {
         List<Order> orders = orderReservationService.getFilteredAvailableOrders(
                 showUnreservedOrdersRequestDto.barbershopId(),

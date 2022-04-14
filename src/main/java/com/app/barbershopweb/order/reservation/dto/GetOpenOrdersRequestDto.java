@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 
-public record GetOpenOrders__RequestDto(
+public record GetOpenOrdersRequestDto(
         @Min(1)
         @NotNull
         Long barbershopId,
