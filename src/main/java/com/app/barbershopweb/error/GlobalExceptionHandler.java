@@ -1,5 +1,6 @@
 package com.app.barbershopweb.error;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
@@ -63,7 +64,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDto(e.getMessages()));
     }
 
-    @ExceptionHandler({AmazonServiceException.class, SdkClientException.class})
+    @ExceptionHandler({AmazonServiceException.class, SdkClientException.class, AmazonClientException.class})
     public ResponseEntity<ErrorDto> onAmazonException(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(List.of(e.getMessage())));
     }
