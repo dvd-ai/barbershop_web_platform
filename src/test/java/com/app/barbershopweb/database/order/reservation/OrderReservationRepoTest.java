@@ -4,7 +4,7 @@ import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.repository.JdbcOrderRepository;
-import com.app.barbershopweb.order.reservation.repository.JdbcOrderReservationRepository;
+import com.app.barbershopweb.order.reservation.repository.OrderReservationRepository;
 import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
 import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -24,11 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-@DisplayName("jdbc order reservation repository test without error handling")
-class JdbcOrderReservationRepoTest extends AbstractIT {
+@DisplayName("order reservation repository test without error handling")
+class OrderReservationRepoTest extends AbstractIT {
 
     @Autowired
-    JdbcOrderReservationRepository orderReservationRepository;
+    OrderReservationRepository orderReservationRepository;
     @Autowired
     JdbcUsersRepository usersRepository;
     @Autowired
