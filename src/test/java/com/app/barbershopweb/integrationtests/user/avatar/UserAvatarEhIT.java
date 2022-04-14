@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class UserAvatarEhIT extends AbstractAwsIT {
 
     /*
-    downloadAvatar: FileException, AmazonServiceException, SdkClientException
+    downloadAvatar, uploadAvatar, deleteAvatar: FileException, AmazonServiceException, SdkClientException
     are checked only on controller level tests
     */
 
