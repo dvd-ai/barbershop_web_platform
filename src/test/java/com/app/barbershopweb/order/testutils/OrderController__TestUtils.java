@@ -13,9 +13,10 @@ import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestCons
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OrderController__TestUtils {
-    
-    private OrderController__TestUtils() {}
-    
+
+    private OrderController__TestUtils() {
+    }
+
     public static void checkOrderDtoJson(String json, List<OrderDto> orderDtos, boolean customerIdIsNull) {
         DocumentContext context = JsonPath.parse(json);
         List<Object> object = context.read("$");
@@ -31,7 +32,8 @@ public class OrderController__TestUtils {
 
             if (customerIdIsNull) {
                 assertEquals(orderDtos.get(i).customerId(), context.read("$[" + i + "].customerId"));
-            } else assertEquals(orderDtos.get(i).customerId().intValue(), (Integer) context.read("$[" + i + "].customerId"));
+            } else
+                assertEquals(orderDtos.get(i).customerId().intValue(), (Integer) context.read("$[" + i + "].customerId"));
 
             assertEquals(orderDtos.get(i).orderDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), context.read("$[" + i + "].orderDate"));
             assertEquals(orderDtos.get(i).active(), context.read("$[" + i + "].active"));
@@ -53,11 +55,12 @@ public class OrderController__TestUtils {
 
             if (customerIdIsNull) {
                 assertEquals(orders.get(i).getCustomerId(), context.read("$[" + i + "].customerId"));
-            } else assertEquals(orders.get(i).getCustomerId().intValue(), (Integer) context.read("$[" + i + "].customerId"));
+            } else
+                assertEquals(orders.get(i).getCustomerId().intValue(), (Integer) context.read("$[" + i + "].customerId"));
 
             assertEquals(orders.get(i).getOrderDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), context.read("$[" + i + "].orderDate"));
             assertEquals(orders.get(i).getActive(), context.read("$[" + i + "].active"));
         }
     }
-    
+
 }
