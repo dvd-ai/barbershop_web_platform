@@ -3,16 +3,12 @@ package com.app.barbershopweb.aws.s3;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.amazonaws.util.IOUtils;
 import com.app.barbershopweb.exception.FileException;
-import org.junit.Ignore;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ByteArrayResource;
 
@@ -115,7 +111,6 @@ class S3ServiceTest {
                 )
         );
     }
-
 
 
 }
