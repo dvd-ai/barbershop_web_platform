@@ -24,7 +24,6 @@ import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__T
 import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.USER_ERR_NOT_EXISTING_USER_ID;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -92,9 +91,9 @@ class UserAvatarController__downloadAvatarTest {
     void downloadAvatar__FileException() throws Exception {
         when(avatarService.downloadProfileAvatar(USERS_VALID_USER_ID))
                 .thenThrow(
-                    new FileException(List.of(anyString())
-                )
-        );
+                        new FileException(List.of(anyString())
+                        )
+                );
         mockMvc.perform(get(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)).andDo(print())
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$", aMapWithSize(1)))

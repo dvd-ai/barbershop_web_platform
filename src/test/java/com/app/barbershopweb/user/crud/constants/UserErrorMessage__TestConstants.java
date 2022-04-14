@@ -1,6 +1,6 @@
 package com.app.barbershopweb.user.crud.constants;
 
-import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.*;
+import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_NOT_EXISTING_USER_ID;
 
 public final class UserErrorMessage__TestConstants {
 

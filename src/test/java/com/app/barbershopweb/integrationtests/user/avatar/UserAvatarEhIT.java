@@ -1,7 +1,6 @@
 package com.app.barbershopweb.integrationtests.user.avatar;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.Region;
 import com.app.barbershopweb.error.ErrorDto;
 import com.app.barbershopweb.integrationtests.AbstractAwsIT;
 import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
@@ -16,7 +15,6 @@ import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,6 +46,12 @@ class UserAvatarEhIT extends AbstractAwsIT {
 
     @Autowired
     private AmazonS3 s3;
+
+    static Resource createTempFileResource(byte[] content, String suffix) throws IOException {
+        Path tempFile = Files.createTempFile("avatar", suffix);
+        Files.write(tempFile, content);
+        return new FileSystemResource(tempFile.toFile());
+    }
 
     @AfterEach
     void cleanUpDb() {
@@ -105,8 +109,6 @@ class UserAvatarEhIT extends AbstractAwsIT {
         assertEquals(1, errors.size());
         assertTrue(errors.contains(USER_AVATAR_ERR_NO_AVATAR_FOUND));
     }
-
-
 
     @Test
     @DisplayName("when user doesn't exist, returns 404 & error dto")
@@ -181,12 +183,5 @@ class UserAvatarEhIT extends AbstractAwsIT {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(1, errors.size());
         assertTrue(errors.contains(USER_ERR_INVALID_PATH_VAR_USER_ID));
-    }
-
-
-    static Resource createTempFileResource(byte [] content, String suffix) throws IOException {
-        Path tempFile = Files.createTempFile("avatar", suffix);
-        Files.write(tempFile, content);
-        return new FileSystemResource(tempFile.toFile());
     }
 }

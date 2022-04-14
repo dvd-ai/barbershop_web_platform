@@ -16,11 +16,11 @@ public final class UserAvatar_Metadata__TestConstants {
 
     public static final MockMultipartFile USERS_AVATAR_IMAGE_MOCK =
             new MockMultipartFile(
-            "file",
-            "avatar.png",
-            "image/png",
-            "image file content".getBytes()
-    );
+                    "file",
+                    "avatar.png",
+                    "image/png",
+                    "image file content".getBytes()
+            );
 
     public static final MockMultipartFile USERS_AVATAR_TEXT_FILE_MOCK
             = new MockMultipartFile(

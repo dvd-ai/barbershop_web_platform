@@ -29,16 +29,24 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserAvatarIT extends AbstractAwsIT {
 
+    private static File file;
     @Autowired
     private JdbcUsersRepository userRepository;
-
     @Autowired
     private TestRestTemplate restTemplate;
-
     @Autowired
     private AmazonS3 s3;
 
-    private static File file;
+    static Resource createTempFileResource(byte[] content) throws IOException {
+        Path tempFile = Files.createTempFile("avatar", ".png");
+        Files.write(tempFile, content);
+        return new FileSystemResource(tempFile.toFile());
+    }
+
+    @AfterAll
+    static void removeFile() {
+        file.delete();
+    }
 
     @BeforeAll
     void createBucket() {
@@ -114,16 +122,5 @@ class UserAvatarIT extends AbstractAwsIT {
 
         assertFalse(s3.doesObjectExist(getBucketName(), USER_AVATAR_OBJECT_KEY));
         assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
-
-    static Resource createTempFileResource(byte [] content) throws IOException {
-        Path tempFile = Files.createTempFile("avatar", ".png");
-        Files.write(tempFile, content);
-        return new FileSystemResource(tempFile.toFile());
-    }
-
-    @AfterAll
-    static void removeFile() {
-        file.delete();
     }
 }

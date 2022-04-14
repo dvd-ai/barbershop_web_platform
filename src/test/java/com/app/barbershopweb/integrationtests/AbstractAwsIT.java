@@ -7,14 +7,13 @@ import org.testcontainers.utility.DockerImageName;
 
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 
-public abstract class AbstractAwsIT extends AbstractIT{
+public abstract class AbstractAwsIT extends AbstractIT {
 
     private static final DockerImageName localstackImage = DockerImageName.parse("localstack/localstack:0.11.3");
+    private static final String bucketName = "barbershop--web";
     public static LocalStackContainer localstack = new LocalStackContainer(localstackImage)
             .withServices(S3);
-
     private static AmazonS3 amazonS3;
-    private static final String bucketName = "barbershop--web";
 
     static {
         localstack.start();

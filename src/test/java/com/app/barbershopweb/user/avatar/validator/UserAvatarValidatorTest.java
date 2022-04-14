@@ -10,7 +10,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_ErrorMessage__TestConstants.USER_AVATAR_ERR_INVALID_FILE;
-import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.*;
+import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.USERS_AVATAR_TEXT_FILE_MOCK;
+import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.USER_AVATARS_URL;
 import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.USER_ERR_INVALID_PATH_VAR_USER_ID;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_INVALID_USER_ID;
 import static org.hamcrest.Matchers.*;
