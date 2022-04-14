@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -20,13 +21,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.app.barbershopweb.barbershop.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_DTO_LIST;
-import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOP_FIELD_AMOUNT;
 import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
 import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_ENTITY_LIST;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_FIELD_AMOUNT;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_URL;
-import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -76,10 +74,11 @@ class UserControllerGetUsersTest {
                 perform(get(USERS_URL)).
                 andDo(print()).andReturn().getResponse();
 
-        checkBarbershopDtoJson(response.getContentAsString());
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        checkUsersDtoJson(response.getContentAsString());
     }
 
-    void checkBarbershopDtoJson(String json) {
+    void checkUsersDtoJson(String json) {
         DocumentContext context = JsonPath.parse(json);
         List<Object> object = context.read("$");
 

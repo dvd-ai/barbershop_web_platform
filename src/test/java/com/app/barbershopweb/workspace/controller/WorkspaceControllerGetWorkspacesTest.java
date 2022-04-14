@@ -3,6 +3,8 @@ package com.app.barbershopweb.workspace.controller;
 import com.app.barbershopweb.workspace.WorkspaceController;
 import com.app.barbershopweb.workspace.WorkspaceConverter;
 import com.app.barbershopweb.workspace.WorkspaceService;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,15 +12,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
+import static com.app.barbershopweb.barbershop.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_DTO_LIST;
 import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_DTO_LIST;
 import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_ENTITY_LIST;
 import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.WORKSPACES_URL;
 import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.WORKSPACE_FIELD_AMOUNT;
-import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -63,30 +70,29 @@ class WorkspaceControllerGetWorkspacesTest {
                 WORKSPACE_VALID_DTO_LIST
         );
 
-        mockMvc.
+        MockHttpServletResponse response = mockMvc.
                 perform(get(WORKSPACES_URL)).
-                andDo(print()).
-                andExpect(status().isOk()).
+                andDo(print()).andReturn().getResponse();
 
-                andExpect(jsonPath("$[0].workspaceId", is(WORKSPACE_VALID_DTO_LIST.get(0).workspaceId().intValue()))).
-                andExpect(jsonPath("$[0].userId", is(WORKSPACE_VALID_DTO_LIST.get(0).userId().intValue()))).
-                andExpect(jsonPath("$[0].barbershopId", is(WORKSPACE_VALID_DTO_LIST.get(0).workspaceId().intValue()))).
-                andExpect(jsonPath("$[0].active", is(WORKSPACE_VALID_DTO_LIST.get(0).active()))).
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
 
-                andExpect(jsonPath("$[1].workspaceId", is(WORKSPACE_VALID_DTO_LIST.get(1).workspaceId().intValue()))).
-                andExpect(jsonPath("$[1].userId", is(WORKSPACE_VALID_DTO_LIST.get(1).userId().intValue()))).
-                andExpect(jsonPath("$[1].barbershopId", is(WORKSPACE_VALID_DTO_LIST.get(1).workspaceId().intValue()))).
-                andExpect(jsonPath("$[1].active", is(WORKSPACE_VALID_DTO_LIST.get(1).active()))).
+        checkWorkspaceDtoJson(response.getContentAsString());
+    }
 
-                andExpect(jsonPath("$[2].workspaceId", is(WORKSPACE_VALID_DTO_LIST.get(2).workspaceId().intValue()))).
-                andExpect(jsonPath("$[2].userId", is(WORKSPACE_VALID_DTO_LIST.get(2).userId().intValue()))).
-                andExpect(jsonPath("$[2].barbershopId", is(WORKSPACE_VALID_DTO_LIST.get(2).workspaceId().intValue()))).
-                andExpect(jsonPath("$[2].active", is(WORKSPACE_VALID_DTO_LIST.get(2).active()))).
+    void checkWorkspaceDtoJson(String json) {
+        DocumentContext context = JsonPath.parse(json);
+        List<Object> object = context.read("$");
 
-                andExpect(jsonPath("$", hasSize(3))).
-                andExpect(jsonPath("$[0]", aMapWithSize(WORKSPACE_FIELD_AMOUNT))).
-                andExpect(jsonPath("$[1]", aMapWithSize(WORKSPACE_FIELD_AMOUNT))).
-                andExpect(jsonPath("$[2]", aMapWithSize(WORKSPACE_FIELD_AMOUNT)));
+        assertEquals(WORKSPACE_VALID_DTO_LIST.size(), object.size());
 
+        for (var i = 0; i < BARBERSHOP_VALID_DTO_LIST.size(); i++) {
+            Map<String, Object> dto = context.read("$[" + i + "]");
+            assertEquals(WORKSPACE_FIELD_AMOUNT, dto.size());
+            assertEquals(WORKSPACE_VALID_DTO_LIST.get(i).workspaceId().intValue(), (Integer) context.read("$[" + i + "].workspaceId"));
+            assertEquals(WORKSPACE_VALID_DTO_LIST.get(i).userId().intValue(), (Integer) context.read("$[" + i + "].userId"));
+            assertEquals(WORKSPACE_VALID_DTO_LIST.get(i).barbershopId().intValue(), (Integer) context.read("$[" + i + "].barbershopId"));
+            assertEquals(WORKSPACE_VALID_DTO_LIST.get(i).active(), context.read("$[" + i + "].active"));
+
+        }
     }
 }
