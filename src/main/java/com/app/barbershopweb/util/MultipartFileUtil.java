@@ -16,10 +16,10 @@ public class MultipartFileUtil {
     public static File convertMultipartFileToFile(MultipartFile multipartFile) {
         String fileName = multipartFile.getOriginalFilename();
         File file = new File(Objects.requireNonNull(fileName));
-
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(multipartFile.getBytes());
         } catch (IOException e) {
+            file.delete();
             throw new FileException(List.of(e.getMessage()));
         }
         return file;
