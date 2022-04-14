@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static com.app.barbershopweb.order.crud.constants.OrderList__TestConstants.ORDER_VALID_DTO_LIST;
 import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.ORDER_FIELD_AMOUNT;
 import static com.app.barbershopweb.order.reservation.constants.OrderReservation_Metadata__TestConstants.ORDER_RESERVATION_URL;
 import static com.app.barbershopweb.order.reservation.constants.dto.OrderReservation_GetOpenOrders_Dto__TestConstants.GET_OPEN_ORDERS__REQUEST_VALID_DTO;
@@ -128,6 +129,7 @@ class OrderReservationController__getAvailableOrdersTest {
             assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.get(i).barberId().intValue(), (Integer) context.read("$["+ i + "].barberId"));
             assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.get(i).customerId(), context.read("$["+ i + "].customerId"));
             assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.get(i).orderDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), context.read("$["+ i + "].orderDate"));
+            assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.get(i).active(), context.read("$[" + i + "].active"));
         }
     }
 

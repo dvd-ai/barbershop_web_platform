@@ -133,6 +133,7 @@ class OrderReservationController__getFilteredAvailableOrdersTest {
             assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.get(i).barberId().intValue(), (Integer) context.read("$["+ i + "].barberId"));
             assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.get(i).customerId(), context.read("$["+ i + "].customerId"));
             assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.get(i).orderDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), context.read("$["+ i + "].orderDate"));
+            assertEquals(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST.get(i).active(), context.read("$[" + i + "].active"));
         }
     }
 
@@ -184,6 +185,7 @@ class OrderReservationController__getFilteredAvailableOrdersTest {
             assertEquals(ORDER_RESERVATION_OPEN_FILTERED_ORDER_DTO_LIST.get(i).barberId().intValue(), (Integer) context.read("$["+ i + "].barberId"));
             assertEquals(ORDER_RESERVATION_OPEN_FILTERED_ORDER_DTO_LIST.get(i).customerId(), context.read("$["+ i + "].customerId"));
             assertEquals(ORDER_RESERVATION_OPEN_FILTERED_ORDER_DTO_LIST.get(i).orderDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), context.read("$["+ i + "].orderDate"));
+            assertEquals(ORDER_RESERVATION_OPEN_FILTERED_ORDER_DTO_LIST.get(i).active(), context.read("$[" + i + "].active"));
         }
     }
 

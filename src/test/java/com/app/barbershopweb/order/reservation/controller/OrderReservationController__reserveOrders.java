@@ -29,6 +29,7 @@ import static com.app.barbershopweb.order.reservation.constants.error.OrderReser
 import static com.app.barbershopweb.order.reservation.constants.error.OrderReservation_ErrorMessage_Fk__TestConstants.ORDER_RESERVATION_ERR_FK_ORDER_ID_LIST;
 import static com.app.barbershopweb.order.reservation.constants.error.OrderReservation_ErrorMessage_Uk__TestConstants.ORDER_RESERVATION_ERR_UK_CUSTOMER_ID__ORDER_DATE;
 import static com.app.barbershopweb.order.reservation.constants.list.dto.OrderReservation_List_OrderDto__TestConstants.ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST;
+import static com.app.barbershopweb.order.reservation.constants.list.dto.OrderReservation_List_OrderDto__TestConstants.ORDER_RESERVATION_OPEN_FILTERED_ORDER_DTO_LIST;
 import static com.app.barbershopweb.order.reservation.constants.list.entity.OrderReservation_List_OrderEntity__TestConstants.ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -213,8 +214,9 @@ class OrderReservationController__reserveOrders {
             assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.get(i).getOrderId().intValue(), (Integer) context.read("$["+ i + "].orderId"));
             assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.get(i).getBarbershopId().intValue(), (Integer) context.read("$["+ i + "].barbershopId"));
             assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.get(i).getBarberId().intValue(), (Integer) context.read("$["+ i + "].barberId"));
-            assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.get(i).getCustomerId(), context.read("$["+ i + "].customerId"));
+            assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.get(i).getCustomerId().intValue(), (Integer) context.read("$["+ i + "].customerId"));
             assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.get(i).getOrderDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), context.read("$["+ i + "].orderDate"));
+            assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.get(i).getActive(), context.read("$[" + i + "].active"));
         }
     }
 }
