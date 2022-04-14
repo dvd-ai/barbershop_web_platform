@@ -30,11 +30,11 @@ public class OrderReservationController {
 
     @PostMapping
     public ResponseEntity<List<OrderDto>> getAvailableOrders(
-            @RequestBody @Valid GetOpenOrdersRequestDto showUnreservedOrdersRequestDto
+            @RequestBody @Valid GetOpenOrdersRequestDto getOpenOrdersRequestDto
     ) {
         List<Order> orders = orderReservationService.getAvailableOrders(
-                showUnreservedOrdersRequestDto.barbershopId(),
-                showUnreservedOrdersRequestDto.startWeekDate()
+                getOpenOrdersRequestDto.barbershopId(),
+                getOpenOrdersRequestDto.startWeekDate()
         );
         return new ResponseEntity<>(
                 orderConverter.orderEntityListToDtoList(orders), HttpStatus.OK
@@ -43,12 +43,12 @@ public class OrderReservationController {
 
     @PostMapping("/filtered")
     public ResponseEntity<List<OrderDto>> getFilteredAvailableOrders(
-            @RequestBody @Valid GetOpenFilteredOrdersRequestDto showUnreservedOrdersRequestDto
+            @RequestBody @Valid GetOpenFilteredOrdersRequestDto getOpenOrdersRequestDto
     ) {
         List<Order> orders = orderReservationService.getFilteredAvailableOrders(
-                showUnreservedOrdersRequestDto.barbershopId(),
-                showUnreservedOrdersRequestDto.startWeekDate(),
-                showUnreservedOrdersRequestDto.orderFilters()
+                getOpenOrdersRequestDto.barbershopId(),
+                getOpenOrdersRequestDto.startWeekDate(),
+                getOpenOrdersRequestDto.orderFilters()
         );
         return new ResponseEntity<>(
                 orderConverter.orderEntityListToDtoList(orders), HttpStatus.OK
