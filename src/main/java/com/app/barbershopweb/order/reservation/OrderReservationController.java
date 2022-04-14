@@ -39,12 +39,12 @@ public class OrderReservationController {
 
     @PostMapping("/filtered")
     public List<OrderDto> getFilteredAvailableOrders(
-            @RequestBody @Valid GetOpenFilteredOrdersRequestDto getOpenOrdersRequestDto
+            @RequestBody @Valid GetOpenFilteredOrdersRequestDto getOpenFilteredOrdersRequestDto
     ) {
         List<Order> orders = orderReservationService.getFilteredAvailableOrders(
-                getOpenOrdersRequestDto.barbershopId(),
-                getOpenOrdersRequestDto.startWeekDate(),
-                getOpenOrdersRequestDto.orderFilters()
+                getOpenFilteredOrdersRequestDto.barbershopId(),
+                getOpenFilteredOrdersRequestDto.startWeekDate(),
+                getOpenFilteredOrdersRequestDto.orderFilters()
         );
         return orderConverter.orderEntityListToDtoList(orders);
     }
