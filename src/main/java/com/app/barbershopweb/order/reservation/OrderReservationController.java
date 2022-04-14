@@ -3,11 +3,9 @@ package com.app.barbershopweb.order.reservation;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.OrderConverter;
 import com.app.barbershopweb.order.crud.OrderDto;
-import com.app.barbershopweb.order.reservation.dto.GetOpenFilteredOrders__RequestDto;
-import com.app.barbershopweb.order.reservation.dto.GetOpenOrders__RequestDto;
+import com.app.barbershopweb.order.reservation.dto.GetOpenFilteredOrdersRequestDto;
+import com.app.barbershopweb.order.reservation.dto.GetOpenOrdersRequestDto;
 import com.app.barbershopweb.order.reservation.dto.OrderReservationDto;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,43 +27,37 @@ public class OrderReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<List<OrderDto>> getAvailableOrders(
-            @RequestBody @Valid GetOpenOrders__RequestDto showUnreservedOrdersRequestDto
+    public List<OrderDto> getAvailableOrders(
+            @RequestBody @Valid GetOpenOrdersRequestDto getOpenOrdersRequestDto
     ) {
         List<Order> orders = orderReservationService.getAvailableOrders(
-                showUnreservedOrdersRequestDto.barbershopId(),
-                showUnreservedOrdersRequestDto.startWeekDate()
+                getOpenOrdersRequestDto.barbershopId(),
+                getOpenOrdersRequestDto.startWeekDate()
         );
-        return new ResponseEntity<>(
-                orderConverter.orderEntityListToDtoList(orders), HttpStatus.OK
-        );
+       return orderConverter.orderEntityListToDtoList(orders);
     }
 
     @PostMapping("/filtered")
-    public ResponseEntity<List<OrderDto>> getFilteredAvailableOrders(
-            @RequestBody @Valid GetOpenFilteredOrders__RequestDto showUnreservedOrdersRequestDto
+    public List<OrderDto> getFilteredAvailableOrders(
+            @RequestBody @Valid GetOpenFilteredOrdersRequestDto getOpenFilteredOrdersRequestDto
     ) {
         List<Order> orders = orderReservationService.getFilteredAvailableOrders(
-                showUnreservedOrdersRequestDto.barbershopId(),
-                showUnreservedOrdersRequestDto.startWeekDate(),
-                showUnreservedOrdersRequestDto.orderFilters()
+                getOpenFilteredOrdersRequestDto.barbershopId(),
+                getOpenFilteredOrdersRequestDto.startWeekDate(),
+                getOpenFilteredOrdersRequestDto.orderFilters()
         );
-        return new ResponseEntity<>(
-                orderConverter.orderEntityListToDtoList(orders), HttpStatus.OK
-        );
+        return orderConverter.orderEntityListToDtoList(orders);
     }
 
     @PutMapping()
-    public ResponseEntity<List<OrderDto>> reserveOrders(@RequestBody @Valid OrderReservationDto orderReservationDto) {
+    public List<OrderDto> reserveOrders(@RequestBody @Valid OrderReservationDto orderReservationDto) {
         List<Order> reservedOrders =
                 orderReservationService.reserveOrders(
                         orderReservationDto.orderIds(),
                         orderReservationDto.customerId()
                 );
-        return new ResponseEntity<>(
-                orderConverter.orderEntityListToDtoList(reservedOrders),
-                HttpStatus.OK
-        );
+
+        return orderConverter.orderEntityListToDtoList(reservedOrders);
     }
 
 }

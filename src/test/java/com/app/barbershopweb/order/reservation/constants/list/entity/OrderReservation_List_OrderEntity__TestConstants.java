@@ -39,23 +39,6 @@ public final class OrderReservation_List_OrderEntity__TestConstants {
     );
 
     public static final List<Order> ORDER_RESERVATION_UNFIT_OPEN_ORDER_ENTITY_LIST = List.of(
-            new Order(1L, ORDER_RESERVATION_FK_BARBERSHOP_ENTITY_LIST.get(0).getId(),
-                    ORDER_RESERVATION_FK_USER_ENTITY_LIST.get(2).getId(), null,
-                    LocalDateTime.of(2022, 4, 2, 14, 0),
-                    false
-            ),
-            new Order(2L, ORDER_RESERVATION_FK_BARBERSHOP_ENTITY_LIST.get(0).getId(),
-                    ORDER_RESERVATION_FK_USER_ENTITY_LIST.get(2).getId(), null,
-                    LocalDateTime.of(2021, 4, 2, 15, 0),
-                    true
-            ),
-
-            new Order(3L, ORDER_RESERVATION_FK_BARBERSHOP_ENTITY_LIST.get(0).getId(),
-                    ORDER_RESERVATION_FK_USER_ENTITY_LIST.get(2).getId(), 1L,
-                    LocalDateTime.of(2022, 4, 3, 14, 0),
-                    true
-            ),
-
             new Order(4L, ORDER_RESERVATION_FK_BARBERSHOP_ENTITY_LIST.get(0).getId(),
                     ORDER_RESERVATION_FK_USER_ENTITY_LIST.get(3).getId(), 2L,
                     LocalDateTime.of(2022, 11, 2, 10, 0),

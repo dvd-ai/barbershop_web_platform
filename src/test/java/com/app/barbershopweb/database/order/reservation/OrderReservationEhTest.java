@@ -5,7 +5,7 @@ import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.repository.JdbcOrderRepository;
-import com.app.barbershopweb.order.reservation.repository.JdbcOrderReservationRepository;
+import com.app.barbershopweb.order.reservation.repository.OrderReservationRepository;
 import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
 import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -24,9 +24,9 @@ import static com.app.barbershopweb.order.reservation.constants.list.fk.OrderRes
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class JdbcOrderReservationEhTest extends AbstractIT {
+class OrderReservationEhTest extends AbstractIT {
     @Autowired
-    JdbcOrderReservationRepository orderReservationRepository;
+    OrderReservationRepository orderReservationRepository;
     @Autowired
     JdbcUsersRepository usersRepository;
     @Autowired

@@ -19,6 +19,6 @@ services:
       - DATASOURCE_PORT=5432
       - AWS_ACCESS_KEY_ID=AKIAYBKCLG4M235G4WSV
       - AWS_SECRET_ACCESS_KEY=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
-      - AWS_S3_BUCKET_NAME=barbershop--web-web
+      - AWS_S3_BUCKET_NAME=barbershop--web
     depends_on:
       - db

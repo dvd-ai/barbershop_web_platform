@@ -3,6 +3,8 @@ package com.app.barbershopweb.user.crud.controller;
 import com.app.barbershopweb.user.crud.UserController;
 import com.app.barbershopweb.user.crud.UserConverter;
 import com.app.barbershopweb.user.crud.UserService;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,20 +12,25 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
 import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_ENTITY_LIST;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_FIELD_AMOUNT;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_URL;
-import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
 @DisplayName("Testing GET: " + USERS_URL)
@@ -64,40 +71,30 @@ class UserControllerGetUsersTest {
                 USERS_USER_VALID_DTO_LIST
         );
 
-        mockMvc.
+        MockHttpServletResponse response = mockMvc.
                 perform(get(USERS_URL)).
-                andDo(print()).
-                andExpect(status().isOk()).
+                andDo(print()).andReturn().getResponse();
 
-                andExpect(jsonPath("$[0].id", is(USERS_USER_VALID_DTO_LIST.get(0).id().intValue()))).
-                andExpect(jsonPath("$[0].firstName", is(USERS_USER_VALID_DTO_LIST.get(0).firstName()))).
-                andExpect(jsonPath("$[0].lastName", is(USERS_USER_VALID_DTO_LIST.get(0).lastName()))).
-                andExpect(jsonPath("$[0].phoneNumber", is(USERS_USER_VALID_DTO_LIST.get(0).phoneNumber()))).
-                andExpect(jsonPath("$[0].email", is(USERS_USER_VALID_DTO_LIST.get(0).email()))).
-                andExpect(jsonPath("$[0].role", is(USERS_USER_VALID_DTO_LIST.get(0).role()))).
-                andExpect(jsonPath("$[0].registrationDate", is(USERS_USER_VALID_DTO_LIST.get(0).registrationDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))).
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        checkUsersDtoJson(response.getContentAsString());
+    }
 
-                andExpect(jsonPath("$[1].id", is(USERS_USER_VALID_DTO_LIST.get(1).id().intValue()))).
-                andExpect(jsonPath("$[1].firstName", is(USERS_USER_VALID_DTO_LIST.get(1).firstName()))).
-                andExpect(jsonPath("$[1].lastName", is(USERS_USER_VALID_DTO_LIST.get(1).lastName()))).
-                andExpect(jsonPath("$[1].phoneNumber", is(USERS_USER_VALID_DTO_LIST.get(1).phoneNumber()))).
-                andExpect(jsonPath("$[1].email", is(USERS_USER_VALID_DTO_LIST.get(1).email()))).
-                andExpect(jsonPath("$[1].role", is(USERS_USER_VALID_DTO_LIST.get(1).role()))).
-                andExpect(jsonPath("$[1].registrationDate", is(USERS_USER_VALID_DTO_LIST.get(1).registrationDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))).
+    void checkUsersDtoJson(String json) {
+        DocumentContext context = JsonPath.parse(json);
+        List<Object> object = context.read("$");
 
-                andExpect(jsonPath("$[2].id", is(USERS_USER_VALID_DTO_LIST.get(2).id().intValue()))).
-                andExpect(jsonPath("$[2].firstName", is(USERS_USER_VALID_DTO_LIST.get(2).firstName()))).
-                andExpect(jsonPath("$[2].lastName", is(USERS_USER_VALID_DTO_LIST.get(2).lastName()))).
-                andExpect(jsonPath("$[2].phoneNumber", is(USERS_USER_VALID_DTO_LIST.get(2).phoneNumber()))).
-                andExpect(jsonPath("$[2].email", is(USERS_USER_VALID_DTO_LIST.get(2).email()))).
-                andExpect(jsonPath("$[2].role", is(USERS_USER_VALID_DTO_LIST.get(2).role()))).
-                andExpect(jsonPath("$[2].registrationDate", is(USERS_USER_VALID_DTO_LIST.get(2).registrationDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))).
+        assertEquals(USERS_USER_VALID_DTO_LIST.size(), object.size());
 
-
-                andExpect(jsonPath("$", hasSize(3))).
-                andExpect(jsonPath("$[0]", aMapWithSize(USERS_FIELD_AMOUNT))).
-                andExpect(jsonPath("$[1]", aMapWithSize(USERS_FIELD_AMOUNT))).
-                andExpect(jsonPath("$[2]", aMapWithSize(USERS_FIELD_AMOUNT)));
-
+        for (var i = 0; i < USERS_USER_VALID_DTO_LIST.size(); i++) {
+            Map<String, Object> dto = context.read("$[" + i + "]");
+            assertEquals(USERS_FIELD_AMOUNT, dto.size());
+            assertEquals(USERS_USER_VALID_DTO_LIST.get(i).id().intValue(), (Integer) context.read("$[" + i + "].id"));
+            assertEquals(USERS_USER_VALID_DTO_LIST.get(i).firstName(), context.read("$[" + i + "].firstName"));
+            assertEquals(USERS_USER_VALID_DTO_LIST.get(i).lastName(), context.read("$[" + i + "].lastName"));
+            assertEquals(USERS_USER_VALID_DTO_LIST.get(i).phoneNumber(), context.read("$[" + i + "].phoneNumber"));
+            assertEquals(USERS_USER_VALID_DTO_LIST.get(i).email(), context.read("$[" + i + "].email"));
+            assertEquals(USERS_USER_VALID_DTO_LIST.get(i).role(), context.read("$[" + i + "].role"));
+            assertEquals(USERS_USER_VALID_DTO_LIST.get(i).registrationDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), context.read("$[" + i + "].registrationDate"));
+        }
     }
 }

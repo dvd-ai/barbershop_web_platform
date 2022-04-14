@@ -4,7 +4,7 @@ import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.repository.JdbcOrderRepository;
-import com.app.barbershopweb.order.reservation.repository.JdbcOrderReservationRepository;
+import com.app.barbershopweb.order.reservation.repository.OrderReservationRepository;
 import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
 import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -20,15 +20,14 @@ import static com.app.barbershopweb.order.reservation.constants.dto.OrderReserva
 import static com.app.barbershopweb.order.reservation.constants.dto.OrderReservation_GetOpenOrders_Filtered_Dto__TestConstants.GET_OPEN_FILTERED_ORDERS__REQUEST_DTO;
 import static com.app.barbershopweb.order.reservation.constants.list.entity.OrderReservation_List_OrderEntity__TestConstants.*;
 import static com.app.barbershopweb.order.reservation.constants.list.fk.OrderReservation_FkEntityList__TestConstants.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-@DisplayName("jdbc order reservation repository test without error handling")
-class JdbcOrderReservationRepoTest extends AbstractIT {
+@DisplayName("order reservation repository test without error handling")
+class OrderReservationRepoTest extends AbstractIT {
 
     @Autowired
-    JdbcOrderReservationRepository orderReservationRepository;
+    OrderReservationRepository orderReservationRepository;
     @Autowired
     JdbcUsersRepository usersRepository;
     @Autowired
@@ -74,7 +73,6 @@ class JdbcOrderReservationRepoTest extends AbstractIT {
         assertTrue(availableOrders.stream().allMatch(order -> order.getCustomerId() == 0));
         availableOrders.forEach(order -> order.setCustomerId(null));
 
-        assertEquals(ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST.size(), availableOrders.size());
         assertTrue(ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST.containsAll(availableOrders));
     }
 
@@ -124,7 +122,6 @@ class JdbcOrderReservationRepoTest extends AbstractIT {
         assertTrue(filteredOrders.stream().allMatch(order -> order.getCustomerId() == 0));
         filteredOrders.forEach(order -> order.setCustomerId(null));
 
-        assertEquals(ORDER_RESERVATION_OPEN_FILTERED_ORDER_ENTITY_LIST.size(), filteredOrders.size());
         assertTrue(ORDER_RESERVATION_OPEN_FILTERED_ORDER_ENTITY_LIST.containsAll(filteredOrders));
 
     }
@@ -163,7 +160,6 @@ class JdbcOrderReservationRepoTest extends AbstractIT {
                 ORDER_RESERVATION_VALID_DTO.customerId()
         );
 
-        assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.size(), reservedOrders.size());
         assertTrue(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.containsAll(reservedOrders));
     }
 }

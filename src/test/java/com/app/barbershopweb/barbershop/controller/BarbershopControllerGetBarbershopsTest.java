@@ -3,6 +3,8 @@ package com.app.barbershopweb.barbershop.controller;
 import com.app.barbershopweb.barbershop.BarbershopController;
 import com.app.barbershopweb.barbershop.BarbershopConverter;
 import com.app.barbershopweb.barbershop.BarbershopService;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,20 +12,25 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static com.app.barbershopweb.barbershop.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_DTO_LIST;
 import static com.app.barbershopweb.barbershop.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_ENTITY_LIST;
 import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOPS_URL;
 import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOP_FIELD_AMOUNT;
-import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BarbershopController.class)
 @DisplayName("Testing GET: " + BARBERSHOPS_URL)
@@ -63,40 +70,31 @@ class BarbershopControllerGetBarbershopsTest {
                 BARBERSHOP_VALID_DTO_LIST
         );
 
-        mockMvc.
+        MockHttpServletResponse response = mockMvc.
                 perform(get(BARBERSHOPS_URL)).
-                andDo(print()).
-                andExpect(status().isOk()).
+                andDo(print()).andReturn().getResponse();
 
-                andExpect(jsonPath("$[0].id", is(BARBERSHOP_VALID_DTO_LIST.get(0).id().intValue()))).
-                andExpect(jsonPath("$[0].address", is(BARBERSHOP_VALID_DTO_LIST.get(0).address()))).
-                andExpect(jsonPath("$[0].name", is(BARBERSHOP_VALID_DTO_LIST.get(0).name()))).
-                andExpect(jsonPath("$[0].phoneNumber", is(BARBERSHOP_VALID_DTO_LIST.get(0).phoneNumber()))).
-                andExpect(jsonPath("$[0].email", is(BARBERSHOP_VALID_DTO_LIST.get(0).email()))).
-                andExpect(jsonPath("$[0].workTimeFrom", is(BARBERSHOP_VALID_DTO_LIST.get(0).workTimeFrom().format(DateTimeFormatter.ISO_LOCAL_TIME)))).
-                andExpect(jsonPath("$[0].workTimeTo", is(BARBERSHOP_VALID_DTO_LIST.get(0).workTimeTo().format(DateTimeFormatter.ISO_LOCAL_TIME)))).
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
 
-                andExpect(jsonPath("$[1].id", is(BARBERSHOP_VALID_DTO_LIST.get(1).id().intValue()))).
-                andExpect(jsonPath("$[1].address", is(BARBERSHOP_VALID_DTO_LIST.get(1).address()))).
-                andExpect(jsonPath("$[1].name", is(BARBERSHOP_VALID_DTO_LIST.get(1).name()))).
-                andExpect(jsonPath("$[1].phoneNumber", is(BARBERSHOP_VALID_DTO_LIST.get(1).phoneNumber()))).
-                andExpect(jsonPath("$[1].email", is(BARBERSHOP_VALID_DTO_LIST.get(1).email()))).
-                andExpect(jsonPath("$[1].workTimeFrom", is(BARBERSHOP_VALID_DTO_LIST.get(1).workTimeFrom().format(DateTimeFormatter.ISO_LOCAL_TIME)))).
-                andExpect(jsonPath("$[1].workTimeTo", is(BARBERSHOP_VALID_DTO_LIST.get(1).workTimeTo().format(DateTimeFormatter.ISO_LOCAL_TIME)))).
+        checkBarbershopDtoJson(response.getContentAsString());
+    }
 
-                andExpect(jsonPath("$[2].id", is(BARBERSHOP_VALID_DTO_LIST.get(2).id().intValue()))).
-                andExpect(jsonPath("$[2].address", is(BARBERSHOP_VALID_DTO_LIST.get(2).address()))).
-                andExpect(jsonPath("$[2].name", is(BARBERSHOP_VALID_DTO_LIST.get(2).name()))).
-                andExpect(jsonPath("$[2].phoneNumber", is(BARBERSHOP_VALID_DTO_LIST.get(2).phoneNumber()))).
-                andExpect(jsonPath("$[2].email", is(BARBERSHOP_VALID_DTO_LIST.get(2).email()))).
-                andExpect(jsonPath("$[2].workTimeFrom", is(BARBERSHOP_VALID_DTO_LIST.get(2).workTimeFrom().format(DateTimeFormatter.ISO_LOCAL_TIME)))).
-                andExpect(jsonPath("$[2].workTimeTo", is(BARBERSHOP_VALID_DTO_LIST.get(2).workTimeTo().format(DateTimeFormatter.ISO_LOCAL_TIME)))).
+    void checkBarbershopDtoJson(String json) {
+        DocumentContext context = JsonPath.parse(json);
+        List<Object> object = context.read("$");
 
+        assertEquals(BARBERSHOP_VALID_DTO_LIST.size(), object.size());
 
-                andExpect(jsonPath("$", hasSize(3))).
-                andExpect(jsonPath("$[0]", aMapWithSize(BARBERSHOP_FIELD_AMOUNT))).
-                andExpect(jsonPath("$[1]", aMapWithSize(BARBERSHOP_FIELD_AMOUNT))).
-                andExpect(jsonPath("$[2]", aMapWithSize(BARBERSHOP_FIELD_AMOUNT)));
-
+        for (var i = 0; i < BARBERSHOP_VALID_DTO_LIST.size(); i++) {
+            Map<String, Object> dto = context.read("$[" + i + "]");
+            assertEquals(BARBERSHOP_FIELD_AMOUNT, dto.size());
+            assertEquals(BARBERSHOP_VALID_DTO_LIST.get(i).id().intValue(), (Integer) context.read("$[" + i + "].id"));
+            assertEquals(BARBERSHOP_VALID_DTO_LIST.get(i).address(), context.read("$[" + i + "].address"));
+            assertEquals(BARBERSHOP_VALID_DTO_LIST.get(i).name(), context.read("$[" + i + "].name"));
+            assertEquals(BARBERSHOP_VALID_DTO_LIST.get(i).phoneNumber(), context.read("$[" + i + "].phoneNumber"));
+            assertEquals(BARBERSHOP_VALID_DTO_LIST.get(i).email(), context.read("$[" + i + "].email"));
+            assertEquals(BARBERSHOP_VALID_DTO_LIST.get(i).workTimeFrom().format(DateTimeFormatter.ISO_LOCAL_TIME), context.read("$[" + i + "].workTimeFrom"));
+            assertEquals(BARBERSHOP_VALID_DTO_LIST.get(i).workTimeTo().format(DateTimeFormatter.ISO_LOCAL_TIME), context.read("$[" + i + "].workTimeTo"));
+        }
     }
 }
