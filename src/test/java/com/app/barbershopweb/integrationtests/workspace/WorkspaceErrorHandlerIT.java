@@ -181,7 +181,6 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
         HttpEntity<WorkspaceDto> requestEntity = new HttpEntity<>(WORKSPACE_NOT_EXISTED_ID_DTO);
         ResponseEntity<ErrorDto> response = restTemplate.exchange(WORKSPACES_URL, HttpMethod.PUT, requestEntity, ErrorDto.class);
         ErrorDto body = response.getBody();
-        System.out.println(body);
 
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -222,7 +221,6 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
         ResponseEntity<ErrorDto> response = restTemplate.exchange(WORKSPACES_URL, HttpMethod.PUT, requestEntity, ErrorDto.class);
         ErrorDto body = response.getBody();
 
-        System.out.println(body);
 
         assertEquals(1, Objects.requireNonNull(body).errors().size());
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
