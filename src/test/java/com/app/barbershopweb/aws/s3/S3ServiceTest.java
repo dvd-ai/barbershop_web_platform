@@ -1,5 +1,7 @@
 package com.app.barbershopweb.aws.s3;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
@@ -12,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.ByteArrayResource;
 
 import java.io.File;
 import java.io.IOException;
@@ -84,10 +87,35 @@ class S3ServiceTest {
         );
     }
 
-    @Ignore("needs to be implemented")
     @Test
-    @DisplayName("from #52 row")
+    @DisplayName("when sth went wrong in aws sdk client")
     void downloadFile__SdkClientException() {
+        SdkClientException e = new SdkClientException("");
+        when(amazonS3.getObject(S3_SERVICE_BUCKET_NAME, S3_SERVICE_OBJECT_KEY))
+                .thenThrow(e);
+        doThrow(new AmazonClientException("")).when(utils).handleNotFoundBucketObject(e);
 
+        assertThrows(AmazonClientException.class,
+                () -> s3Service.downloadFile(S3_SERVICE_BUCKET_NAME, S3_SERVICE_OBJECT_KEY)
+        );
     }
+
+    @Test
+    @DisplayName("when there is no object found in aws s3, returns empty byte array")
+    void downloadFile__NoObjectFound() {
+        SdkClientException e = new SdkClientException("The specified key does not exist.");
+
+        when(amazonS3.getObject(S3_SERVICE_BUCKET_NAME, S3_SERVICE_OBJECT_KEY))
+                .thenThrow(e);
+
+        assertEquals(
+                new ByteArrayResource(new byte[0]),
+                new ByteArrayResource(
+                        s3Service.downloadFile(S3_SERVICE_BUCKET_NAME, S3_SERVICE_OBJECT_KEY)
+                )
+        );
+    }
+
+
+
 }
