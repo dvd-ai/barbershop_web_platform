@@ -47,7 +47,6 @@ class OrderReservationServiceTest {
                         GET_OPEN_ORDERS__REQUEST_VALID_DTO.startWeekDate()
                 );
 
-        assertEquals(ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST.size(), unreservedOrdersForWeek.size());
         assertEquals(ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST, unreservedOrdersForWeek);
     }
 
@@ -75,7 +74,6 @@ class OrderReservationServiceTest {
                 getAvailableOrders(
                         any(), any()
                 );
-        assertEquals(ORDER_RESERVATION_OPEN_FILTERED_ORDER_ENTITY_LIST.size(), unreservedFilteredOrdersForWeek.size());
         assertEquals(ORDER_RESERVATION_OPEN_FILTERED_ORDER_ENTITY_LIST, unreservedFilteredOrdersForWeek);
     }
 
@@ -102,7 +100,6 @@ class OrderReservationServiceTest {
                 getAvailableFilteredOrders(
                         any(), any(), any()
                 );
-        assertEquals(ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST.size(), unreservedFilteredOrdersForWeek.size());
         assertEquals(ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST, unreservedFilteredOrdersForWeek);
     }
 
@@ -122,7 +119,6 @@ class OrderReservationServiceTest {
                         ORDER_RESERVATION_VALID_DTO.customerId()
                 );
 
-        assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.size(), reservedFilteredOrdersForWeek.size());
         assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST, reservedFilteredOrdersForWeek);
     }
 }

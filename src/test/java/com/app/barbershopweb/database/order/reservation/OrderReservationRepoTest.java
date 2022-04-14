@@ -74,7 +74,6 @@ class OrderReservationRepoTest extends AbstractIT {
         assertTrue(availableOrders.stream().allMatch(order -> order.getCustomerId() == 0));
         availableOrders.forEach(order -> order.setCustomerId(null));
 
-        assertEquals(ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST.size(), availableOrders.size());
         assertTrue(ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST.containsAll(availableOrders));
     }
 
@@ -124,7 +123,6 @@ class OrderReservationRepoTest extends AbstractIT {
         assertTrue(filteredOrders.stream().allMatch(order -> order.getCustomerId() == 0));
         filteredOrders.forEach(order -> order.setCustomerId(null));
 
-        assertEquals(ORDER_RESERVATION_OPEN_FILTERED_ORDER_ENTITY_LIST.size(), filteredOrders.size());
         assertTrue(ORDER_RESERVATION_OPEN_FILTERED_ORDER_ENTITY_LIST.containsAll(filteredOrders));
 
     }
@@ -163,7 +161,6 @@ class OrderReservationRepoTest extends AbstractIT {
                 ORDER_RESERVATION_VALID_DTO.customerId()
         );
 
-        assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.size(), reservedOrders.size());
         assertTrue(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.containsAll(reservedOrders));
     }
 }
