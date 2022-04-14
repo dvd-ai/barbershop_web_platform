@@ -103,7 +103,7 @@ class OrderReservationController__getAvailableOrdersTest {
                         ORDER_RESERVATION_OPEN_ORDER_ENTITY_LIST
                 )
         )
-                .thenReturn(ORDER_RESERVATION_OPEN_ORDER_DTO_LIST);
+                .thenCallRealMethod();
 
         mockMvc.perform(post(ORDER_RESERVATION_URL)
                         .contentType(MediaType.APPLICATION_JSON)
