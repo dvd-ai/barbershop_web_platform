@@ -6,17 +6,23 @@ import com.app.barbershopweb.order.crud.OrderConverter;
 import com.app.barbershopweb.order.reservation.OrderReservationController;
 import com.app.barbershopweb.order.reservation.OrderReservationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
+import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.ORDER_FIELD_AMOUNT;
 import static com.app.barbershopweb.order.reservation.constants.OrderReservation_Metadata__TestConstants.ORDER_RESERVATION_URL;
 import static com.app.barbershopweb.order.reservation.constants.dto.OrderReservation_Dto__TestConstants.ORDER_RESERVATION_VALID_DTO;
 import static com.app.barbershopweb.order.reservation.constants.error.OrderReservation_ErrorMessage_Fk__TestConstants.ORDER_RESERVATION_ERR_FK_CUSTOMER_ID;
@@ -25,6 +31,7 @@ import static com.app.barbershopweb.order.reservation.constants.error.OrderReser
 import static com.app.barbershopweb.order.reservation.constants.list.dto.OrderReservation_List_OrderDto__TestConstants.ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST;
 import static com.app.barbershopweb.order.reservation.constants.list.entity.OrderReservation_List_OrderEntity__TestConstants.ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -188,35 +195,26 @@ class OrderReservationController__reserveOrders {
                         ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST
                 );
 
-        mockMvc.perform(put(ORDER_RESERVATION_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json)
-                )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.size())))
-                .andExpect(jsonPath("$[0].orderId", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(0).orderId().intValue())))
-                .andExpect(jsonPath("$[0].barbershopId", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(0).barbershopId().intValue())))
-                .andExpect(jsonPath("$[0].barberId", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(0).barberId().intValue())))
-                .andExpect(jsonPath("$[0].customerId", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(0).customerId().intValue())))
-                .andExpect(jsonPath("$[0].orderDate", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(0).orderDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))))
-                .andExpect(jsonPath("$[0].active", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(0).active())))
+        MockHttpServletResponse response = mockMvc.perform(put(ORDER_RESERVATION_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+        ).andReturn().getResponse();
 
-                .andExpect(jsonPath("$[1].orderId", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(1).orderId().intValue())))
-                .andExpect(jsonPath("$[1].barbershopId", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(1).barbershopId().intValue())))
-                .andExpect(jsonPath("$[1].barberId", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(1).barberId().intValue())))
-                .andExpect(jsonPath("$[1].customerId", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(1).customerId().intValue())))
-                .andExpect(jsonPath("$[1].orderDate", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(1).orderDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))))
-                .andExpect(jsonPath("$[1].active", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(1).active())))
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
 
-                .andExpect(jsonPath("$[2].orderId", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(2).orderId().intValue())))
-                .andExpect(jsonPath("$[2].barbershopId", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(2).barbershopId().intValue())))
-                .andExpect(jsonPath("$[2].barberId", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(2).barberId().intValue())))
-                .andExpect(jsonPath("$[2].customerId", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(2).customerId().intValue())))
-                .andExpect(jsonPath("$[2].orderDate", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(2).orderDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))))
-                .andExpect(jsonPath("$[2].active", is(ORDER_RESERVATION_CLOSED_ORDER_DTO_LIST.get(2).active())))
-        ;
+        DocumentContext context = JsonPath.parse(response.getContentAsString());
+        List<Object> object = context.read("$");
 
+        assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.size(), object.size());
+
+        for (var i = 0; i < ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.size(); i++) {
+            Map<String, Object> dto = context.read("$[" + i + "]");
+            assertEquals(ORDER_FIELD_AMOUNT, dto.size());
+            assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.get(i).getOrderId().intValue(), (Integer) context.read("$["+ i + "].orderId"));
+            assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.get(i).getBarbershopId().intValue(), (Integer) context.read("$["+ i + "].barbershopId"));
+            assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.get(i).getBarberId().intValue(), (Integer) context.read("$["+ i + "].barberId"));
+            assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.get(i).getCustomerId(), context.read("$["+ i + "].customerId"));
+            assertEquals(ORDER_RESERVATION_CLOSED_ORDER_ENTITY_LIST.get(i).getOrderDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), context.read("$["+ i + "].orderDate"));
+        }
     }
-
-
 }
