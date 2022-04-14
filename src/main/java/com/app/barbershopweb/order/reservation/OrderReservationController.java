@@ -6,8 +6,6 @@ import com.app.barbershopweb.order.crud.OrderDto;
 import com.app.barbershopweb.order.reservation.dto.GetOpenFilteredOrdersRequestDto;
 import com.app.barbershopweb.order.reservation.dto.GetOpenOrdersRequestDto;
 import com.app.barbershopweb.order.reservation.dto.OrderReservationDto;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,20 +27,18 @@ public class OrderReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<List<OrderDto>> getAvailableOrders(
+    public List<OrderDto> getAvailableOrders(
             @RequestBody @Valid GetOpenOrdersRequestDto getOpenOrdersRequestDto
     ) {
         List<Order> orders = orderReservationService.getAvailableOrders(
                 getOpenOrdersRequestDto.barbershopId(),
                 getOpenOrdersRequestDto.startWeekDate()
         );
-        return new ResponseEntity<>(
-                orderConverter.orderEntityListToDtoList(orders), HttpStatus.OK
-        );
+       return orderConverter.orderEntityListToDtoList(orders);
     }
 
     @PostMapping("/filtered")
-    public ResponseEntity<List<OrderDto>> getFilteredAvailableOrders(
+    public List<OrderDto> getFilteredAvailableOrders(
             @RequestBody @Valid GetOpenFilteredOrdersRequestDto getOpenOrdersRequestDto
     ) {
         List<Order> orders = orderReservationService.getFilteredAvailableOrders(
@@ -50,22 +46,18 @@ public class OrderReservationController {
                 getOpenOrdersRequestDto.startWeekDate(),
                 getOpenOrdersRequestDto.orderFilters()
         );
-        return new ResponseEntity<>(
-                orderConverter.orderEntityListToDtoList(orders), HttpStatus.OK
-        );
+        return orderConverter.orderEntityListToDtoList(orders);
     }
 
     @PutMapping()
-    public ResponseEntity<List<OrderDto>> reserveOrders(@RequestBody @Valid OrderReservationDto orderReservationDto) {
+    public List<OrderDto> reserveOrders(@RequestBody @Valid OrderReservationDto orderReservationDto) {
         List<Order> reservedOrders =
                 orderReservationService.reserveOrders(
                         orderReservationDto.orderIds(),
                         orderReservationDto.customerId()
                 );
-        return new ResponseEntity<>(
-                orderConverter.orderEntityListToDtoList(reservedOrders),
-                HttpStatus.OK
-        );
+
+        return orderConverter.orderEntityListToDtoList(reservedOrders);
     }
 
 }
