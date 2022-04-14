@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import static com.app.barbershopweb.aws.s3.constants.S3Service_Metadata__TestConstants.*;
 import static com.app.barbershopweb.util.MultipartFileUtil.convertMultipartFileToFile;
@@ -58,37 +59,29 @@ class S3ServiceTest {
 
     @Test
     void downloadFile() throws IOException {
-        MockedStatic<IOUtils> mockStatic = mockStatic(IOUtils.class);
-
-        when(IOUtils.toByteArray(any(S3ObjectInputStream.class)))
-                .thenReturn(S3_SERVICE_MULTIPART_FILE_MOCK.getBytes());
         when(amazonS3.getObject(S3_SERVICE_BUCKET_NAME, S3_SERVICE_OBJECT_KEY))
                 .thenReturn(S3_SERVICE_OBJECT_MOCK);
+        when(utils.toByteArray(S3_SERVICE_OBJECT_MOCK.getObjectContent()))
+                .thenReturn(S3_SERVICE_MULTIPART_FILE_MOCK.getBytes());
 
         byte[] bytes = s3Service.downloadFile(S3_SERVICE_BUCKET_NAME, S3_SERVICE_OBJECT_KEY);
-        assertEquals(S3_SERVICE_MULTIPART_FILE_MOCK.getBytes(), bytes);
 
-        mockStatic.close();
+        assertEquals(S3_SERVICE_MULTIPART_FILE_MOCK.getBytes(), bytes);
     }
 
     @Test
     @DisplayName("wraps IOException into FileException, when it occurs")
-    void downloadFileIOException() throws IOException {
-        MockedStatic<IOUtils> mockStatic = mockStatic(IOUtils.class);
+    void downloadFileIOException() {
 
         when(amazonS3.getObject(S3_SERVICE_BUCKET_NAME, S3_SERVICE_OBJECT_KEY))
                 .thenReturn(S3_SERVICE_OBJECT_MOCK);
 
-        when(IOUtils.toByteArray(any(S3ObjectInputStream.class)))
-                .thenThrow(new IOException(""));
+        when(utils.toByteArray(S3_SERVICE_OBJECT_MOCK.getObjectContent()))
+                .thenThrow(new FileException(List.of("")));
 
         assertThrows(FileException.class,
-                () -> {
-                    s3Service.downloadFile(S3_SERVICE_BUCKET_NAME, S3_SERVICE_OBJECT_KEY);
-                }
+                () -> s3Service.downloadFile(S3_SERVICE_BUCKET_NAME, S3_SERVICE_OBJECT_KEY)
         );
-
-        mockStatic.close();
     }
 
     @Ignore("needs to be implemented")
