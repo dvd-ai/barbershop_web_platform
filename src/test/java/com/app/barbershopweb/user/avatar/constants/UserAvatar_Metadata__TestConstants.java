@@ -22,12 +22,28 @@ public final class UserAvatar_Metadata__TestConstants {
                     "image file content".getBytes()
             );
 
+    public static final MockMultipartFile USERS_AVATAR_FILE_SIZE_LIMIT_MOCK =
+            new MockMultipartFile(
+                    "file",
+                    "avatar.png",
+                    "image/png",
+                    new byte[1_100_000]
+            );
+
     public static final MockMultipartFile USERS_AVATAR_TEXT_FILE_MOCK
             = new MockMultipartFile(
             "file",
             "hello.txt",
             MediaType.TEXT_PLAIN_VALUE,
             "Hello, World!".getBytes()
+    );
+
+    public static final MockMultipartFile USERS_AVATAR_NO_FILE_CONTENT_MOCK
+            = new MockMultipartFile(
+            "file",
+            "avatar.png",
+            "image/png",
+            new byte[0]
     );
 
 }

@@ -1,7 +1,6 @@
 package com.app.barbershopweb.user.avatar.controller;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.SdkClientException;
+import com.app.barbershopweb.exception.MinioClientException;
 import com.app.barbershopweb.user.avatar.UserAvatarController;
 import com.app.barbershopweb.user.avatar.UserAvatarService;
 import org.junit.jupiter.api.DisplayName;
@@ -31,24 +30,9 @@ class UserAvatarController__deleteAvatarTest {
     UserAvatarService avatarService;
 
     @Test
-    @DisplayName("when AmazonServiceException, returns 500 & error dto")
-    void removeAvatar__AmazonServiceException() throws Exception {
-        doThrow(new AmazonServiceException(""))
-                .when(avatarService).deleteProfileAvatar(USERS_VALID_USER_ID);
-
-        mockMvc.perform(delete(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID))
-                .andDo(print())
-                .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$", aMapWithSize(1)))
-                .andExpect(jsonPath("$.errors").isArray())
-                .andExpect(jsonPath("$.errors", hasSize(1)))
-        ;
-    }
-
-    @Test
-    @DisplayName("when SdkClientException, returns 500 & error dto")
-    void removeAvatar__SdkClientException() throws Exception {
-        doThrow(new SdkClientException(""))
+    @DisplayName("when MinioClientException, returns 500 & error dto")
+    void removeAvatar__MinioClientException() throws Exception {
+        doThrow(new MinioClientException(""))
                 .when(avatarService).deleteProfileAvatar(USERS_VALID_USER_ID);
 
         mockMvc.perform(delete(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID))

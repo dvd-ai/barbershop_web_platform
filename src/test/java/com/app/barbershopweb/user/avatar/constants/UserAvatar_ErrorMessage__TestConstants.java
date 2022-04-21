@@ -4,6 +4,9 @@ import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConsta
 
 public final class UserAvatar_ErrorMessage__TestConstants {
 
-    public final static String USER_AVATAR_ERR_INVALID_FILE = "'image' Only PNG or JPG images are allowed";
+    public final static String USER_AVATAR_ERR_FILE_SIZE = "'image' File size should be at most 1MB.";
+    public final static String USER_AVATAR_ERR_INVALID_FILE = "'image' Only JPG and PNG images are allowed.";
+    public final static String USER_AVATAR_ERR_EMPTY_FILE = "'image' It must not be an empty image.";
+
     public final static String USER_AVATAR_ERR_NO_AVATAR_FOUND = "No profile avatar for user with id " + USERS_VALID_USER_ID;
 }

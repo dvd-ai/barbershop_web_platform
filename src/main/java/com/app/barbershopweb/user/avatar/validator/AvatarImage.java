@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {AvatarImageValidator.class})
 public @interface AvatarImage {
-    String message() default "Only PNG or JPG images are allowed";
+    String message() default "Invalid avatar image";
 
     Class<?>[] groups() default {};
 

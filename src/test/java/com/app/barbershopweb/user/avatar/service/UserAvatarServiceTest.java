@@ -1,7 +1,7 @@
 package com.app.barbershopweb.user.avatar.service;
 
-import com.app.barbershopweb.aws.s3.S3Service;
 import com.app.barbershopweb.exception.NotFoundException;
+import com.app.barbershopweb.minio.MinioService;
 import com.app.barbershopweb.user.avatar.UserAvatarService;
 import com.app.barbershopweb.user.crud.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +13,7 @@ import org.springframework.core.io.ByteArrayResource;
 
 import java.io.IOException;
 
-import static com.app.barbershopweb.aws.s3.constants.S3Service_Metadata__TestConstants.S3_SERVICE_BUCKET_NAME;
+import static com.app.barbershopweb.minio.s3.constants.MinioService_Metadata__TestConstants.MINIO_SERVICE_BUCKET_NAME;
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.USERS_AVATAR_IMAGE_MOCK;
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.USER_AVATAR_S3_KEY;
 import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.USER_ERR_NOT_EXISTING_USER_ID;
@@ -27,10 +27,10 @@ class UserAvatarServiceTest {
 
     UserRepository userRepository = Mockito.mock(UserRepository.class);
 
-    S3Service s3Service = Mockito.mock(S3Service.class);
+    MinioService minioService = Mockito.mock(MinioService.class);
 
     UserAvatarService userAvatarService = new UserAvatarService(
-            userRepository, s3Service, S3_SERVICE_BUCKET_NAME
+            userRepository, minioService, MINIO_SERVICE_BUCKET_NAME
     );
 
     @Test
@@ -39,10 +39,10 @@ class UserAvatarServiceTest {
         when(userRepository.userExistsById(USERS_VALID_USER_ID)).thenReturn(true);
         userAvatarService.uploadProfileAvatar(USERS_VALID_USER_ID, USERS_AVATAR_IMAGE_MOCK);
 
-        verify(s3Service, times(1)).deleteFile(
-                S3_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY);
-        verify(s3Service, times(1)).uploadFile(
-                S3_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY,
+        verify(minioService, times(1)).deleteFile(
+                MINIO_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY);
+        verify(minioService, times(1)).uploadFile(
+                MINIO_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY,
                 USERS_AVATAR_IMAGE_MOCK
         );
         assertDoesNotThrow(() -> userAvatarService.uploadProfileAvatar(USERS_VALID_USER_ID, USERS_AVATAR_IMAGE_MOCK));
@@ -50,7 +50,7 @@ class UserAvatarServiceTest {
 
     @Test
     @DisplayName("throws NotFoundException if user doesn't exist")
-    void uploadProfileAvatar__UserNotExist() throws NotFoundException {
+    void uploadProfileAvatar__UserNotExist() {
         when(userRepository.userExistsById(USERS_NOT_EXISTING_USER_ID)).thenReturn(false);
 
         NotFoundException thrown = assertThrows(NotFoundException.class,
@@ -66,12 +66,12 @@ class UserAvatarServiceTest {
         try {
             userAvatarService.uploadProfileAvatar(USERS_NOT_EXISTING_USER_ID, USERS_AVATAR_IMAGE_MOCK);
         } catch (NotFoundException ex) {
-            verify(s3Service, times(0)).deleteFile(
-                    S3_SERVICE_BUCKET_NAME,
+            verify(minioService, times(0)).deleteFile(
+                    MINIO_SERVICE_BUCKET_NAME,
                     USER_AVATAR_S3_KEY
             );
-            verify(s3Service, times(0)).uploadFile(
-                    USER_AVATAR_S3_KEY, S3_SERVICE_BUCKET_NAME,
+            verify(minioService, times(0)).uploadFile(
+                    USER_AVATAR_S3_KEY, MINIO_SERVICE_BUCKET_NAME,
                     USERS_AVATAR_IMAGE_MOCK
             );
         }
@@ -80,7 +80,7 @@ class UserAvatarServiceTest {
     @Test
     void downloadProfileAvatar() throws IOException {
         when(userRepository.userExistsById(USERS_VALID_USER_ID)).thenReturn(true);
-        when(s3Service.downloadFile(S3_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY)).thenReturn(
+        when(minioService.downloadFile(MINIO_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY)).thenReturn(
                 USERS_AVATAR_IMAGE_MOCK.getBytes()
         );
 
@@ -103,8 +103,8 @@ class UserAvatarServiceTest {
         try {
             userAvatarService.downloadProfileAvatar(USERS_NOT_EXISTING_USER_ID);
         } catch (NotFoundException ex) {
-            verify(s3Service, times(0)).downloadFile(
-                    S3_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY
+            verify(minioService, times(0)).downloadFile(
+                    MINIO_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY
             );
         }
     }
@@ -124,8 +124,8 @@ class UserAvatarServiceTest {
         try {
             userAvatarService.deleteProfileAvatar(USERS_NOT_EXISTING_USER_ID);
         } catch (NotFoundException ex) {
-            verify(s3Service, times(0)).downloadFile(
-                    S3_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY
+            verify(minioService, times(0)).downloadFile(
+                    MINIO_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY
             );
         }
     }
@@ -136,8 +136,8 @@ class UserAvatarServiceTest {
         when(userRepository.userExistsById(USERS_VALID_USER_ID)).thenReturn(true);
         userAvatarService.deleteProfileAvatar(USERS_VALID_USER_ID);
 
-        verify(s3Service, times(1)).deleteFile(
-                S3_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY);
+        verify(minioService, times(1)).deleteFile(
+                MINIO_SERVICE_BUCKET_NAME, USER_AVATAR_S3_KEY);
         assertDoesNotThrow(() -> userAvatarService.deleteProfileAvatar(USERS_VALID_USER_ID));
     }
 
