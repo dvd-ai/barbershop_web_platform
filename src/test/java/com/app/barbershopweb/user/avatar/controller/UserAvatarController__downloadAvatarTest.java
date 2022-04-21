@@ -1,8 +1,6 @@
 package com.app.barbershopweb.user.avatar.controller;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.SdkClientException;
-import com.app.barbershopweb.exception.FileException;
+import com.app.barbershopweb.exception.MinioClientException;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.user.avatar.UserAvatarController;
 import com.app.barbershopweb.user.avatar.UserAvatarService;
@@ -87,42 +85,11 @@ class UserAvatarController__downloadAvatarTest {
     }
 
     @Test
-    @DisplayName("when FileException, returns 500 & error dto")
-    void downloadAvatar__FileException() throws Exception {
+    @DisplayName("when MinioClientException, returns 500 & error dto")
+    void downloadAvatar__MinioClientException() throws Exception {
         when(avatarService.downloadProfileAvatar(USERS_VALID_USER_ID))
                 .thenThrow(
-                        new FileException(List.of(anyString())
-                        )
-                );
-        mockMvc.perform(get(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)).andDo(print())
-                .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$", aMapWithSize(1)))
-                .andExpect(jsonPath("$.errors").isArray())
-                .andExpect(jsonPath("$.errors", hasSize(1)))
-        ;
-    }
-
-    @Test
-    @DisplayName("when AmazonServiceException, returns 500 & error dto")
-    void downloadAvatar__AmazonServiceException() throws Exception {
-        when(avatarService.downloadProfileAvatar(USERS_VALID_USER_ID))
-                .thenThrow(
-                        new AmazonServiceException(anyString())
-                );
-        mockMvc.perform(get(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)).andDo(print())
-                .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$", aMapWithSize(1)))
-                .andExpect(jsonPath("$.errors").isArray())
-                .andExpect(jsonPath("$.errors", hasSize(1)))
-        ;
-    }
-
-    @Test
-    @DisplayName("when SdkClientException, returns 500 & error dto")
-    void downloadAvatar__SdkClientException() throws Exception {
-        when(avatarService.downloadProfileAvatar(USERS_VALID_USER_ID))
-                .thenThrow(
-                        new SdkClientException(anyString())
+                        new MinioClientException(anyString())
                 );
         mockMvc.perform(get(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)).andDo(print())
                 .andExpect(status().isInternalServerError())

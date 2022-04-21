@@ -34,7 +34,7 @@ public class OrderReservationController {
                 getOpenOrdersRequestDto.barbershopId(),
                 getOpenOrdersRequestDto.startWeekDate()
         );
-       return orderConverter.orderEntityListToDtoList(orders);
+        return orderConverter.orderEntityListToDtoList(orders);
     }
 
     @PostMapping("/filtered")

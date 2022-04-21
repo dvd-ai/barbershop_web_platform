@@ -1,6 +1,6 @@
 package com.app.barbershopweb.user.crud.service;
 
-import com.app.barbershopweb.aws.s3.S3Service;
+import com.app.barbershopweb.minio.MinioService;
 import com.app.barbershopweb.user.crud.UserService;
 import com.app.barbershopweb.user.crud.Users;
 import com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants;
@@ -27,7 +27,7 @@ class UserServiceTests {
     UserRepository userRepository;
 
     @Mock
-    S3Service s3Service;
+    MinioService minioService;
 
     @InjectMocks
     UserService userService;
