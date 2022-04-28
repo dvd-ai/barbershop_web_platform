@@ -26,6 +26,8 @@ public interface OrderRepository {
 
     boolean orderExistsByBarberIdAndOrderDate(Long barberId, LocalDateTime orderDate);
 
+    void deactivateOrdersByBarbershopId(Long barbershopId);
+
     void truncateAndRestartSequence();
 
 }

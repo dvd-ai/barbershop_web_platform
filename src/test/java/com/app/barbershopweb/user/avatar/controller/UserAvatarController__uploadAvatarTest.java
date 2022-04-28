@@ -1,9 +1,10 @@
 package com.app.barbershopweb.user.avatar.controller;
 
 import com.app.barbershopweb.exception.MinioClientException;
-import com.app.barbershopweb.exception.NotFoundException;
+import com.app.barbershopweb.exception.ValidationException;
 import com.app.barbershopweb.user.avatar.UserAvatarController;
 import com.app.barbershopweb.user.avatar.UserAvatarService;
+import com.app.barbershopweb.user.avatar.validator.AvatarImageValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,6 @@ import java.util.List;
 
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_ErrorMessage__TestConstants.*;
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.*;
-import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.USER_ERR_NOT_EXISTING_USER_ID;
-import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_NOT_EXISTING_USER_ID;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.doThrow;
@@ -34,22 +33,9 @@ class UserAvatarController__uploadAvatarTest {
     @MockBean
     UserAvatarService avatarService;
 
-    @Test
-    @DisplayName("when user doesn't exist, returns 404 & error dto")
-    void uploadAvatar__UserNotExist() throws Exception {
-        doThrow(new NotFoundException(List.of(USER_ERR_NOT_EXISTING_USER_ID)))
-                .when(avatarService).uploadProfileAvatar(USERS_NOT_EXISTING_USER_ID, USERS_AVATAR_IMAGE_MOCK);
+    @MockBean
+    AvatarImageValidator imageValidator;
 
-        mockMvc.perform(multipart(USER_AVATARS_URL + "/" + USERS_NOT_EXISTING_USER_ID)
-                        .file(USERS_AVATAR_IMAGE_MOCK))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", aMapWithSize(1)))
-                .andExpect(jsonPath("$.errors").isArray())
-                .andExpect(jsonPath("$.errors", hasSize(1)))
-                .andExpect(jsonPath("$.errors", hasItem(USER_ERR_NOT_EXISTING_USER_ID)))
-        ;
-    }
 
     @Test
     @DisplayName("when MinioClientException, returns 500 & error dto")
@@ -70,6 +56,14 @@ class UserAvatarController__uploadAvatarTest {
     @Test
     @DisplayName("when upload size exceeds maximum - returns 400 and error dto")
     void uploadAvatar__uploadLimitExceeded() throws Exception {
+        ValidationException validationException = new ValidationException(
+                List.of(
+                        USER_AVATAR_ERR_FILE_SIZE
+                )
+        );
+
+        doThrow(validationException).when(imageValidator).isValid(USERS_AVATAR_FILE_SIZE_LIMIT_MOCK);
+
         mockMvc.perform(multipart(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)
                         .file(USERS_AVATAR_FILE_SIZE_LIMIT_MOCK))
                 .andDo(print())
@@ -84,6 +78,13 @@ class UserAvatarController__uploadAvatarTest {
     @Test
     @DisplayName("when invalid content type - returns 400 and error dto")
     void uploadAvatar__invalidContentType() throws Exception {
+        ValidationException validationException = new ValidationException(
+                List.of(
+                        USER_AVATAR_ERR_INVALID_FILE
+                )
+        );
+
+        doThrow(validationException).when(imageValidator).isValid(USERS_AVATAR_TEXT_FILE_MOCK);
         mockMvc.perform(multipart(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)
                         .file(USERS_AVATAR_TEXT_FILE_MOCK))
                 .andDo(print())
@@ -98,6 +99,14 @@ class UserAvatarController__uploadAvatarTest {
     @Test
     @DisplayName("when no file content - returns 400 and error dto")
     void uploadAvatar__noFileContent() throws Exception {
+        ValidationException validationException = new ValidationException(
+                List.of(
+                        USER_AVATAR_ERR_EMPTY_FILE
+                )
+        );
+
+        doThrow(validationException).when(imageValidator).isValid(USERS_AVATAR_NO_FILE_CONTENT_MOCK);
+
         mockMvc.perform(multipart(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)
                         .file(USERS_AVATAR_NO_FILE_CONTENT_MOCK))
                 .andDo(print())

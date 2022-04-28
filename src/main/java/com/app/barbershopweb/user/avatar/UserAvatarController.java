@@ -1,15 +1,12 @@
 package com.app.barbershopweb.user.avatar;
 
-import com.app.barbershopweb.exception.NotFoundException;
-import com.app.barbershopweb.user.avatar.validator.AvatarImage;
-import org.springframework.core.io.ByteArrayResource;
+import com.app.barbershopweb.user.avatar.validator.AvatarImageValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
-import java.util.List;
 
 @RestController
 @RequestMapping("/users/avatars")
@@ -17,32 +14,25 @@ import java.util.List;
 public class UserAvatarController {
 
     private final UserAvatarService userAvatarService;
+    private final AvatarImageValidator imageValidator;
 
-    public UserAvatarController(UserAvatarService userAvatarService) {
+    public UserAvatarController(UserAvatarService userAvatarService, AvatarImageValidator imageValidator) {
         this.userAvatarService = userAvatarService;
+        this.imageValidator = imageValidator;
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<ByteArrayResource> downloadAvatar(@PathVariable @Min(1) Long userId) {
-        ByteArrayResource content = userAvatarService.downloadProfileAvatar(userId);
-
-        if (content.contentLength() == 0) {
-            throw new NotFoundException(
-                    List.of(
-                            "No profile avatar for user with id " + userId
-                    )
-            );
-        }
-
+    public ResponseEntity<byte[]> downloadAvatar(@PathVariable @Min(1) Long userId) {
         return ResponseEntity
                 .ok()
                 .header("Content-type", "application/octet-stream")
-                .body(content);
+                .body(userAvatarService.downloadProfileAvatar(userId));
     }
 
     @PostMapping("/{userId}")
     public void uploadAvatar(@PathVariable @Min(1) Long userId,
-                             @RequestParam(value = "file") @AvatarImage MultipartFile image) {
+                             @RequestParam(value = "file") MultipartFile image) {
+        imageValidator.isValid(image);
         userAvatarService.uploadProfileAvatar(userId, image);
     }
 

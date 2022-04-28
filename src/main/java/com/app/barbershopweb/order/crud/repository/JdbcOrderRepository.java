@@ -1,7 +1,7 @@
 package com.app.barbershopweb.order.crud.repository;
 
-import com.app.barbershopweb.barbershop.Barbershop;
-import com.app.barbershopweb.barbershop.repository.BarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.Barbershop;
+import com.app.barbershopweb.barbershop.crud.repository.BarbershopRepository;
 import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
 import com.app.barbershopweb.exception.InvalidBusinessDataFormatException;
 import com.app.barbershopweb.exception.NotFoundException;
@@ -196,6 +196,19 @@ public class JdbcOrderRepository implements OrderRepository {
 
         Integer count = namedParameterJdbcTemplate.queryForObject(sql, parameterSource, Integer.class);
         return Objects.requireNonNull(count) > 0;
+    }
+
+    @Override
+    public void deactivateOrdersByBarbershopId(Long barbershopId) {
+        String sql =
+                "UPDATE orders " +
+                        "SET " +
+                        "is_active = false " +
+                        "WHERE barbershop_id = :barbershopId;";
+
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("barbershopId", barbershopId);
+        namedParameterJdbcTemplate.update(sql, sqlParameterSource);
     }
 
     @Override

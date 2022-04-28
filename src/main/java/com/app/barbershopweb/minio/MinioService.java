@@ -13,36 +13,21 @@ import java.io.InputStream;
 public class MinioService {
     private static final long PART_SIZE = 5_000_000_00;
     private final MinioClient minioClient;
-    private final MinioServiceUtils minioServiceUtils;
 
-    public MinioService(MinioClient minioClient, MinioServiceUtils minioServiceUtils,
-                        @Value("${minio.bucket.name}") String bucket) {
+    public MinioService(MinioClient minioClient, @Value("${minio.bucket.name}") String bucket) {
         this.minioClient = minioClient;
-        this.minioServiceUtils = minioServiceUtils;
-
-        try {
-            boolean found = minioClient.bucketExists(
-                    BucketExistsArgs.builder()
-                            .bucket(bucket)
-                            .build()
-            );
-            if (!found) {
-                minioClient.makeBucket(MakeBucketArgs.builder()
-                        .bucket(bucket)
-                        .build());
-            }
-        } catch (Exception e) {
-            throw new MinioClientException(e.getMessage());
-        }
-
+        createBucketIfNotExist(bucket);
     }
 
     public void deleteFile(String bucketName, String key) {
 
         try {
-            minioClient.removeObject(
-                    RemoveObjectArgs.builder().bucket(bucketName).object(key).build()
-            );
+            RemoveObjectArgs args = RemoveObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(key)
+                    .build();
+
+            minioClient.removeObject(args);
         } catch (Exception e) {
             throw new MinioClientException(e.getMessage());
         }
@@ -50,30 +35,52 @@ public class MinioService {
 
     public void uploadFile(String bucketName, String key, MultipartFile multipartFile) {
         try {
-            minioClient.putObject(
-                    PutObjectArgs.builder().bucket(bucketName).object(key).stream(
-                                    multipartFile.getInputStream(), -1, PART_SIZE)
-                            .contentType(multipartFile.getContentType())
-                            .build()
-            );
+            PutObjectArgs args = PutObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(key)
+                    .stream(multipartFile.getInputStream(), -1, PART_SIZE)
+                    .contentType(multipartFile.getContentType())
+                    .build();
+
+            minioClient.putObject(args);
         } catch (Exception e) {
             throw new MinioClientException(e.getMessage());
         }
     }
 
     public byte[] downloadFile(String bucketName, String key) {
-        InputStream is;
-
-        try {
-            is = minioClient.getObject(
-                    GetObjectArgs.builder()
-                            .bucket(bucketName)
-                            .object(key)
-                            .build());
+        try (InputStream is =
+                     minioClient.getObject(GetObjectArgs.builder()
+                             .bucket(bucketName)
+                             .object(key)
+                             .build())
+        ) {
             return is.readAllBytes();
         } catch (Exception e) {
-            minioServiceUtils.handleNotFoundBucketObject(e);
+            if (!e.getMessage().contains("The specified key does not exist."))
+                throw new MinioClientException(e.getMessage());
         }
         return new byte[0];
+    }
+
+    void createBucketIfNotExist(String bucket) {
+
+        try {
+            BucketExistsArgs args = BucketExistsArgs.builder()
+                    .bucket(bucket)
+                    .build();
+
+            MakeBucketArgs args1 = MakeBucketArgs.builder()
+                    .bucket(bucket)
+                    .build();
+
+            boolean found = minioClient.bucketExists(args);
+
+            if (!found) {
+                minioClient.makeBucket(args1);
+            }
+        } catch (Exception e) {
+            throw new MinioClientException(e.getMessage());
+        }
     }
 }

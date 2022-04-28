@@ -4,12 +4,12 @@ import com.app.barbershopweb.exception.MinioClientException;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.user.avatar.UserAvatarController;
 import com.app.barbershopweb.user.avatar.UserAvatarService;
+import com.app.barbershopweb.user.avatar.validator.AvatarImageValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,9 +19,9 @@ import java.util.List;
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_ErrorMessage__TestConstants.USER_AVATAR_ERR_NO_AVATAR_FOUND;
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.USERS_AVATAR_IMAGE_MOCK;
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.USER_AVATARS_URL;
-import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.USER_ERR_NOT_EXISTING_USER_ID;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -39,11 +39,20 @@ class UserAvatarController__downloadAvatarTest {
     @MockBean
     UserAvatarService avatarService;
 
+    @MockBean
+    AvatarImageValidator imageValidator;
+
     @Test
     @DisplayName("when there's no profile avatar returns 404 & error dto")
     void downloadAvatar__NoAvatar() throws Exception {
+        NotFoundException notFoundException = new NotFoundException(
+                List.of(
+                        "No profile avatar for user with id " + USERS_VALID_USER_ID
+                )
+        );
+
         when(avatarService.downloadProfileAvatar(USERS_VALID_USER_ID))
-                .thenReturn(new ByteArrayResource(new byte[0]));
+                .thenThrow(notFoundException);
 
         mockMvc.perform(get(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)).andDo(print())
                 .andExpect(status().isNotFound())
@@ -54,33 +63,17 @@ class UserAvatarController__downloadAvatarTest {
     }
 
     @Test
-    @DisplayName("when user doesn't exist, returns 404 & error dto")
-    void downloadAvatar__UserNotExist() throws Exception {
-        when(avatarService.downloadProfileAvatar(USERS_VALID_USER_ID))
-                .thenThrow(
-                        new NotFoundException(List.of(USER_ERR_NOT_EXISTING_USER_ID))
-                );
-
-        mockMvc.perform(get(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)).andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", aMapWithSize(1)))
-                .andExpect(jsonPath("$.errors").isArray())
-                .andExpect(jsonPath("$.errors", hasSize(1)))
-                .andExpect(jsonPath("$.errors", hasItem(USER_ERR_NOT_EXISTING_USER_ID)));
-    }
-
-    @Test
     @DisplayName("returns file")
     void downloadAvatar() throws Exception {
         when(avatarService.downloadProfileAvatar(USERS_VALID_USER_ID))
-                .thenReturn(new ByteArrayResource(USERS_AVATAR_IMAGE_MOCK.getBytes()));
+                .thenReturn(USERS_AVATAR_IMAGE_MOCK.getBytes());
 
         MockHttpServletResponse response = mockMvc.perform(get(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)
                         .contentType(MediaType.APPLICATION_OCTET_STREAM))
                 .andReturn().getResponse();
 
         assertEquals(200, response.getStatus());
-        assertEquals(new ByteArrayResource(USERS_AVATAR_IMAGE_MOCK.getBytes()), new ByteArrayResource(response.getContentAsByteArray()));
+        assertArrayEquals(USERS_AVATAR_IMAGE_MOCK.getBytes(), response.getContentAsByteArray());
         assertEquals("application/octet-stream", response.getContentType());
     }
 

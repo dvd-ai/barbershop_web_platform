@@ -3,6 +3,7 @@ package com.app.barbershopweb.user.avatar.controller;
 import com.app.barbershopweb.exception.MinioClientException;
 import com.app.barbershopweb.user.avatar.UserAvatarController;
 import com.app.barbershopweb.user.avatar.UserAvatarService;
+import com.app.barbershopweb.user.avatar.validator.AvatarImageValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ class UserAvatarController__deleteAvatarTest {
     @MockBean
     UserAvatarService avatarService;
 
+    @MockBean
+    AvatarImageValidator imageValidator;
+
     @Test
     @DisplayName("when MinioClientException, returns 500 & error dto")
     void removeAvatar__MinioClientException() throws Exception {
@@ -45,7 +49,7 @@ class UserAvatarController__deleteAvatarTest {
     }
 
     @Test
-    @DisplayName("when user doesn't exist / exists, it removes avatar if needed and returns 200")
+    @DisplayName("removes avatar and returns 200")
     void removeAvatar() throws Exception {
         mockMvc.perform(delete(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID))
                 .andDo(print())

@@ -1,6 +1,6 @@
 package com.app.barbershopweb.integrationtests.order.crud;
 
-import com.app.barbershopweb.barbershop.repository.BarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.BarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.OrderDto;
 import com.app.barbershopweb.order.crud.repository.OrderRepository;
@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Objects;
 
-import static com.app.barbershopweb.barbershop.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
+import static com.app.barbershopweb.barbershop.crud.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
 import static com.app.barbershopweb.order.crud.constants.OrderDto__TestConstants.ORDER_VALID_DTO;
 import static com.app.barbershopweb.order.crud.constants.OrderDto__TestConstants.ORDER_VALID_UPDATED_DTO;
 import static com.app.barbershopweb.order.crud.constants.OrderEntity__TestConstants.ORDER_VALID_ENTITY;

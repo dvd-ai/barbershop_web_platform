@@ -1,6 +1,6 @@
 package com.app.barbershopweb.order.reservation.constants.list.fk;
 
-import com.app.barbershopweb.barbershop.Barbershop;
+import com.app.barbershopweb.barbershop.crud.Barbershop;
 import com.app.barbershopweb.user.crud.Users;
 import com.app.barbershopweb.workspace.Workspace;
 
@@ -12,24 +12,24 @@ public final class OrderReservation_FkEntityList__TestConstants {
 
     public static final List<Users> ORDER_RESERVATION_FK_USER_ENTITY_LIST = List.of(
             new Users(1L, "", "",
-                    "", "", "customer", LocalDateTime.now()),
+                    "", "user1@gmail.com", "customer", LocalDateTime.now()),
 
             new Users(2L, "", "",
-                    "", "", "customer", LocalDateTime.now()),
+                    "", "user2@gmail.com", "customer", LocalDateTime.now()),
 
             new Users(3L, "", "",
-                    "", "", "barber", LocalDateTime.now()),
+                    "", "user3@gmail.com", "barber", LocalDateTime.now()),
 
             new Users(4L, "", "",
-                    "", "", "barber", LocalDateTime.now())
+                    "", "user4@gmail.com", "barber", LocalDateTime.now())
     );
 
     public static final List<Barbershop> ORDER_RESERVATION_FK_BARBERSHOP_ENTITY_LIST = List.of(
-            new Barbershop(1L, "", "", "", "",
-                    LocalTime.of(8, 0), LocalTime.of(20, 0)),
+            new Barbershop(1L, "", "", "", "barb1@barbershop.com",
+                    LocalTime.of(8, 0), LocalTime.of(20, 0), true),
 
-            new Barbershop(2L, "", "", "", "",
-                    LocalTime.of(9, 0), LocalTime.of(18, 0))
+            new Barbershop(2L, "", "", "", "barb2@barbershop.com",
+                    LocalTime.of(9, 0), LocalTime.of(18, 0), true)
     );
 
     public static final List<Workspace> ORDER_RESERVATION_FK_WORKSPACE_ENTITY_LIST = List.of(

@@ -1,6 +1,6 @@
 package com.app.barbershopweb.workspace.repository;
 
-import com.app.barbershopweb.barbershop.repository.BarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.BarbershopRepository;
 import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.user.crud.repository.UserRepository;
@@ -159,6 +159,20 @@ public class JdbcWorkspaceRepository implements WorkspaceRepository {
 
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("id", id);
+
+        namedParameterJdbcTemplate.update(sql, sqlParameterSource);
+    }
+
+    @Override
+    public void deactivateWorkspacesByBarbershopId(Long barbershopId) {
+        String sql =
+                "UPDATE workspace " +
+                        "SET " +
+                        "active = false " +
+                        "WHERE barbershop_id = :barbershopId;";
+
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("barbershopId", barbershopId);
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
     }

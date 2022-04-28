@@ -1,6 +1,6 @@
 package com.app.barbershopweb.database.order.crud;
 
-import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.JdbcBarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.repository.JdbcOrderRepository;
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Optional;
 
-import static com.app.barbershopweb.barbershop.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
+import static com.app.barbershopweb.barbershop.crud.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
 import static com.app.barbershopweb.order.crud.constants.OrderEntity__TestConstants.ORDER_VALID_ENTITY;
 import static com.app.barbershopweb.order.crud.constants.OrderEntity__TestConstants.ORDER_VALID_UPDATED_ENTITY;
 import static com.app.barbershopweb.order.crud.constants.OrderList__TestConstants.ORDER_VALID_ENTITY_LIST;
@@ -171,4 +171,14 @@ class JdbcOrderRepositoryTest extends AbstractIT {
         assertEquals(1, id);
     }
 
+    @Test
+    void deactivateOrdersByBarbershopId() {
+        orderRepository.addOrder(ORDER_VALID_ENTITY);
+
+        orderRepository.deactivateOrdersByBarbershopId(ORDER_VALID_ENTITY.getBarbershopId());
+
+        Order order = orderRepository.findOrder(ORDER_VALID_ENTITY.getOrderId()).get();
+
+        assertFalse(order.getActive());
+    }
 }
