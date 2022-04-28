@@ -1,30 +1,21 @@
 package com.app.barbershopweb.user.avatar.validator;
 
+import com.app.barbershopweb.exception.ValidationException;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
-public class AvatarImageValidator implements ConstraintValidator<AvatarImage, MultipartFile> {
-    @Override
-    public void initialize(AvatarImage constraintAnnotation) {
-        ConstraintValidator.super.initialize(constraintAnnotation);
-    }
+@Component
+public class AvatarImageValidator {
 
-    @Override
-    public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext context) {
-
+    public void isValid(MultipartFile multipartFile) {
 
         var msgValidation = imageValidations(multipartFile);
 
         if (!msgValidation.isEmpty()) {
-            context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(msgValidation).addConstraintViolation();
-            return false;
+            throw new ValidationException(List.of("'image' " + msgValidation));
         }
-
-        return true;
     }
 
     private String imageValidations(MultipartFile multipartFile) {

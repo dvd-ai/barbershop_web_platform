@@ -2,7 +2,7 @@ package com.app.barbershopweb.order.crud.constants;
 
 import java.time.LocalDateTime;
 
-import static com.app.barbershopweb.barbershop.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
+import static com.app.barbershopweb.barbershop.crud.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
 
 public final class OrderMetadata__TestConstants {
 

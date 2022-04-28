@@ -22,6 +22,8 @@ public interface WorkspaceRepository {
 
     void deleteWorkspaceById(Long id);
 
+    void deactivateWorkspacesByBarbershopId(Long barbershopId);
+
     void truncateAndRestartSequence();
 
 }

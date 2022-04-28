@@ -1,6 +1,6 @@
 package com.app.barbershopweb.integrationtests.workspace;
 
-import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.JdbcBarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
 import com.app.barbershopweb.workspace.WorkspaceDto;
@@ -16,8 +16,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Objects;
 
-import static com.app.barbershopweb.barbershop.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_DTO_LIST;
-import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOPS_URL;
+import static com.app.barbershopweb.barbershop.crud.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_DTO_LIST;
+import static com.app.barbershopweb.barbershop.crud.constants.BarbershopMetadata__TestConstants.BARBERSHOPS_URL;
 import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_URL;
 import static com.app.barbershopweb.workspace.constants.WorkspaceDto__TestConstants.WORKSPACE_VALID_DTO;

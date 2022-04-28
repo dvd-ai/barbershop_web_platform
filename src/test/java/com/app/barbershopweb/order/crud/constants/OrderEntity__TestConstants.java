@@ -2,7 +2,7 @@ package com.app.barbershopweb.order.crud.constants;
 
 import com.app.barbershopweb.order.crud.Order;
 
-import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOP_VALID_BARBERSHOP_ID;
+import static com.app.barbershopweb.barbershop.crud.constants.BarbershopMetadata__TestConstants.BARBERSHOP_VALID_BARBERSHOP_ID;
 import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.*;
 
 public final class OrderEntity__TestConstants {

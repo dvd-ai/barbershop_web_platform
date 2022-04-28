@@ -5,7 +5,7 @@ import com.app.barbershopweb.order.crud.OrderDto;
 
 import java.util.List;
 
-import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOP_VALID_BARBERSHOP_ID;
+import static com.app.barbershopweb.barbershop.crud.constants.BarbershopMetadata__TestConstants.BARBERSHOP_VALID_BARBERSHOP_ID;
 import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.*;
 
 public final class OrderList__TestConstants {

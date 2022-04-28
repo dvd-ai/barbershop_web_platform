@@ -10,14 +10,15 @@ VALUES ('denis', 'ivaylo', '+38092334455', 'denis@gmail.com', 'barber', '2021-03
 ;
 
 INSERT INTO barbershop(address, name, phone_number,
-                       email, work_time_from, work_time_to)
-VALUES ('Tymoshenka street 9', 'at Tymoshenka', '+380950110000', 'tymoshenka@barbeshop.com', '08:00:00', '19:00:00'),
+                       email, work_time_from, work_time_to, is_active)
+VALUES ('Tymoshenka street 9', 'at Tymoshenka', '+380950110000', 'tymoshenka@barbeshop.com', '08:00:00', '19:00:00',
+        true),
        ('Bulgaria, Ivaylo street 15', 'BolgariaBarbershop', '+9999999999', 'bolgaria@barbeshop.com', '12:00:00',
-        '18:00:00'),
-       ('Kyiv, Lvivska 49', 'BestBarbershop', '+380930939393', 'best@barbeshop.com', '08:00:00', '19:00:00'),
-       ('Lviv, Lvivska 1', 'LvivskaBarbershop', '+380330339333', 'lvivska@barbeshop.com', '10:00:00', '17:00:00'),
+        '18:00:00', true),
+       ('Kyiv, Lvivska 49', 'BestBarbershop', '+380930939393', 'best@barbeshop.com', '08:00:00', '19:00:00', true),
+       ('Lviv, Lvivska 1', 'LvivskaBarbershop', '+380330339333', 'lvivska@barbeshop.com', '10:00:00', '17:00:00', true),
        ('Luhansk, Luhanska street 5', 'LuhanskaBarbershop', '+380110339333', 'luhanska@barbeshop.com', '10:00:00',
-        '17:00:00')
+        '17:00:00', true)
 ;
 
 INSERT INTO workspace(user_id, barbershop_id, active)

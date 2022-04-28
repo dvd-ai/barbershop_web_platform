@@ -1,6 +1,6 @@
 package com.app.barbershopweb.database.workspace;
 
-import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.JdbcBarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
 import com.app.barbershopweb.workspace.Workspace;
@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
-import static com.app.barbershopweb.barbershop.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
-import static com.app.barbershopweb.barbershop.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_ENTITY_LIST;
-import static com.app.barbershopweb.barbershop.constants.BarbershopMetadata__TestConstants.BARBERSHOP_VALID_BARBERSHOP_ID;
+import static com.app.barbershopweb.barbershop.crud.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
+import static com.app.barbershopweb.barbershop.crud.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.barbershop.crud.constants.BarbershopMetadata__TestConstants.BARBERSHOP_VALID_BARBERSHOP_ID;
 import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
 import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_ENTITY_LIST;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
@@ -23,6 +23,7 @@ import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestCon
 import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_UPDATED_ENTITY;
 import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_ENTITY_LIST;
 import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.WORKSPACE_NOT_EXISTED_WORKSPACE_ID;
+import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.WORKSPACE_VALID_WORKSPACE_ID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("jdbc workspace repository tests without error handling")
@@ -158,5 +159,15 @@ class JdbcWorkspaceRepositoryTest extends AbstractIT {
         usersRepository.truncateAndRestartSequence();
         barbershopRepository.truncateAndRestartSequence();
         workspaceRepository.truncateAndRestartSequence();
+    }
+
+    @Test
+    void deactivateWorkspacesByBarbershopId() {
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
+
+        workspaceRepository.deactivateWorkspacesByBarbershopId(WORKSPACE_VALID_ENTITY.getBarbershopId());
+
+        Workspace workspace = workspaceRepository.findWorkspaceById(WORKSPACE_VALID_WORKSPACE_ID).get();
+        assertFalse(workspace.getActive());
     }
 }

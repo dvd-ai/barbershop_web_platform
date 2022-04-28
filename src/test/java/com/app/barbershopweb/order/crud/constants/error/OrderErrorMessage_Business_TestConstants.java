@@ -1,6 +1,6 @@
 package com.app.barbershopweb.order.crud.constants.error;
 
-import static com.app.barbershopweb.barbershop.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
+import static com.app.barbershopweb.barbershop.crud.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
 import static com.app.barbershopweb.order.crud.constants.OrderDto__TestConstants.ORDER_INVALID_BUSINESS_DTO;
 
 public final class OrderErrorMessage_Business_TestConstants {

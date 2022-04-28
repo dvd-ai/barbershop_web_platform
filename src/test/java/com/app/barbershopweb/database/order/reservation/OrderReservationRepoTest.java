@@ -1,6 +1,6 @@
 package com.app.barbershopweb.database.order.reservation;
 
-import com.app.barbershopweb.barbershop.repository.JdbcBarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.JdbcBarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.repository.JdbcOrderRepository;

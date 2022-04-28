@@ -1,6 +1,6 @@
 package com.app.barbershopweb.integrationtests.order.reservation;
 
-import com.app.barbershopweb.barbershop.repository.BarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.BarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.OrderConverter;
