@@ -70,7 +70,7 @@ class UserErrorHandlerIT extends AbstractIT {
 
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("Users with id '" + USERS_NOT_EXISTING_USER_ID + "' not found.",
+        assertEquals("User with id '" + USERS_NOT_EXISTING_USER_ID + "' not found.",
                 Objects.requireNonNull(response.getBody()).errors().get(0));
         assertEquals(1, response.getBody().errors().size());
     }

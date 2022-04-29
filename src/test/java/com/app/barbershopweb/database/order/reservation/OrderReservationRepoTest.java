@@ -1,12 +1,12 @@
 package com.app.barbershopweb.database.order.reservation;
 
-import com.app.barbershopweb.barbershop.crud.repository.JdbcBarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.BarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.Order;
-import com.app.barbershopweb.order.crud.repository.JdbcOrderRepository;
+import com.app.barbershopweb.order.crud.repository.OrderRepository;
 import com.app.barbershopweb.order.reservation.repository.OrderReservationRepository;
-import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
-import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
+import com.app.barbershopweb.workspace.repository.WorkspaceRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,13 +29,13 @@ class OrderReservationRepoTest extends AbstractIT {
     @Autowired
     OrderReservationRepository orderReservationRepository;
     @Autowired
-    JdbcUsersRepository usersRepository;
+    UserRepository usersRepository;
     @Autowired
-    JdbcBarbershopRepository barbershopRepository;
+    BarbershopRepository barbershopRepository;
     @Autowired
-    JdbcOrderRepository orderRepository;
+    OrderRepository orderRepository;
     @Autowired
-    JdbcWorkspaceRepository workspaceRepository;
+    WorkspaceRepository workspaceRepository;
 
 
     @BeforeEach

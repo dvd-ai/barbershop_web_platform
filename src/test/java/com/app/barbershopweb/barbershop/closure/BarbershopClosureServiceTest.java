@@ -18,7 +18,7 @@ import java.util.Optional;
 import static com.app.barbershopweb.barbershop.closure.constants.BarbershopClosure_ErrorMessage__TestConstants.BARBERSHOP_CLOSURE_ERR_BARBERSHOP_NOT_FOUND;
 import static com.app.barbershopweb.barbershop.crud.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
 import static com.app.barbershopweb.barbershop.crud.constants.BarbershopMetadata__TestConstants.BARBERSHOP_VALID_BARBERSHOP_ID;
-import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_VALID_ENTITY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
@@ -48,8 +48,8 @@ class BarbershopClosureServiceTest {
 
     @Test
     void outOfBusiness_NoBarbershop() {
-        when(barbershopRepository.findBarbershopById(BARBERSHOP_VALID_BARBERSHOP_ID))
-                .thenReturn(Optional.empty());
+        when(barbershopRepository.barbershopExistsById(BARBERSHOP_VALID_BARBERSHOP_ID))
+                .thenReturn(false);
 
         List<String> errorMessages = assertThrows(NotFoundException.class,
                 () -> barbershopClosureService.outOfBusiness(BARBERSHOP_VALID_BARBERSHOP_ID)
@@ -61,10 +61,10 @@ class BarbershopClosureServiceTest {
 
     @Test
     void outOfBusiness() {
-        when(barbershopRepository.findBarbershopById(BARBERSHOP_VALID_BARBERSHOP_ID))
-                .thenReturn(Optional.of(BARBERSHOP_VALID_ENTITY));
+        when(barbershopRepository.barbershopExistsById(BARBERSHOP_VALID_BARBERSHOP_ID))
+                .thenReturn(true);
         when(barbershopClosureRepository.getBarbershopVictimCustomers(BARBERSHOP_VALID_BARBERSHOP_ID))
-                .thenReturn(List.of(USERS_VALID_ENTITY));
+                .thenReturn(List.of(USER_VALID_ENTITY));
 
         barbershopClosureService.outOfBusiness(BARBERSHOP_VALID_BARBERSHOP_ID);
 
@@ -72,7 +72,7 @@ class BarbershopClosureServiceTest {
         verify(workspaceRepository).deactivateWorkspacesByBarbershopId(BARBERSHOP_VALID_BARBERSHOP_ID);
         verify(orderRepository).deactivateOrdersByBarbershopId(BARBERSHOP_VALID_BARBERSHOP_ID);
         verify(mailService).notifyAboutOutOfBusiness(
-                List.of(USERS_VALID_ENTITY), BARBERSHOP_VALID_ENTITY.getEmail()
+                List.of(USER_VALID_ENTITY)
         );
 
     }

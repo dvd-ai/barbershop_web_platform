@@ -1,7 +1,7 @@
 package com.app.barbershopweb.order.reservation.constants.list.fk;
 
 import com.app.barbershopweb.barbershop.crud.Barbershop;
-import com.app.barbershopweb.user.crud.Users;
+import com.app.barbershopweb.user.crud.User;
 import com.app.barbershopweb.workspace.Workspace;
 
 import java.time.LocalDateTime;
@@ -10,17 +10,17 @@ import java.util.List;
 
 public final class OrderReservation_FkEntityList__TestConstants {
 
-    public static final List<Users> ORDER_RESERVATION_FK_USER_ENTITY_LIST = List.of(
-            new Users(1L, "", "",
+    public static final List<User> ORDER_RESERVATION_FK_USER_ENTITY_LIST = List.of(
+            new User(1L, "", "",
                     "", "user1@gmail.com", "customer", LocalDateTime.now()),
 
-            new Users(2L, "", "",
+            new User(2L, "", "",
                     "", "user2@gmail.com", "customer", LocalDateTime.now()),
 
-            new Users(3L, "", "",
+            new User(3L, "", "",
                     "", "user3@gmail.com", "barber", LocalDateTime.now()),
 
-            new Users(4L, "", "",
+            new User(4L, "", "",
                     "", "user4@gmail.com", "barber", LocalDateTime.now())
     );
 

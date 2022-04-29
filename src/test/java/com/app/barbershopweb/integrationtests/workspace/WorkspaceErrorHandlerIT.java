@@ -1,11 +1,11 @@
 package com.app.barbershopweb.integrationtests.workspace;
 
-import com.app.barbershopweb.barbershop.crud.repository.JdbcBarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.BarbershopRepository;
 import com.app.barbershopweb.error.ErrorDto;
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
 import com.app.barbershopweb.workspace.WorkspaceDto;
-import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
+import com.app.barbershopweb.workspace.repository.WorkspaceRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -39,11 +39,11 @@ class WorkspaceErrorHandlerIT extends AbstractIT {
 
 
     @Autowired
-    private JdbcBarbershopRepository barbershopRepository;
+    private BarbershopRepository barbershopRepository;
     @Autowired
-    private JdbcUsersRepository usersRepository;
+    private UserRepository usersRepository;
     @Autowired
-    private JdbcWorkspaceRepository workspaceRepository;
+    private WorkspaceRepository workspaceRepository;
 
     void initFk() {
         restTemplate.postForEntity(BARBERSHOPS_URL, BARBERSHOP_VALID_DTO, Long.class);

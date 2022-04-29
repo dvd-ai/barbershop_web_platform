@@ -52,7 +52,7 @@ class BarbershopConverterTest {
                         entity.getEmail(),
                         entity.getWorkTimeFrom(),
                         entity.getWorkTimeTo(),
-                        entity.IsActive()
+                        entity.getActive()
                 ))
                 .toList();
 

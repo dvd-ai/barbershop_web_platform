@@ -27,7 +27,7 @@ import static com.app.barbershopweb.order.crud.constants.OrderEntity__TestConsta
 import static com.app.barbershopweb.order.crud.constants.OrderList__TestConstants.ORDER_VALID_DTO_LIST;
 import static com.app.barbershopweb.order.crud.constants.OrderList__TestConstants.ORDER_VALID_ENTITY_LIST;
 import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.*;
-import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_VALID_ENTITY;
 import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_ENTITY;
 import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_ENTITY_LIST;
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,8 +49,8 @@ class OrderIT extends AbstractIT {
 
     @BeforeEach
     void init() {
-        userRepository.addUser(USERS_VALID_ENTITY);
-        userRepository.addUser(USERS_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
 
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
@@ -94,8 +94,8 @@ class OrderIT extends AbstractIT {
     @DisplayName("GET: " + ORDERS_URL +
             " gives Order List(array) when they were added")
     void shouldReturnOrderList() {
-        userRepository.addUser(USERS_VALID_ENTITY);
-        userRepository.addUser(USERS_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(2));
 
@@ -115,7 +115,7 @@ class OrderIT extends AbstractIT {
     @DisplayName("PUT: " + ORDERS_URL +
             " should return updated order (dto)")
     void shouldUpdateOrder() {
-        userRepository.addUser(USERS_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(2));
         orderRepository.addOrder(ORDER_VALID_ENTITY);

@@ -2,7 +2,7 @@ package com.app.barbershopweb.integrationtests.barbershop.crud;
 
 
 import com.app.barbershopweb.barbershop.crud.BarbershopDto;
-import com.app.barbershopweb.barbershop.crud.repository.JdbcBarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.BarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class BarbershopIT extends AbstractIT {
 
     @Autowired
-    private JdbcBarbershopRepository barbershopRepository;
+    private BarbershopRepository barbershopRepository;
 
     @Autowired
     private TestRestTemplate restTemplate;

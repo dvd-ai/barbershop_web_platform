@@ -2,7 +2,7 @@ package com.app.barbershopweb.user.crud;
 
 import java.time.LocalDateTime;
 
-public class Users {
+public class User {
 
     private Long id;
     private String firstName;
@@ -12,13 +12,13 @@ public class Users {
     private String role;
     private LocalDateTime registrationDate;
 
-    public Users() {
+    public User() {
     }
 
-    public Users(Long id, String firstName,
-                 String lastName, String phoneNumber,
-                 String email, String role,
-                 LocalDateTime registrationDate) {
+    public User(Long id, String firstName,
+                String lastName, String phoneNumber,
+                String email, String role,
+                LocalDateTime registrationDate) {
 
         this.id = id;
         this.firstName = firstName;
@@ -90,7 +90,7 @@ public class Users {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Users users = (Users) o;
+        User users = (User) o;
 
         if (!id.equals(users.id)) return false;
         if (!firstName.equals(users.firstName)) return false;

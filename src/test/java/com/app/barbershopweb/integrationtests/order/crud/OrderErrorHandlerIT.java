@@ -30,7 +30,7 @@ import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage
 import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Fk__TestConstants.ORDER_ERR_FK_CUSTOMER_ID;
 import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Uk__TestConstants.ORDER_ERR_UK_BARBER_ID__ORDER_DATE;
 import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Uk__TestConstants.ORDER_ERR_UK_CUSTOMER_ID__ORDER_DATE;
-import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_VALID_ENTITY;
 import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_ENTITY;
 import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_ENTITY_LIST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -106,8 +106,8 @@ class OrderErrorHandlerIT extends AbstractIT {
             " when order dto violates db uk constraints " +
             "returns status code 400 & error dto")
     void addOrderUkCv() {
-        userRepository.addUser(USERS_VALID_ENTITY);
-        userRepository.addUser(USERS_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
@@ -135,8 +135,8 @@ class OrderErrorHandlerIT extends AbstractIT {
             " when order dto violates business data format " +
             "returns status code 400 & error dto")
     void addOrderBdfCv() {
-        userRepository.addUser(USERS_VALID_ENTITY);
-        userRepository.addUser(USERS_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
@@ -208,8 +208,8 @@ class OrderErrorHandlerIT extends AbstractIT {
             " when order dto violates db uk constraints " +
             "returns status code 400 & error dto")
     void updateOrderUkCv() {
-        userRepository.addUser(USERS_VALID_ENTITY);
-        userRepository.addUser(USERS_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
@@ -239,8 +239,8 @@ class OrderErrorHandlerIT extends AbstractIT {
             " when order dto violates business data format " +
             "returns status code 400 & error dto")
     void updateOrderBdfCv() {
-        userRepository.addUser(USERS_VALID_ENTITY);
-        userRepository.addUser(USERS_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);

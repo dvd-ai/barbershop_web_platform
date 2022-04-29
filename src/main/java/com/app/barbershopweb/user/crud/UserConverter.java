@@ -7,20 +7,20 @@ import java.util.List;
 @Component
 public class UserConverter {
 
-    public List<Users> userDtoListToEntityList(List<UsersDto> dtos) {
+    public List<User> userDtoListToEntityList(List<UsersDto> dtos) {
         return dtos.stream()
                 .map(this::mapToEntity)
                 .toList();
     }
 
-    public List<UsersDto> userEntityListToDtoList(List<Users> entities) {
+    public List<UsersDto> userEntityListToDtoList(List<User> entities) {
         return entities.stream()
                 .map(this::mapToDto)
                 .toList();
     }
 
-    public Users mapToEntity(UsersDto dto) {
-        return new Users(
+    public User mapToEntity(UsersDto dto) {
+        return new User(
                 dto.id(),
                 dto.firstName(),
                 dto.lastName(),
@@ -32,7 +32,7 @@ public class UserConverter {
         );
     }
 
-    public UsersDto mapToDto(Users entity) {
+    public UsersDto mapToDto(User entity) {
         return new UsersDto(
                 entity.getId(),
                 entity.getFirstName(),

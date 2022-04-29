@@ -1,13 +1,13 @@
 package com.app.barbershopweb.database.order.crud;
 
-import com.app.barbershopweb.barbershop.crud.repository.JdbcBarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.BarbershopRepository;
 import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
 import com.app.barbershopweb.exception.InvalidBusinessDataFormatException;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.order.crud.repository.JdbcOrderRepository;
-import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
-import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
+import com.app.barbershopweb.order.crud.repository.OrderRepository;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
+import com.app.barbershopweb.workspace.repository.WorkspaceRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,20 +21,20 @@ import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage
 import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Fk__TestConstants.ORDER_ERR_FK_CUSTOMER_ID;
 import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Uk__TestConstants.ORDER_ERR_UK_BARBER_ID__ORDER_DATE;
 import static com.app.barbershopweb.order.crud.constants.error.OrderErrorMessage_Uk__TestConstants.ORDER_ERR_UK_CUSTOMER_ID__ORDER_DATE;
-import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_VALID_ENTITY;
 import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_ENTITY;
 import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_ENTITY_LIST;
 import static org.junit.jupiter.api.Assertions.*;
 
-class JdbcOrderRepositoryErrorHandlingTest extends AbstractIT {
+class OrderRepositoryErrorHandlingTest extends AbstractIT {
     @Autowired
-    JdbcWorkspaceRepository workspaceRepository;
+    WorkspaceRepository workspaceRepository;
     @Autowired
-    JdbcBarbershopRepository barbershopRepository;
+    BarbershopRepository barbershopRepository;
     @Autowired
-    JdbcUsersRepository usersRepository;
+    UserRepository usersRepository;
     @Autowired
-    JdbcOrderRepository orderRepository;
+    OrderRepository orderRepository;
 
 
     @AfterEach
@@ -74,8 +74,8 @@ class JdbcOrderRepositoryErrorHandlingTest extends AbstractIT {
     void addOrderUkViolation() {
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
-        usersRepository.addUser(USERS_VALID_ENTITY);
-        usersRepository.addUser(USERS_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(1));
 
@@ -103,8 +103,8 @@ class JdbcOrderRepositoryErrorHandlingTest extends AbstractIT {
     void addOrderBdfViolation() {
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
-        usersRepository.addUser(USERS_VALID_ENTITY);
-        usersRepository.addUser(USERS_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(1));
 
@@ -152,8 +152,8 @@ class JdbcOrderRepositoryErrorHandlingTest extends AbstractIT {
     void updateOrderUkViolation() {
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
-        usersRepository.addUser(USERS_VALID_ENTITY);
-        usersRepository.addUser(USERS_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(1));
 
@@ -181,8 +181,8 @@ class JdbcOrderRepositoryErrorHandlingTest extends AbstractIT {
     void updateOrderBdfViolation() {
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
-        usersRepository.addUser(USERS_VALID_ENTITY);
-        usersRepository.addUser(USERS_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(1));
 

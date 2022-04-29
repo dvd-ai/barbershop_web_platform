@@ -19,8 +19,8 @@ import java.util.Optional;
 
 import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_USER_DTO_NOT_EXISTED_ID;
 import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_VALID_USER_DTO;
-import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_ENTITY_NOT_EXISTED_ID;
-import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_ENTITY_NOT_EXISTED_ID;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_VALID_ENTITY;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
@@ -55,9 +55,9 @@ class UserControllerUpdateUserTest {
         );
 
         when(userConverter.mapToEntity(USERS_USER_DTO_NOT_EXISTED_ID)).thenReturn(
-                USERS_ENTITY_NOT_EXISTED_ID
+                USER_ENTITY_NOT_EXISTED_ID
         );
-        when(userService.updateUser(USERS_ENTITY_NOT_EXISTED_ID)).thenReturn(Optional.empty());
+        when(userService.updateUser(USER_ENTITY_NOT_EXISTED_ID)).thenReturn(Optional.empty());
 
         mockMvc
                 .perform(put(USERS_URL)
@@ -81,12 +81,12 @@ class UserControllerUpdateUserTest {
         );
 
         when(userConverter.mapToEntity(USERS_VALID_USER_DTO)).thenReturn(
-                USERS_VALID_ENTITY
+                USER_VALID_ENTITY
         );
-        when(userService.updateUser(USERS_VALID_ENTITY)).thenReturn(
-                Optional.of(USERS_VALID_ENTITY)
+        when(userService.updateUser(USER_VALID_ENTITY)).thenReturn(
+                Optional.of(USER_VALID_ENTITY)
         );
-        when(userConverter.mapToDto(USERS_VALID_ENTITY)).thenReturn(
+        when(userConverter.mapToDto(USER_VALID_ENTITY)).thenReturn(
                 USERS_VALID_USER_DTO
         );
 

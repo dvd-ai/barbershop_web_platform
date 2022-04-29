@@ -1,10 +1,10 @@
 package com.app.barbershopweb.database.workspace;
 
-import com.app.barbershopweb.barbershop.crud.repository.JdbcBarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.BarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
 import com.app.barbershopweb.workspace.Workspace;
-import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
+import com.app.barbershopweb.workspace.repository.WorkspaceRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,8 +16,8 @@ import java.util.Optional;
 import static com.app.barbershopweb.barbershop.crud.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
 import static com.app.barbershopweb.barbershop.crud.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_ENTITY_LIST;
 import static com.app.barbershopweb.barbershop.crud.constants.BarbershopMetadata__TestConstants.BARBERSHOP_VALID_BARBERSHOP_ID;
-import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
-import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USER_USER_VALID_ENTITY_LIST;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
 import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_ENTITY;
 import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_UPDATED_ENTITY;
@@ -27,20 +27,20 @@ import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestC
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("jdbc workspace repository tests without error handling")
-class JdbcWorkspaceRepositoryTest extends AbstractIT {
+class WorkspaceRepositoryTest extends AbstractIT {
 
     @Autowired
-    JdbcWorkspaceRepository workspaceRepository;
+    WorkspaceRepository workspaceRepository;
     @Autowired
-    JdbcBarbershopRepository barbershopRepository;
+    BarbershopRepository barbershopRepository;
     @Autowired
-    JdbcUsersRepository usersRepository;
+    UserRepository usersRepository;
 
 
     @BeforeEach
     void initFks() {
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
-        usersRepository.addUser(USERS_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
     }
 
     @Test
@@ -104,7 +104,7 @@ class JdbcWorkspaceRepositoryTest extends AbstractIT {
     @Test
     void updateExistingWorkspace() {
 
-        usersRepository.addUser(USERS_USER_VALID_ENTITY_LIST.get(1));
+        usersRepository.addUser(USER_USER_VALID_ENTITY_LIST.get(1));
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
         Optional<Workspace> updWorkspaceOptional = workspaceRepository.updateWorkspace(
                 WORKSPACE_VALID_UPDATED_ENTITY
@@ -120,8 +120,8 @@ class JdbcWorkspaceRepositoryTest extends AbstractIT {
 
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY_LIST.get(1));
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY_LIST.get(2));
-        usersRepository.addUser(USERS_USER_VALID_ENTITY_LIST.get(1));
-        usersRepository.addUser(USERS_USER_VALID_ENTITY_LIST.get(2));
+        usersRepository.addUser(USER_USER_VALID_ENTITY_LIST.get(1));
+        usersRepository.addUser(USER_USER_VALID_ENTITY_LIST.get(2));
 
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(0));
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(1));

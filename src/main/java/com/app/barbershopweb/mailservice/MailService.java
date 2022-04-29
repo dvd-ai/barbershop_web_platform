@@ -1,7 +1,7 @@
 package com.app.barbershopweb.mailservice;
 
 import com.app.barbershopweb.exception.MailException;
-import com.app.barbershopweb.user.crud.Users;
+import com.app.barbershopweb.user.crud.User;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -17,15 +17,15 @@ public class MailService {
         this.mailSender = mailSender;
     }
 
-    public void notifyAboutOutOfBusiness(List<Users> customers, String barbershopEmail) {
-        for (Users customer : customers) {
+    public void notifyAboutOutOfBusiness(List<User> customers) {
+        for (User customer : customers) {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setSubject("Your appointments canceled because barbershop is out of business");
             message.setText("""
                     Dear %s %s, your ...
                     """.formatted(customer.getFirstName(), customer.getLastName()));
             message.setTo(customer.getEmail());
-            message.setFrom("no-reply@" + barbershopEmail.split("@")[1]);
+            message.setFrom("no-reply@gmail.com");
 
             try {
                 mailSender.send(message);

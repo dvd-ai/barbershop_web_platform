@@ -1,11 +1,11 @@
 package com.app.barbershopweb.database.order.crud;
 
-import com.app.barbershopweb.barbershop.crud.repository.JdbcBarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.BarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.order.crud.Order;
-import com.app.barbershopweb.order.crud.repository.JdbcOrderRepository;
-import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
-import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
+import com.app.barbershopweb.order.crud.repository.OrderRepository;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
+import com.app.barbershopweb.workspace.repository.WorkspaceRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,30 +20,30 @@ import static com.app.barbershopweb.order.crud.constants.OrderEntity__TestConsta
 import static com.app.barbershopweb.order.crud.constants.OrderEntity__TestConstants.ORDER_VALID_UPDATED_ENTITY;
 import static com.app.barbershopweb.order.crud.constants.OrderList__TestConstants.ORDER_VALID_ENTITY_LIST;
 import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.*;
-import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_VALID_ENTITY;
 import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_ENTITY;
 import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_ENTITY_LIST;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("jdbc order repository test without error handling")
-class JdbcOrderRepositoryTest extends AbstractIT {
+class OrderRepositoryTest extends AbstractIT {
 
     @Autowired
-    JdbcWorkspaceRepository workspaceRepository;
+    WorkspaceRepository workspaceRepository;
     @Autowired
-    JdbcBarbershopRepository barbershopRepository;
+    BarbershopRepository barbershopRepository;
     @Autowired
-    JdbcUsersRepository usersRepository;
+    UserRepository usersRepository;
     @Autowired
-    JdbcOrderRepository orderRepository;
+    OrderRepository orderRepository;
 
 
     @BeforeEach
     void initFks() {
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
-        usersRepository.addUser(USERS_VALID_ENTITY);
-        usersRepository.addUser(USERS_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(1));
     }
@@ -77,7 +77,7 @@ class JdbcOrderRepositoryTest extends AbstractIT {
 
     @Test
     void updateOrder() {
-        usersRepository.addUser(USERS_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(2));
 
@@ -94,8 +94,8 @@ class JdbcOrderRepositoryTest extends AbstractIT {
     void getOrders() {
         assertTrue(orderRepository.getOrders().isEmpty());
 
-        usersRepository.addUser(USERS_VALID_ENTITY);
-        usersRepository.addUser(USERS_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY_LIST.get(2));
 
