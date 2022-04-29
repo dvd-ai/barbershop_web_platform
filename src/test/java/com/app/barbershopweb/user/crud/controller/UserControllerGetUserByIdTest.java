@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_VALID_USER_DTO;
-import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_VALID_ENTITY;
 import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.USER_ERR_INVALID_PATH_VAR_USER_ID;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.*;
 import static org.hamcrest.Matchers.*;
@@ -67,7 +67,7 @@ class UserControllerGetUserByIdTest {
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors", hasSize(1)))
                 .andExpect(jsonPath("$.errors[0]", is(
-                        "Users with id '" + USERS_NOT_EXISTING_USER_ID + "' not found.")
+                        "User with id '" + USERS_NOT_EXISTING_USER_ID + "' not found.")
                 ));
     }
 
@@ -75,9 +75,9 @@ class UserControllerGetUserByIdTest {
     @Test
     void shouldReturnUser() throws Exception {
         when(userService.findUserById(USERS_VALID_USER_ID)).thenReturn(
-                Optional.of(USERS_VALID_ENTITY)
+                Optional.of(USER_VALID_ENTITY)
         );
-        when(userConverter.mapToDto(USERS_VALID_ENTITY)).thenReturn(
+        when(userConverter.mapToDto(USER_VALID_ENTITY)).thenReturn(
                 USERS_VALID_USER_DTO
         );
 

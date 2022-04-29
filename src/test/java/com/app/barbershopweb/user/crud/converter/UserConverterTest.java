@@ -1,20 +1,20 @@
 package com.app.barbershopweb.user.crud.converter;
 
+import com.app.barbershopweb.user.crud.User;
 import com.app.barbershopweb.user.crud.UserConverter;
-import com.app.barbershopweb.user.crud.Users;
 import com.app.barbershopweb.user.crud.UsersDto;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_VALID_USER_DTO;
-import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_VALID_ENTITY;
 import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
-import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USER_USER_VALID_ENTITY_LIST;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_FIELD_AMOUNT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class UsersConverterTest {
+class UserConverterTest {
 
     private final UserConverter userConverter = new UserConverter();
 
@@ -22,8 +22,8 @@ class UsersConverterTest {
     @Test
     void userDtoListToEntityList() {
 
-        List<Users> users = USERS_USER_VALID_DTO_LIST.stream()
-                .map(dto -> new Users(
+        List<User> users = USERS_USER_VALID_DTO_LIST.stream()
+                .map(dto -> new User(
                         dto.id(),
                         dto.firstName(),
                         dto.lastName(),
@@ -44,7 +44,7 @@ class UsersConverterTest {
 
     @Test
     void userEntityListToDtoList() {
-        List<UsersDto> dtos = USERS_USER_VALID_ENTITY_LIST.stream()
+        List<UsersDto> dtos = USER_USER_VALID_ENTITY_LIST.stream()
                 .map(entity -> new UsersDto(
                         entity.getId(),
                         entity.getFirstName(),
@@ -59,7 +59,7 @@ class UsersConverterTest {
         assertEquals(
                 dtos,
                 userConverter.userEntityListToDtoList(
-                        USERS_USER_VALID_ENTITY_LIST
+                        USER_USER_VALID_ENTITY_LIST
                 )
         );
     }
@@ -67,7 +67,7 @@ class UsersConverterTest {
     @Test
     void mapToEntity() {
         assertEquals(
-                USERS_VALID_ENTITY,
+                USER_VALID_ENTITY,
                 userConverter.mapToEntity(USERS_VALID_USER_DTO)
         );
     }
@@ -76,12 +76,12 @@ class UsersConverterTest {
     void mapToDto() {
         assertEquals(
                 USERS_VALID_USER_DTO,
-                userConverter.mapToDto(USERS_VALID_ENTITY)
+                userConverter.mapToDto(USER_VALID_ENTITY)
         );
     }
 
     @Test
     void actualFieldAmount() {
-        assertEquals(Users.class.getDeclaredFields().length, USERS_FIELD_AMOUNT);
+        assertEquals(User.class.getDeclaredFields().length, USERS_FIELD_AMOUNT);
     }
 }

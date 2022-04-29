@@ -1,6 +1,6 @@
 package com.app.barbershopweb.barbershop.closure.repository;
 
-import com.app.barbershopweb.user.crud.Users;
+import com.app.barbershopweb.user.crud.User;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -18,7 +18,7 @@ public class JdbcBarbershopClosureRepository {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    public List<Users> getBarbershopVictimCustomers(Long barbershopId) {
+    public List<User> getBarbershopVictimCustomers(Long barbershopId) {
         String sql =
                 "SELECT users.first_name, users.last_name, users.email " +
                         "FROM users JOIN " +

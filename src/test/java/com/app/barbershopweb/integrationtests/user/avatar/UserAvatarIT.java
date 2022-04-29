@@ -1,7 +1,7 @@
 package com.app.barbershopweb.integrationtests.user.avatar;
 
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
 import io.minio.*;
 import io.minio.messages.Item;
 import org.junit.jupiter.api.AfterEach;
@@ -23,14 +23,14 @@ import java.util.List;
 
 import static com.app.barbershopweb.minio.constants.MinioService_Metadata__TestConstants.MINIO_ALLOWED_MIN_PART_SIZE;
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.*;
-import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_VALID_ENTITY;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserAvatarIT extends AbstractIT {
 
     @Autowired
-    private JdbcUsersRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
     private TestRestTemplate restTemplate;
     @Autowired
@@ -44,7 +44,7 @@ class UserAvatarIT extends AbstractIT {
 
     @BeforeEach
     void addUser() {
-        userRepository.addUser(USERS_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
     }
 
     @AfterEach

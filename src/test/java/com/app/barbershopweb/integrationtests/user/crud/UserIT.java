@@ -2,7 +2,7 @@ package com.app.barbershopweb.integrationtests.user.crud;
 
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.app.barbershopweb.user.crud.UsersDto;
-import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -17,7 +17,7 @@ import java.util.Objects;
 import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_VALID_UPDATED_USER_DTO;
 import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_VALID_USER_DTO;
 import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
-import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USER_USER_VALID_ENTITY_LIST;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserIT extends AbstractIT {
 
     @Autowired
-    private JdbcUsersRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -103,8 +103,8 @@ class UserIT extends AbstractIT {
     @Test
     @Order(5)
     void shouldReturnAllUsers() {
-        userRepository.addUser(USERS_USER_VALID_ENTITY_LIST.get(1));
-        userRepository.addUser(USERS_USER_VALID_ENTITY_LIST.get(2));
+        userRepository.addUser(USER_USER_VALID_ENTITY_LIST.get(1));
+        userRepository.addUser(USER_USER_VALID_ENTITY_LIST.get(2));
 
         ResponseEntity<UsersDto[]> response = restTemplate.getForEntity(USERS_URL, UsersDto[].class);
         List<UsersDto> body = List.of(Objects.requireNonNull(response.getBody()));

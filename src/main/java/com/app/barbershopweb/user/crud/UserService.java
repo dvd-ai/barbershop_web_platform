@@ -16,7 +16,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Long addUser(Users users) {
+    public Long addUser(User users) {
         return userRepository.addUser(users);
     }
 
@@ -24,15 +24,15 @@ public class UserService {
         userRepository.deleteUserById(id);
     }
 
-    public Optional<Users> updateUser(Users users) {
+    public Optional<User> updateUser(User users) {
         return userRepository.updateUser(users);
     }
 
-    public Optional<Users> findUserById(Long id) {
+    public Optional<User> findUserById(Long id) {
         return userRepository.findUserById(id);
     }
 
-    public List<Users> getUsers() {
+    public List<User> getUsers() {
         return userRepository.getUsers();
     }
 

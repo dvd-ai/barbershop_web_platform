@@ -8,7 +8,7 @@ public final class BarbershopDto__TestConstants {
             BarbershopMetadata__TestConstants.BARBERSHOP_VALID_BARBERSHOP_ID, BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY.getAddress(),
             BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY.getName(), BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY.getPhoneNumber(),
             BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY.getEmail(), BarbershopMetadata__TestConstants.BARBERSHOP_TIME_FROM, BarbershopMetadata__TestConstants.BARBERSHOP_TIME_TO,
-            BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY.IsActive()
+            BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY.getActive()
     );
 
     public static final BarbershopDto BARBERSHOP_INVALID_DTO = new BarbershopDto(

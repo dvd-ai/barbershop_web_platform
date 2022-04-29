@@ -11,7 +11,7 @@ public class Barbershop {
     private String email;
     private LocalTime workTimeFrom;
     private LocalTime workTimeTo;
-    private boolean isActive;
+    private boolean active;
 
 
     public Barbershop() {
@@ -20,7 +20,7 @@ public class Barbershop {
     public Barbershop(Long id, String address, String name,
                       String phoneNumber, String email,
                       LocalTime workTimeFrom, LocalTime workTimeTo,
-                      boolean isActive) {
+                      boolean active) {
         this.id = id;
         this.address = address;
         this.name = name;
@@ -28,7 +28,7 @@ public class Barbershop {
         this.email = email;
         this.workTimeFrom = workTimeFrom;
         this.workTimeTo = workTimeTo;
-        this.isActive = isActive;
+        this.active = active;
     }
 
     public Long getId() {
@@ -87,12 +87,12 @@ public class Barbershop {
         this.workTimeTo = workTimeTo;
     }
 
-    public boolean IsActive() {
-        return isActive;
+    public boolean getActive() {
+        return active;
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 
     @Override
@@ -102,7 +102,7 @@ public class Barbershop {
 
         Barbershop that = (Barbershop) o;
 
-        if (isActive != that.isActive) return false;
+        if (active != that.active) return false;
         if (!Objects.equals(id, that.id)) return false;
         if (!Objects.equals(address, that.address)) return false;
         if (!Objects.equals(name, that.name)) return false;
@@ -121,7 +121,7 @@ public class Barbershop {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (workTimeFrom != null ? workTimeFrom.hashCode() : 0);
         result = 31 * result + (workTimeTo != null ? workTimeTo.hashCode() : 0);
-        result = 31 * result + (isActive ? 1 : 0);
+        result = 31 * result + (active ? 1 : 0);
         return result;
     }
 }

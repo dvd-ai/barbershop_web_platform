@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_DTO_LIST;
-import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USERS_USER_VALID_ENTITY_LIST;
+import static com.app.barbershopweb.user.crud.constants.UserList__TestConstants.USER_USER_VALID_ENTITY_LIST;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_FIELD_AMOUNT;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_URL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(UserController.class)
 @DisplayName("Testing GET: " + USERS_URL)
 @ExtendWith(MockitoExtension.class)
-class UserControllerGetUsersTest {
+class UserControllerGetUserTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -65,9 +65,9 @@ class UserControllerGetUsersTest {
     @Test
     void shouldReturnAllUsers() throws Exception {
         when(userService.getUsers()).thenReturn(
-                USERS_USER_VALID_ENTITY_LIST
+                USER_USER_VALID_ENTITY_LIST
         );
-        when(converter.userEntityListToDtoList(USERS_USER_VALID_ENTITY_LIST)).thenReturn(
+        when(converter.userEntityListToDtoList(USER_USER_VALID_ENTITY_LIST)).thenReturn(
                 USERS_USER_VALID_DTO_LIST
         );
 

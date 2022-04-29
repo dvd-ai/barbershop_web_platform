@@ -1,7 +1,7 @@
 package com.app.barbershopweb.database.barbershop.crud;
 
 import com.app.barbershopweb.barbershop.crud.Barbershop;
-import com.app.barbershopweb.barbershop.crud.repository.JdbcBarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.BarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -17,10 +17,10 @@ import static com.app.barbershopweb.barbershop.crud.constants.BarbershopMetadata
 import static com.app.barbershopweb.barbershop.crud.constants.BarbershopMetadata__TestConstants.BARBERSHOP_VALID_BARBERSHOP_ID;
 import static org.junit.jupiter.api.Assertions.*;
 
-class JdbcBarbershopRepositoryTest extends AbstractIT {
+class BarbershopRepositoryTest extends AbstractIT {
 
     @Autowired
-    JdbcBarbershopRepository barbershopRepository;
+    BarbershopRepository barbershopRepository;
 
 
     @Test

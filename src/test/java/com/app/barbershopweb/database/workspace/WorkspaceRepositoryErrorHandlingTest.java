@@ -1,18 +1,18 @@
 package com.app.barbershopweb.database.workspace;
 
-import com.app.barbershopweb.barbershop.crud.repository.JdbcBarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.BarbershopRepository;
 import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
-import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
+import com.app.barbershopweb.workspace.repository.WorkspaceRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.app.barbershopweb.barbershop.crud.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
-import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_VALID_ENTITY;
 import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_ENTITY;
 import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMessage_Fk__TestConstants.WORKSPACE_ERR_FK_BARBERSHOP_ID;
 import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMessage_Fk__TestConstants.WORKSPACE_ERR_FK_USER_ID;
@@ -20,13 +20,13 @@ import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMess
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("jdbc workspace repository error handling tests")
-class JdbcWorkspaceRepositoryErrorHandlingTest extends AbstractIT {
+class WorkspaceRepositoryErrorHandlingTest extends AbstractIT {
     @Autowired
-    JdbcUsersRepository usersRepository;
+    UserRepository usersRepository;
     @Autowired
-    JdbcBarbershopRepository barbershopRepository;
+    BarbershopRepository barbershopRepository;
     @Autowired
-    JdbcWorkspaceRepository workspaceRepository;
+    WorkspaceRepository workspaceRepository;
 
 
     @Test
@@ -56,7 +56,7 @@ class JdbcWorkspaceRepositoryErrorHandlingTest extends AbstractIT {
                     """
     )
     void addWorkspaceUkViolation() {
-        usersRepository.addUser(USERS_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
 
@@ -99,7 +99,7 @@ class JdbcWorkspaceRepositoryErrorHandlingTest extends AbstractIT {
                     """
     )
     void updateWorkspaceUkViolation() {
-        usersRepository.addUser(USERS_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
         barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
         workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
 

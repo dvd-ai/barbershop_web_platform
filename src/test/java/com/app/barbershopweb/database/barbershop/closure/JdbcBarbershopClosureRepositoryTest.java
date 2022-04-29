@@ -1,12 +1,12 @@
 package com.app.barbershopweb.database.barbershop.closure;
 
 import com.app.barbershopweb.barbershop.closure.repository.JdbcBarbershopClosureRepository;
-import com.app.barbershopweb.barbershop.crud.repository.JdbcBarbershopRepository;
+import com.app.barbershopweb.barbershop.crud.repository.BarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.order.crud.repository.JdbcOrderRepository;
-import com.app.barbershopweb.user.crud.Users;
-import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
-import com.app.barbershopweb.workspace.repository.JdbcWorkspaceRepository;
+import com.app.barbershopweb.order.crud.repository.OrderRepository;
+import com.app.barbershopweb.user.crud.User;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
+import com.app.barbershopweb.workspace.repository.WorkspaceRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,13 +23,13 @@ class JdbcBarbershopClosureRepositoryTest extends AbstractIT {
     @Autowired
     JdbcBarbershopClosureRepository barbershopClosureRepository;
     @Autowired
-    JdbcUsersRepository usersRepository;
+    UserRepository usersRepository;
     @Autowired
-    JdbcBarbershopRepository barbershopRepository;
+    BarbershopRepository barbershopRepository;
     @Autowired
-    JdbcOrderRepository orderRepository;
+    OrderRepository orderRepository;
     @Autowired
-    JdbcWorkspaceRepository workspaceRepository;
+    WorkspaceRepository workspaceRepository;
 
     @BeforeEach
     void initFks() {
@@ -49,7 +49,7 @@ class JdbcBarbershopClosureRepositoryTest extends AbstractIT {
 
     @Test
     void getBarbershopVictimCustomers() {
-        List<Users> customers = barbershopClosureRepository.getBarbershopVictimCustomers(
+        List<User> customers = barbershopClosureRepository.getBarbershopVictimCustomers(
                 ORDER_RESERVATION_FK_BARBERSHOP_ENTITY_LIST.get(0).getId()
         );
 

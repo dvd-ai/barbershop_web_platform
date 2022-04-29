@@ -2,7 +2,7 @@ package com.app.barbershopweb.integrationtests.user.avatar;
 
 import com.app.barbershopweb.error.ErrorDto;
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.user.crud.repository.JdbcUsersRepository;
+import com.app.barbershopweb.user.crud.repository.UserRepository;
 import io.minio.MinioClient;
 import io.minio.RemoveObjectArgs;
 import org.junit.jupiter.api.AfterEach;
@@ -24,7 +24,7 @@ import java.util.Objects;
 
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_ErrorMessage__TestConstants.*;
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.*;
-import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_VALID_ENTITY;
 import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.USER_ERR_INVALID_PATH_VAR_USER_ID;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_INVALID_USER_ID;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
@@ -39,7 +39,7 @@ class UserAvatarErrorHandlerIT extends AbstractIT {
     */
 
     @Autowired
-    JdbcUsersRepository usersRepository;
+    UserRepository usersRepository;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -84,7 +84,7 @@ class UserAvatarErrorHandlerIT extends AbstractIT {
     @Test
     @DisplayName("when there's no profile avatar returns 404 & error dto")
     void downloadAvatar__NoAvatar() {
-        usersRepository.addUser(USERS_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
 
         ResponseEntity<ErrorDto> response = restTemplate.getForEntity(
                 USER_AVATARS_URL + "/" + USERS_VALID_USER_ID,
@@ -180,7 +180,7 @@ class UserAvatarErrorHandlerIT extends AbstractIT {
     @Test
     @DisplayName("when image exceeds size limit (AvatarImage validator, not global spring validation), returns 400 & error dto")
     void uploadAvatar__imageSizeLimit() throws Exception {
-        usersRepository.addUser(USERS_VALID_ENTITY);
+        usersRepository.addUser(USER_VALID_ENTITY);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);

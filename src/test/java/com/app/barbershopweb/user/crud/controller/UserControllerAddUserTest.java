@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_VALID_USER_DTO;
-import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USERS_VALID_ENTITY;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_VALID_ENTITY;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_URL;
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_VALID_USER_ID;
 import static org.mockito.Mockito.when;
@@ -51,9 +51,9 @@ class UserControllerAddUserTest {
         );
 
         when(userConverter.mapToEntity(USERS_VALID_USER_DTO)).thenReturn(
-                USERS_VALID_ENTITY
+                USER_VALID_ENTITY
         );
-        when(userService.addUser(USERS_VALID_ENTITY)).thenReturn(
+        when(userService.addUser(USER_VALID_ENTITY)).thenReturn(
                 USERS_VALID_USER_ID
         );
 

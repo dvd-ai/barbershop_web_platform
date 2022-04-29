@@ -2,14 +2,12 @@ package com.app.barbershopweb.integrationtests.barbershop.closure;
 
 import com.app.barbershopweb.barbershop.crud.repository.BarbershopRepository;
 import com.app.barbershopweb.integrationtests.AbstractIT;
+import com.app.barbershopweb.mailservice.pojo.ExpectedMailMetadata;
 import com.app.barbershopweb.order.crud.Order;
 import com.app.barbershopweb.order.crud.repository.OrderRepository;
 import com.app.barbershopweb.user.crud.repository.UserRepository;
 import com.app.barbershopweb.workspace.repository.WorkspaceRepository;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +16,15 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
+import static com.app.barbershopweb.barbershop.crud.constants.BarbershopEntity__TestConstants.BARBERSHOP_VALID_ENTITY;
 import static com.app.barbershopweb.barbershop.crud.constants.BarbershopMetadata__TestConstants.BARBERSHOPS_URL;
 import static com.app.barbershopweb.barbershop.crud.constants.BarbershopMetadata__TestConstants.BARBERSHOP_VALID_BARBERSHOP_ID;
-import static com.app.barbershopweb.integrationtests.barbershop.closure.constants.BarbershopClosure_Fk__TestConstants.BARBERSHOP_CLOSURE_FK_ORDER;
-import static com.app.barbershopweb.mailservice.constants.MailService_Metadata__TestConstants.MAIL_SERVICE_MESSAGES_URL;
-import static com.app.barbershopweb.mailservice.constants.outofbusiness.MailService_Metadata_OutOfBusiness__TestConstants.*;
-import static com.app.barbershopweb.order.reservation.constants.list.fk.OrderReservation_FkEntityList__TestConstants.*;
+import static com.app.barbershopweb.user.crud.constants.UserEntity__TestConstants.USER_VALID_ENTITY;
+import static com.app.barbershopweb.workspace.constants.WorkspaceEntity__TestConstants.WORKSPACE_VALID_ENTITY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class BarbershopClosureIT extends AbstractIT {
     @Autowired
@@ -43,9 +41,16 @@ class BarbershopClosureIT extends AbstractIT {
 
     @BeforeEach
     void init() {
-        ORDER_RESERVATION_FK_USER_ENTITY_LIST.forEach(userRepository::addUser);
-        ORDER_RESERVATION_FK_BARBERSHOP_ENTITY_LIST.forEach(barbershopRepository::addBarbershop);
-        ORDER_RESERVATION_FK_WORKSPACE_ENTITY_LIST.forEach(workspaceRepository::addWorkspace);
+        Order order = new Order(1L, 1L, 1L, 2L,
+                LocalDateTime.of(2011, 10, 1, 10, 0),
+                true
+        );
+
+        userRepository.addUser(USER_VALID_ENTITY);
+        userRepository.addUser(USER_VALID_ENTITY);
+        barbershopRepository.addBarbershop(BARBERSHOP_VALID_ENTITY);
+        workspaceRepository.addWorkspace(WORKSPACE_VALID_ENTITY);
+        orderRepository.addOrder(order);
     }
 
     @AfterEach
@@ -54,15 +59,11 @@ class BarbershopClosureIT extends AbstractIT {
         barbershopRepository.truncateAndRestartSequence();
         workspaceRepository.truncateAndRestartSequence();
         orderRepository.truncateAndRestartSequence();
-
-        String url = mailHogContainer.getWebInterfaceUrl() + MAIL_SERVICE_MESSAGES_URL;
-        testRestTemplate.delete(url, Object.class);
+        mailHogContainer.deleteAllMailHogMessages(testRestTemplate);
     }
 
     @Test
     void deactivatesBarbershop() {
-        orderRepository.addOrder(BARBERSHOP_CLOSURE_FK_ORDER);
-
         ResponseEntity<Object> response =
                 testRestTemplate.exchange(
                         BARBERSHOPS_URL + "/" + BARBERSHOP_VALID_BARBERSHOP_ID, HttpMethod.DELETE,
@@ -71,48 +72,20 @@ class BarbershopClosureIT extends AbstractIT {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        checkActiveBarbershops();
-        checkActiveWorkspaces();
-        checkActiveOrders();
-        checkMailInbox();
-    }
+        assertFalse(barbershopRepository.getBarbershops().get(0).getActive());
+        assertFalse(workspaceRepository.getWorkspaces().get(0).getActive());
+        assertFalse(orderRepository.getOrders().get(0).getActive());
 
-    private void checkActiveBarbershops() {
-        assertEquals(1,
-                barbershopRepository.getBarbershops()
-                        .stream().filter(e -> !e.IsActive())
-                        .toList()
-                        .size()
+        mailHogContainer.checkMailInbox(
+                testRestTemplate,
+                new ExpectedMailMetadata(
+                        "no-reply@gmail.com",
+                        USER_VALID_ENTITY.getEmail(),
+                        "Your appointments canceled because barbershop is out of business",
+                        "Dear " + USER_VALID_ENTITY.getFirstName() +
+                                " " + USER_VALID_ENTITY.getLastName() +
+                                ", your ..."
+                )
         );
-    }
-
-    private void checkActiveWorkspaces() {
-        assertEquals(2,
-                workspaceRepository.getWorkspaces()
-                        .stream().filter(e -> !e.getActive())
-                        .toList()
-                        .size()
-        );
-    }
-
-    private void checkActiveOrders() {
-        orderRepository.getOrders()
-                .stream()
-                .map(Order::getActive)
-                .forEach(Assertions::assertFalse);
-    }
-
-    private void checkMailInbox() {
-        String url = mailHogContainer.getWebInterfaceUrl() + MAIL_SERVICE_MESSAGES_URL;
-        String json = testRestTemplate.getForObject(url, String.class);
-
-        DocumentContext context = JsonPath.parse(json);
-        List<Object> object = context.read("$");
-
-        assertEquals(1, object.size());
-        assertEquals(MAIL_OUT_OF_BUSINESS_EMAIL_FROM, context.read("$.[0].Content.Headers.From[0]"));
-        assertEquals(ORDER_RESERVATION_FK_USER_ENTITY_LIST.get(0).getEmail(), context.read("$.[0].Content.Headers.To[0]"));
-        assertEquals(MAIL_OUT_OF_BUSINESS_SUBJECT, context.read("$.[0].Content.Headers.Subject[0]"));
-        assertEquals(MAIL_OUT_OF_BUSINESS_EMAIL_TO, context.read("$.[0].Content.Body"));
     }
 }

@@ -36,19 +36,19 @@ public final class BarbershopList__TestConstants {
                     BARBERSHOP_VALID_BARBERSHOP_ID, BARBERSHOP_VALID_ENTITY_LIST.get(0).getAddress(),
                     BARBERSHOP_VALID_ENTITY_LIST.get(0).getName(), BARBERSHOP_VALID_ENTITY_LIST.get(0).getPhoneNumber(),
                     BARBERSHOP_VALID_ENTITY_LIST.get(0).getEmail(), BARBERSHOP_TIME_FROM, BARBERSHOP_TIME_TO,
-                    BARBERSHOP_VALID_ENTITY_LIST.get(0).IsActive()
+                    BARBERSHOP_VALID_ENTITY_LIST.get(0).getActive()
             ),
             new BarbershopDto(
                     BARBERSHOP_VALID_BARBERSHOP_ID + 1, BARBERSHOP_VALID_ENTITY_LIST.get(1).getAddress(),
                     BARBERSHOP_VALID_ENTITY_LIST.get(1).getName(), BARBERSHOP_VALID_ENTITY_LIST.get(1).getPhoneNumber(),
                     BARBERSHOP_VALID_ENTITY_LIST.get(1).getEmail(), BARBERSHOP_TIME_FROM, BARBERSHOP_TIME_TO,
-                    BARBERSHOP_VALID_ENTITY_LIST.get(1).IsActive()
+                    BARBERSHOP_VALID_ENTITY_LIST.get(1).getActive()
             ),
             new BarbershopDto(
                     BARBERSHOP_VALID_BARBERSHOP_ID + 2, BARBERSHOP_VALID_ENTITY_LIST.get(2).getAddress(),
                     BARBERSHOP_VALID_ENTITY_LIST.get(2).getName(), BARBERSHOP_VALID_ENTITY_LIST.get(2).getPhoneNumber(),
                     BARBERSHOP_VALID_ENTITY_LIST.get(2).getEmail(), BARBERSHOP_TIME_FROM, BARBERSHOP_TIME_TO,
-                    BARBERSHOP_VALID_ENTITY_LIST.get(2).IsActive()
+                    BARBERSHOP_VALID_ENTITY_LIST.get(2).getActive()
             )
     );
 
