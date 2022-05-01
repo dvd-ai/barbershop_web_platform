@@ -2,7 +2,7 @@ package com.app.barbershopweb.integrationtests.user.crud;
 
 import com.app.barbershopweb.error.ErrorDto;
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.user.crud.UsersDto;
+import com.app.barbershopweb.user.crud.UserDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +80,7 @@ class UserErrorHandlerIT extends AbstractIT {
             "returns status code 400 & error dto")
     @Test
     void whenUserDtoNotValidPut() {
-        HttpEntity<UsersDto> requestEntity = new HttpEntity<>(USERS_INVALID_USER_DTO);
+        HttpEntity<UserDto> requestEntity = new HttpEntity<>(USERS_INVALID_USER_DTO);
         ResponseEntity<ErrorDto> response = restTemplate.exchange(USERS_URL, HttpMethod.PUT, requestEntity, ErrorDto.class);
         ErrorDto body = response.getBody();
 
@@ -98,7 +98,7 @@ class UserErrorHandlerIT extends AbstractIT {
             " when entity with 'id' in userDto doesn't exist " +
             "returns status code 404 and error dto")
     void whenNotFoundUserId() {
-        HttpEntity<UsersDto> requestEntity = new HttpEntity<>(USERS_USER_DTO_NOT_EXISTED_ID);
+        HttpEntity<UserDto> requestEntity = new HttpEntity<>(USERS_USER_DTO_NOT_EXISTED_ID);
         ResponseEntity<ErrorDto> response = restTemplate.exchange(USERS_URL, HttpMethod.PUT, requestEntity, ErrorDto.class);
         ErrorDto body = response.getBody();
 

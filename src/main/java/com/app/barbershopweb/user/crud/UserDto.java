@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-public record UsersDto(
+public record UserDto(
         @Min(1)
         Long id,
         @NotBlank

@@ -2,7 +2,7 @@ package com.app.barbershopweb.user.crud.converter;
 
 import com.app.barbershopweb.user.crud.User;
 import com.app.barbershopweb.user.crud.UserConverter;
-import com.app.barbershopweb.user.crud.UsersDto;
+import com.app.barbershopweb.user.crud.UserDto;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -44,8 +44,8 @@ class UserConverterTest {
 
     @Test
     void userEntityListToDtoList() {
-        List<UsersDto> dtos = USER_USER_VALID_ENTITY_LIST.stream()
-                .map(entity -> new UsersDto(
+        List<UserDto> dtos = USER_USER_VALID_ENTITY_LIST.stream()
+                .map(entity -> new UserDto(
                         entity.getId(),
                         entity.getFirstName(),
                         entity.getLastName(),

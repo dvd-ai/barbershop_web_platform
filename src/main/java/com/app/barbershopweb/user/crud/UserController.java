@@ -24,14 +24,14 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UsersDto>> getUsers() {
+    public ResponseEntity<List<UserDto>> getUsers() {
         return new ResponseEntity<>(
                 userConverter.userEntityListToDtoList(userService.getUsers()), HttpStatus.OK
         );
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UsersDto> findUserById(@PathVariable @Min(1) Long userId) {
+    public ResponseEntity<UserDto> findUserById(@PathVariable @Min(1) Long userId) {
         User user = userService.findUserById(userId)
                 .orElseThrow(() ->
                         new NotFoundException(
@@ -43,13 +43,13 @@ public class UserController {
 
     @PostMapping
     //id is obligation due to @Valid
-    public ResponseEntity<Long> addUser(@RequestBody @Valid UsersDto userDto) {
+    public ResponseEntity<Long> addUser(@RequestBody @Valid UserDto userDto) {
         User entity = userConverter.mapToEntity(userDto);
         return new ResponseEntity<>(userService.addUser(entity), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<UsersDto> updateUser(@RequestBody @Valid UsersDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserDto userDto) {
         User entity = userService.updateUser(userConverter.mapToEntity(userDto))
                 .orElseThrow(() ->
                         new NotFoundException(

@@ -1,7 +1,7 @@
 package com.app.barbershopweb.integrationtests.user.crud;
 
 import com.app.barbershopweb.integrationtests.AbstractIT;
-import com.app.barbershopweb.user.crud.UsersDto;
+import com.app.barbershopweb.user.crud.UserDto;
 import com.app.barbershopweb.user.crud.repository.UserRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ class UserIT extends AbstractIT {
     @Order(1)
     void shouldReturnEmptyUserList() {
 
-        ResponseEntity<UsersDto[]> response = restTemplate.getForEntity(USERS_URL, UsersDto[].class);
+        ResponseEntity<UserDto[]> response = restTemplate.getForEntity(USERS_URL, UserDto[].class);
 
         assertEquals(0, Objects.requireNonNull(response.getBody()).length);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -63,10 +63,10 @@ class UserIT extends AbstractIT {
     @Test
     @Order(3)
     void shouldReturnUser() {
-        ResponseEntity<UsersDto> response = restTemplate.getForEntity(
-                USERS_URL + "/" + USERS_VALID_USER_ID, UsersDto.class
+        ResponseEntity<UserDto> response = restTemplate.getForEntity(
+                USERS_URL + "/" + USERS_VALID_USER_ID, UserDto.class
         );
-        UsersDto body = response.getBody();
+        UserDto body = response.getBody();
         assertEquals(USERS_VALID_USER_ID, Objects.requireNonNull(body).id());
         assertEquals(USERS_VALID_USER_DTO.firstName(), Objects.requireNonNull(body).firstName());
         assertEquals(USERS_VALID_USER_DTO.lastName(), Objects.requireNonNull(body).lastName());
@@ -75,7 +75,7 @@ class UserIT extends AbstractIT {
         assertEquals(USERS_VALID_USER_DTO.role(), Objects.requireNonNull(body).role());
         assertEquals(USERS_VALID_USER_DTO.registrationDate(), Objects.requireNonNull(body).registrationDate());
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(USERS_FIELD_AMOUNT, UsersDto.class.getDeclaredFields().length);
+        assertEquals(USERS_FIELD_AMOUNT, UserDto.class.getDeclaredFields().length);
     }
 
     @Test
@@ -83,9 +83,9 @@ class UserIT extends AbstractIT {
             " should return updated user (dto)")
     @Order(4)
     void shouldReturnUpdatedUser() {
-        HttpEntity<UsersDto> entity = new HttpEntity<>(USERS_VALID_UPDATED_USER_DTO);
-        ResponseEntity<UsersDto> response = restTemplate.exchange(USERS_URL, HttpMethod.PUT, entity, UsersDto.class);
-        UsersDto body = response.getBody();
+        HttpEntity<UserDto> entity = new HttpEntity<>(USERS_VALID_UPDATED_USER_DTO);
+        ResponseEntity<UserDto> response = restTemplate.exchange(USERS_URL, HttpMethod.PUT, entity, UserDto.class);
+        UserDto body = response.getBody();
 
         assertEquals(USERS_VALID_UPDATED_USER_DTO.id(), Objects.requireNonNull(body).id());
         assertEquals(USERS_VALID_UPDATED_USER_DTO.firstName(), Objects.requireNonNull(body).firstName());
@@ -94,7 +94,7 @@ class UserIT extends AbstractIT {
         assertEquals(USERS_VALID_UPDATED_USER_DTO.email(), Objects.requireNonNull(body).email());
         assertEquals(USERS_VALID_UPDATED_USER_DTO.role(), Objects.requireNonNull(body).role());
         assertEquals(USERS_VALID_UPDATED_USER_DTO.registrationDate(), Objects.requireNonNull(body).registrationDate());
-        assertEquals(USERS_FIELD_AMOUNT, UsersDto.class.getDeclaredFields().length);
+        assertEquals(USERS_FIELD_AMOUNT, UserDto.class.getDeclaredFields().length);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -106,8 +106,8 @@ class UserIT extends AbstractIT {
         userRepository.addUser(USER_USER_VALID_ENTITY_LIST.get(1));
         userRepository.addUser(USER_USER_VALID_ENTITY_LIST.get(2));
 
-        ResponseEntity<UsersDto[]> response = restTemplate.getForEntity(USERS_URL, UsersDto[].class);
-        List<UsersDto> body = List.of(Objects.requireNonNull(response.getBody()));
+        ResponseEntity<UserDto[]> response = restTemplate.getForEntity(USERS_URL, UserDto[].class);
+        List<UserDto> body = List.of(Objects.requireNonNull(response.getBody()));
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(USERS_USER_VALID_DTO_LIST.size(), body.size());
