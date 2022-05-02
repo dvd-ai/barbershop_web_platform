@@ -9,6 +9,16 @@ VALUES ('denis', 'ivaylo', '+38092334455', 'denis@gmail.com', 'barber', '2021-03
        ('Bob', 'Thompson', '+1341177117', 'bob@gmail.com', 'user', '2010-08-20T17:00:01')
 ;
 
+INSERT INTO user_credentials(user_id, username, password, enabled)
+VALUES (1, 'divaylo', '$2a$12$DK9huzm6rDGtn1A83.uvvOV1GIWWfqJxlmmC5l/AOlRkW6u/2hLFy', true),
+       (2, 'kbishop', '$2a$12$VmAPVrCsrWgCTVwF.oN8fezyi2R5zXwFU5V6bjzY./mU0HhR.UUa2', true),
+       (3, 'todinson', '$2a$12$.Jj.71Zm.NKVX6Aj9Brpk.0/YZ8c3a0r9kvN4PFKvawozs6ML1lyG', true),
+       (4, 'lodinson', '$2a$12$h2EXBpf4N0AAL5uoyU48OeUjQL7//mRQrC1c63qGe8BeDeYW22dLO', true),
+       (5, 'gtree', '$2a$12$RIBs.wZikWcpuZTRAk73/eCCD5cmMqYC1EvOWk986tbo37ej0r5aC', true),
+       (6, 'fgirl', '$2a$12$qGf/FaWTc5U5Id6oHF5L1Ou8Z1rJqqd/8imzA7U9YeG1A8wRxX8M.', true),
+       (7, 'bthompson', '$2a$12$WqKEWd3VkKTPOZpqONP6uOyiQDF7Oyv7NN6Z9wsQQxqe5zwM9fa/a', true)
+;
+
 INSERT INTO barbershop(address, name, phone_number,
                        email, work_time_from, work_time_to, is_active)
 VALUES ('Tymoshenka street 9', 'at Tymoshenka', '+380950110000', 'tymoshenka@barbeshop.com', '08:00:00', '19:00:00',
