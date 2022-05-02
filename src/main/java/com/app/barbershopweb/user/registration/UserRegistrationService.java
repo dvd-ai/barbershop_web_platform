@@ -8,6 +8,8 @@ import com.app.barbershopweb.user.crud.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserRegistrationService {
 
@@ -20,6 +22,14 @@ public class UserRegistrationService {
     }
 
     public Long register(UserRegistrationDto userRegistrationDto) {
+        if (userCredentialsRepository.credentialsExistByUsername(userRegistrationDto.username()))
+            throw new DbUniqueConstraintsViolationException(
+                    List.of(
+                            "uk violation: user credentials with username " + userRegistrationDto.username() +
+                                    " already exist"
+                    )
+            );
+
         Long userId = setAndAddUser(userRegistrationDto);
         return setAndAddUserCredentials(userId, userRegistrationDto);
     }
@@ -43,11 +53,6 @@ public class UserRegistrationService {
         userCredentials.setPassword(new BCryptPasswordEncoder().encode(userRegistrationDto.password()));
         userCredentials.setEnabled(true);
 
-        try {
-            return userCredentialsRepository.addUserCredentials(userCredentials);
-        } catch (DbUniqueConstraintsViolationException e) {
-            userRepository.deleteUserById(userId);
-            throw new DbUniqueConstraintsViolationException(e.getMessages());
-        }
+        return userCredentialsRepository.addUserCredentials(userCredentials);
     }
 }

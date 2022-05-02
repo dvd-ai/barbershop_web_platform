@@ -6,9 +6,9 @@ public class UserCredentialsErrorMessage_Uk__TestConstants {
 
     public static final String USER_CREDENTIALS_ERR_UK_USERNAME =
             "uk violation: user credentials with username " + USER_CREDENTIALS_VALID_ENTITY.getUsername()
-                    + " already exists";
+                    + " already exist";
 
     public static final String USER_CREDENTIALS_ERR_UK_USER_ID =
             "uk violation: user credentials with userId " + USER_CREDENTIALS_VALID_ENTITY.getUserId()
-                    + " already exists";
+                    + " already exist";
 }
