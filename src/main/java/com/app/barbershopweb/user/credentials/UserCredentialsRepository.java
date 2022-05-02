@@ -84,14 +84,14 @@ public class UserCredentialsRepository {
     private void checkUk(String username, Long userId) {
         List<String> messages = new ArrayList<>();
         String ukViolation = "uk violation: user credentials with ";
-        String exists = " already exists";
+        String exist = " already exist";
 
         if (credentialsExistByUsername(username)) {
-            messages.add(ukViolation + "username " + username + exists);
+            messages.add(ukViolation + "username " + username + exist);
         }
 
         if (credentialsExistByUserId(userId)) {
-            messages.add(ukViolation + "userId " + userId + exists);
+            messages.add(ukViolation + "userId " + userId + exist);
         }
 
         if (!messages.isEmpty()) {
