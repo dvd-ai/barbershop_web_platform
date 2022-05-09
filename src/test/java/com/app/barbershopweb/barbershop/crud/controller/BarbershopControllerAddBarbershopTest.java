@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.barbershop.crud.constants.BarbershopDto__TestConstants.BARBERSHOP_VALID_DTO;
@@ -43,9 +45,26 @@ class BarbershopControllerAddBarbershopTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @WithMockUser(roles = {"USER", "BARBER"})
+    @Test
+    void whenNotAdmin() throws Exception {
+        String json = objectMapper.writeValueAsString(
+                BARBERSHOP_VALID_DTO
+        );
+
+        mockMvc
+                .perform(post(BARBERSHOPS_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isForbidden())
+        ;
+    }
+
 
     @DisplayName("after saving barbershop entity returns its id and status code 201")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldAddBarbershop() throws Exception {
         String json = objectMapper.writeValueAsString(
                 BARBERSHOP_VALID_DTO

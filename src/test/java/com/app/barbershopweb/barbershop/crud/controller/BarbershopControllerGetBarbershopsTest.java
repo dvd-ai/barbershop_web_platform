@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.format.DateTimeFormatter;
@@ -49,6 +50,7 @@ class BarbershopControllerGetBarbershopsTest {
 
     @DisplayName("gives empty Barbershop List when they're no added barbershops yet")
     @Test
+    @WithMockUser
     void shouldReturnEmptyBarbershopList() throws Exception {
 
         when(barbershopService.getBarbershops()).thenReturn(Collections.emptyList());
@@ -63,6 +65,7 @@ class BarbershopControllerGetBarbershopsTest {
 
     @DisplayName("gives all barbershops at once")
     @Test
+    @WithMockUser
     void shouldReturnAllBarbershops() throws Exception {
         when(barbershopService.getBarbershops()).thenReturn(
                 BarbershopList__TestConstants.BARBERSHOP_VALID_ENTITY_LIST

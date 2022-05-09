@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.format.DateTimeFormatter;
@@ -46,6 +47,7 @@ class BarbershopControllerGetBarbershopByIdTest {
     @DisplayName("When path variable input 'barbershopId' isn't valid" +
             " returns status code 400 (BAD_REQUEST) & error dto")
     @Test
+    @WithMockUser
     void whenBarbershopIdNotValid() throws Exception {
         mockMvc
                 .perform(get(BARBERSHOPS_URL + "/" + BARBERSHOP_INVALID_BARBERSHOP_ID))
@@ -60,6 +62,7 @@ class BarbershopControllerGetBarbershopByIdTest {
     @DisplayName("when there's no barbershop with id 'barbershopId' " +
             "returns status code 404 & error dto")
     @Test
+    @WithMockUser
     void whenNotExistedBarbershopId() throws Exception {
         mockMvc
                 .perform(get(BARBERSHOPS_URL + "/" + BARBERSHOP_NOT_EXISTED_BARBERSHOP_ID))
@@ -75,6 +78,7 @@ class BarbershopControllerGetBarbershopByIdTest {
 
     @DisplayName("returns corresponding barbershop dto")
     @Test
+    @WithMockUser
     void shouldReturnBarbershop() throws Exception {
         when(barbershopService.findBarbershopById(BARBERSHOP_VALID_BARBERSHOP_ID)).thenReturn(
                 Optional.of(BARBERSHOP_VALID_ENTITY)

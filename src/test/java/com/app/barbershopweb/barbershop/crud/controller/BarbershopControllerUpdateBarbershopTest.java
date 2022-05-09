@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.format.DateTimeFormatter;
@@ -52,6 +53,7 @@ class BarbershopControllerUpdateBarbershopTest {
     @Test
     @DisplayName("when entity with 'id' in barbershopDto doesn't exist " +
             "returns status code 404 and error dto")
+    @WithMockUser
     void whenNotFoundBarbershopId() throws Exception {
         String json = objectMapper.writeValueAsString(
                 BARBERSHOP_NOT_EXISTED_ID_DTO
@@ -78,6 +80,7 @@ class BarbershopControllerUpdateBarbershopTest {
 
     @Test
     @DisplayName("should return updated barbershop (dto)")
+    @WithMockUser
     void shouldReturnUpdatedBarbershop() throws Exception {
         String json = objectMapper.writeValueAsString(
                 BARBERSHOP_VALID_DTO

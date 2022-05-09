@@ -32,6 +32,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.POST, "/users").permitAll()
                 .mvcMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
                 .mvcMatchers(HttpMethod.DELETE, "/barbershops/**").hasRole("ADMIN")
+                .mvcMatchers(HttpMethod.POST, "/barbershops").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and().formLogin();
     }
