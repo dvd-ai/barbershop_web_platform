@@ -5,6 +5,7 @@ import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.order.crud.OrderController;
 import com.app.barbershopweb.order.crud.OrderConverter;
 import com.app.barbershopweb.order.crud.OrderService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -52,10 +54,25 @@ class OrderControllerAddOrderTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Test
+    @WithMockUser(roles = "USER")
+    void whenNotBarberOrAdmin() throws Exception {
+        String json = objectMapper.writeValueAsString(
+                ORDER_VALID_DTO
+        );
+
+        mockMvc
+                .perform(post(ORDERS_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isForbidden())
+        ;
+    }
 
     @DisplayName("when order dto violates db fk constraints " +
             "returns status code 404 & error dto")
     @Test
+    @WithMockUser(roles = {"BARBER", "ADMIN"})
     void whenOrderDtoViolatesDbFkConstraints() throws Exception {
         String json = objectMapper.writeValueAsString(
                 ORDER_VALID_DTO
@@ -87,6 +104,7 @@ class OrderControllerAddOrderTest {
     @DisplayName("when order dto violates db uk constraints " +
             "returns status code 400 & error dto")
     @Test
+    @WithMockUser(roles = {"BARBER", "ADMIN"})
     void whenOrderDtoViolatesDbUkConstraints() throws Exception {
         String json = objectMapper.writeValueAsString(
                 ORDER_VALID_DTO
@@ -118,6 +136,7 @@ class OrderControllerAddOrderTest {
     @DisplayName("when order dto violates business data format " +
             "returns status code 400 & error dto")
     @Test
+    @WithMockUser(roles = {"BARBER", "ADMIN"})
     void whenOrderDtoViolatesBusinessDataFormat() throws Exception {
         String json = objectMapper.writeValueAsString(
                 ORDER_VALID_DTO
@@ -151,6 +170,7 @@ class OrderControllerAddOrderTest {
 
     @DisplayName("after saving order entity returns its id and status code 201")
     @Test
+    @WithMockUser(roles = {"BARBER", "ADMIN"})
     void shouldAddOrder() throws Exception {
         String json = objectMapper.writeValueAsString(
                 ORDER_VALID_DTO

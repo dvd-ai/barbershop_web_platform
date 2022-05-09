@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.*;
@@ -40,9 +41,19 @@ class OrderControllerDeleteTest {
     OrderConverter orderConverter;
 
 
+    @WithMockUser(roles = "USER")
+    @Test
+    void whenNotAdminOrBarber() throws Exception {
+        mockMvc
+                .perform(delete(ORDERS_URL + "/" + ORDER_VALID_ORDER_ID))
+                .andExpect(status().isForbidden())
+        ;
+    }
+
     @DisplayName("When path variable input 'orderId' isn't valid" +
             " returns status code 400 (BAD_REQUEST) & error dto")
     @Test
+    @WithMockUser(roles = {"ADMIN", "BARBER"})
     void whenOrderIdNotValid() throws Exception {
 
         mockMvc
@@ -58,6 +69,7 @@ class OrderControllerDeleteTest {
     @DisplayName("returns empty body, status code 200, " +
             "when: order with existing / not existing id was deleted")
     @Test
+    @WithMockUser(roles = {"ADMIN", "BARBER"})
     void shouldDeleteOrderById() throws Exception {
 
 

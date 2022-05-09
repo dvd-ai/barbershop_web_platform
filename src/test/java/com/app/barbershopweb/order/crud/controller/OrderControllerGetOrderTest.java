@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.format.DateTimeFormatter;
@@ -47,6 +48,7 @@ class OrderControllerGetOrderTest {
     @DisplayName("When path variable input 'orderId' isn't valid" +
             " returns status code 400 (BAD_REQUEST) & error dto")
     @Test
+    @WithMockUser
     void whenOrderIdNotValid() throws Exception {
         mockMvc
                 .perform(get(ORDERS_URL + "/" + ORDER_INVALID_ORDER_ID))
@@ -61,6 +63,7 @@ class OrderControllerGetOrderTest {
     @DisplayName("when there's no order with id 'orderId' " +
             "returns status code 404 & error dto")
     @Test
+    @WithMockUser
     void whenNotExistedOrderId() throws Exception {
         mockMvc
                 .perform(get(ORDERS_URL + "/" + ORDER_NOT_EXISTING_ORDER_ID))
@@ -76,6 +79,7 @@ class OrderControllerGetOrderTest {
 
     @DisplayName("returns corresponding order dto")
     @Test
+    @WithMockUser
     void shouldReturnOrder() throws Exception {
         when(orderService.findOrder(ORDER_VALID_ORDER_ID)).thenReturn(
                 Optional.of(ORDER_VALID_ENTITY)

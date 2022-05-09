@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
@@ -43,9 +44,20 @@ class OrderControllerGetOrdersTest {
     @MockBean
     OrderConverter converter;
 
+    @Test
+    @WithMockUser(roles = {"BARBER", "USER"})
+    void whenNotAdmin() throws Exception {
+        mockMvc.
+                perform(get(ORDERS_URL)).
+                andDo(print()).
+                andExpect(status().isForbidden())
+        ;
+    }
+
 
     @DisplayName("gives empty Order List when they're no added orders yet")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnEmptyOrderList() throws Exception {
 
         when(orderService.getOrders()).thenReturn(Collections.emptyList());
@@ -60,6 +72,7 @@ class OrderControllerGetOrdersTest {
 
     @DisplayName("gives all orders at once")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAllOrders() throws Exception {
         when(orderService.getOrders()).thenReturn(
                 ORDER_VALID_ENTITY_LIST
