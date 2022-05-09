@@ -55,7 +55,5 @@ class UserRegistrationDtoTest {
                 .andExpect(jsonPath("$.errors", hasItem(USER_REGISTRATION_INVALID_DTO_PASSWORD)))
                 .andExpect(jsonPath("$.errors", hasItem(USER_REGISTRATION_INVALID_DTO_REGISTRATION_DATE)))
         ;
-
-        //should fill constants with output... from failed test
     }
 }
