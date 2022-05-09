@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.format.DateTimeFormatter;
@@ -51,6 +52,7 @@ class UserControllerUpdateUserTest {
     @Test
     @DisplayName("when entity with 'id' in userDto doesn't exist " +
             "returns status code 404 and error dto")
+    @WithMockUser
     void whenNotFoundUserId() throws Exception {
         String json = objectMapper.writeValueAsString(
                 USERS_USER_DTO_NOT_EXISTED_ID
@@ -77,6 +79,7 @@ class UserControllerUpdateUserTest {
 
     @Test
     @DisplayName("should return updated user (dto)")
+    @WithMockUser
     void shouldReturnUpdatedUser() throws Exception {
         String json = objectMapper.writeValueAsString(
                 USERS_VALID_USER_DTO

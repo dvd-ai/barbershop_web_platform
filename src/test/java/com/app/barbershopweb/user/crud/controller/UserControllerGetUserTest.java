@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.format.DateTimeFormatter;
@@ -51,6 +52,7 @@ class UserControllerGetUserTest {
 
     @DisplayName("gives empty User List when they're no added users yet")
     @Test
+    @WithMockUser
     void shouldReturnEmptyUserList() throws Exception {
 
         when(userService.getUsers()).thenReturn(Collections.emptyList());
@@ -65,6 +67,7 @@ class UserControllerGetUserTest {
 
     @DisplayName("gives all users at once")
     @Test
+    @WithMockUser
     void shouldReturnAllUsers() throws Exception {
         when(userService.getUsers()).thenReturn(
                 USER_USER_VALID_ENTITY_LIST

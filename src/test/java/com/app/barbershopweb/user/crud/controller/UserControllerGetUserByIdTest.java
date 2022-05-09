@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.format.DateTimeFormatter;
@@ -46,6 +47,7 @@ class UserControllerGetUserByIdTest {
     @DisplayName("When path variable input 'userId' isn't valid" +
             " returns status code 400 (BAD_REQUEST) & error dto")
     @Test
+    @WithMockUser
     void whenUserIdNotValid() throws Exception {
         mockMvc
                 .perform(get(USERS_URL + "/" + USERS_INVALID_USER_ID))
@@ -60,6 +62,7 @@ class UserControllerGetUserByIdTest {
     @DisplayName("when there's no user with id 'userId' " +
             "returns status code 404 & error dto")
     @Test
+    @WithMockUser
     void whenNotExistedUserId() throws Exception {
         mockMvc
                 .perform(get(USERS_URL + "/" + USERS_NOT_EXISTING_USER_ID))
@@ -75,6 +78,7 @@ class UserControllerGetUserByIdTest {
 
     @DisplayName("returns corresponding user dto")
     @Test
+    @WithMockUser
     void shouldReturnUser() throws Exception {
         when(userService.findUserById(USERS_VALID_USER_ID)).thenReturn(
                 Optional.of(USER_VALID_ENTITY)

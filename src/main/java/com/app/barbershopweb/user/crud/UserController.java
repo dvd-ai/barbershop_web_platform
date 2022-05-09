@@ -41,13 +41,6 @@ public class UserController {
         return new ResponseEntity<>(userConverter.mapToDto(user), HttpStatus.OK);
     }
 
-//    @PostMapping
-//    //id is obligation due to @Valid
-//    public ResponseEntity<Long> addUser(@RequestBody @Valid UserDto userDto) {
-//        User entity = userConverter.mapToEntity(userDto);
-//        return new ResponseEntity<>(userService.addUser(entity), HttpStatus.CREATED);
-//    }
-
     @PutMapping
     public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserDto userDto) {
         User entity = userService.updateUser(userConverter.mapToEntity(userDto))

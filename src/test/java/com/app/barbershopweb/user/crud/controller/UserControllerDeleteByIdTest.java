@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.USER_ERR_INVALID_PATH_VAR_USER_ID;
@@ -33,10 +34,19 @@ class UserControllerDeleteByIdTest {
     @MockBean
     UserConverter userConverter;
 
+    @WithMockUser(roles = {"BARBER", "USER"})
+    @Test
+    void whenNotAdmin() throws Exception {
+        mockMvc
+                .perform(delete(USERS_URL + "/" + USERS_INVALID_USER_ID))
+                .andExpect(status().isForbidden())
+        ;
+    }
 
     @DisplayName("When path variable input 'userId' isn't valid" +
             " returns status code 400 (BAD_REQUEST) & error dto")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void whenUserIdNotValid() throws Exception {
 
 
@@ -53,6 +63,7 @@ class UserControllerDeleteByIdTest {
     @DisplayName("returns empty body, status code 200, " +
             "when: user with existing / not existing id was deleted")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDeleteUserById() throws Exception {
         mockMvc
                 .perform(delete(USERS_URL + "/" + USERS_VALID_USER_ID))
