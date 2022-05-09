@@ -1,19 +1,21 @@
 package com.app.barbershopweb.user.registration;
 
 import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
+import com.app.barbershopweb.exception.NotFoundException;
+import com.app.barbershopweb.integrationtests.AbstractIT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.test.web.servlet.MockMvc;
-
-import javax.sql.DataSource;
 
 import java.util.List;
 
+import static com.app.barbershopweb.security.TestCredentialsRepository.PASSWORD;
+import static com.app.barbershopweb.security.TestCredentialsRepository.USER_USERNAME;
 import static com.app.barbershopweb.user.credentials.UserCredentials_Entities__TestConstants.USER_CREDENTIALS_VALID_ENTITY;
 import static com.app.barbershopweb.user.credentials.error.UserCredentialsErrorMessage_Fk__TestConstants.USER_CREDENTIALS_ERR_FK_USER_ID;
 import static com.app.barbershopweb.user.credentials.error.UserCredentialsErrorMessage_Uk__TestConstants.USER_CREDENTIALS_ERR_UK_USERNAME;
@@ -28,13 +30,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(UserRegistrationController.class)
+@MockBean(AuthenticationProvider.class)
 class UserRegistrationControllerTest {
 
     @MockBean
     UserRegistrationService userRegistrationService;
-
-    @MockBean
-    DataSource dataSource;
 
     @Autowired
     MockMvc mockMvc;
@@ -42,8 +42,8 @@ class UserRegistrationControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+
     @Test
-    @WithMockUser
     void register() throws Exception {
         String json = objectMapper.writeValueAsString(
                 USER_REGISTRATION_VALID_DTO
@@ -62,7 +62,7 @@ class UserRegistrationControllerTest {
     }
 
     @Test
-    void register_ukUserId() throws Exception {
+    void register_err_ukUserId() throws Exception {
         String json = objectMapper.writeValueAsString(
                 USER_REGISTRATION_VALID_DTO
         );
@@ -83,13 +83,13 @@ class UserRegistrationControllerTest {
     }
 
     @Test
-    void register_fkUserId() throws Exception {
+    void register_err_fkUserId() throws Exception {
         String json = objectMapper.writeValueAsString(
                 USER_REGISTRATION_VALID_DTO
         );
 
         when(userRegistrationService.register(USER_REGISTRATION_VALID_DTO))
-                .thenThrow(new DbUniqueConstraintsViolationException(List.of(USER_CREDENTIALS_ERR_FK_USER_ID)));
+                .thenThrow(new NotFoundException(List.of(USER_CREDENTIALS_ERR_FK_USER_ID)));
 
         mockMvc
                 .perform(post(USERS_URL)
@@ -104,7 +104,7 @@ class UserRegistrationControllerTest {
     }
 
     @Test
-    void register_ukUsername() throws Exception {
+    void register_err_ukUsername() throws Exception {
         String json = objectMapper.writeValueAsString(
                 USER_REGISTRATION_VALID_DTO
         );
