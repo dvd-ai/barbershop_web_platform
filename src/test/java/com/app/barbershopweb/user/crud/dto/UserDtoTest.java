@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.user.crud.constants.UserDto__TestConstants.USERS_INVALID_USER_DTO;
@@ -41,34 +42,12 @@ class UserDtoTest {
 
     String json;
 
-
-    @DisplayName(
-            "Testing POST: " + USERS_URL +
-                    " when user dto isn't valid " +
-                    "returns status code 400 & error dto")
-    @Test
-    void addUser__whenUserDtoNotValid() throws Exception {
-        json = objectMapper.writeValueAsString(
-                USERS_INVALID_USER_DTO
-        );
-
-        mockMvc
-                .perform(post(USERS_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors").isArray())
-                .andExpect(jsonPath("$.errors", hasSize(3)))
-                .andExpect(jsonPath("$.errors", hasItem(USER_ERR_INVALID_DTO_ID)))
-                .andExpect(jsonPath("$.errors", hasItem(USER_ERR_INVALID_DTO_PHONE_NUMBER)))
-                .andExpect(jsonPath("$.errors", hasItem(USER_ERR_INVALID_DTO_LAST_NAME)));
-    }
-
     @DisplayName(
             "Testing PUT: " + USERS_URL +
                     "when user dto isn't valid " +
                     "returns status code 400 & error dto")
     @Test
+    @WithMockUser
     void updateUser__whenUserDtoNotValid() throws Exception {
 
         json = objectMapper.writeValueAsString(

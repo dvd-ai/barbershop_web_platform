@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.barbershop.crud.constants.BarbershopDto__TestConstants.BARBERSHOP_INVALID_DTO;
@@ -43,6 +44,7 @@ class BarbershopDtoTest {
                     " when barbershop dto isn't valid " +
                     "returns status code 400 & error dto")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void addBarbershop__whenDtoNotValid() throws Exception {
         String json = objectMapper.writeValueAsString(
                 BARBERSHOP_INVALID_DTO
@@ -65,6 +67,7 @@ class BarbershopDtoTest {
                     "when barbershop dto isn't valid " +
                     "returns status code 400 & returns error dto")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void whenBarbershopDtoNotValid() throws Exception {
 
 

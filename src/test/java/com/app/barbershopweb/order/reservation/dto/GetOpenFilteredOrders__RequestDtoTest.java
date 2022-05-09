@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.order.reservation.constants.OrderReservation_Metadata__TestConstants.ORDER_RESERVATION_FILTER_URL;
@@ -51,6 +52,7 @@ class GetOpenFilteredOrders__RequestDtoTest {
                             status code 400 and error dto"
                             """
     )
+    @WithMockUser
     void getFilteredAvailableOrders__whenInvalidDto() throws Exception {
         json = objectMapper.writeValueAsString(
                 GET_OPEN_FILTERED_ORDERS__REQUEST_INVALID_DTO

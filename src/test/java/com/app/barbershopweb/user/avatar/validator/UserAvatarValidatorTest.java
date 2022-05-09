@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.USERS_AVATAR_IMAGE_MOCK;
@@ -36,6 +37,7 @@ class UserAvatarValidatorTest {
 
     @Test
     @DisplayName("when invalid path var returns 400 & error dto")
+    @WithMockUser
     void downloadAvatar__InvalidPathVar() throws Exception {
         mockMvc.perform(get(USER_AVATARS_URL + "/" + USERS_INVALID_USER_ID))
                 .andDo(print())
@@ -48,6 +50,7 @@ class UserAvatarValidatorTest {
 
     @Test
     @DisplayName("when invalid path var returns 400 & error dto")
+    @WithMockUser
     void uploadAvatar__InvalidPathVar() throws Exception {
         mockMvc.perform(multipart(USER_AVATARS_URL + "/" + USERS_INVALID_USER_ID)
                         .file(USERS_AVATAR_IMAGE_MOCK))
@@ -62,6 +65,7 @@ class UserAvatarValidatorTest {
 
     @Test
     @DisplayName("when no file returns 400")
+    @WithMockUser
     void uploadAvatar__NoFile() throws Exception {
         mockMvc.perform(multipart(USER_AVATARS_URL + "/" + USERS_INVALID_USER_ID))
                 .andDo(print())
@@ -70,6 +74,7 @@ class UserAvatarValidatorTest {
 
     @Test
     @DisplayName("when invalid path var returns 400 & error dto")
+    @WithMockUser
     void removeAvatar() throws Exception {
         mockMvc.perform(delete(USER_AVATARS_URL + "/" + USERS_INVALID_USER_ID))
                 .andDo(print())

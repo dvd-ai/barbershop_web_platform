@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.workspace.constants.WorkspaceDto__TestConstants.WORKSPACE_INVALID_DTO;
@@ -46,6 +47,7 @@ class WorkspaceDtoTest {
                     " when workspace dto isn't valid " +
                     "returns status code 400 & error dto")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void addWorkspace__DtoNotValid() throws Exception {
         json = objectMapper.writeValueAsString(
                 WORKSPACE_INVALID_DTO
@@ -68,6 +70,7 @@ class WorkspaceDtoTest {
                     " when workspace dto isn't valid " +
                     "returns status code 400 & error dto")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void updateWorkspace__whenWorkspaceDtoNotValid() throws Exception {
 
 

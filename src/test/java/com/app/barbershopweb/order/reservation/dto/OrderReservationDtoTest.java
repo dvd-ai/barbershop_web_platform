@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.order.reservation.constants.OrderReservation_Metadata__TestConstants.ORDER_RESERVATION_URL;
@@ -50,6 +51,7 @@ class OrderReservationDtoTest {
                             status code 400 and error dto"
                             """
     )
+    @WithMockUser
     void reserveOrders__whenInvalidDto() throws Exception {
         json = objectMapper.writeValueAsString(
                 ORDER_RESERVATION_INVALID_DTO
