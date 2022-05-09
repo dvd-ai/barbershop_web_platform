@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
@@ -33,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(OrderReservationController.class)
 @DisplayName("TESTING: " + ORDER_RESERVATION_URL + " (OrderReservationController.getAvailableOrders)")
 @ExtendWith(MockitoExtension.class)
+@MockBean(AuthenticationProvider.class)
 class OrderReservationController__getAvailableOrdersTest {
 
     @MockBean

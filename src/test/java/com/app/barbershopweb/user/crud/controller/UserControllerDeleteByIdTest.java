@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.user.crud.constants.UserErrorMessage__TestConstants.USER_ERR_INVALID_PATH_VAR_USER_ID;
@@ -20,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserController.class)
 @DisplayName("Testing DELETE: " + USERS_URL + "{userId}")
+@MockBean(AuthenticationProvider.class)
 class UserControllerDeleteByIdTest {
 
     @Autowired

@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserAvatarController.class)
+@MockBean(AuthenticationProvider.class)
 class UserAvatarController__downloadAvatarTest {
 
     @Autowired

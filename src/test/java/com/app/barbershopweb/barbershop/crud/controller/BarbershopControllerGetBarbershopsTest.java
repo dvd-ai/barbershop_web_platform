@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.format.DateTimeFormatter;
@@ -34,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(BarbershopController.class)
 @DisplayName("Testing GET: " + BARBERSHOPS_URL)
 @ExtendWith(MockitoExtension.class)
+@MockBean(AuthenticationProvider.class)
 class BarbershopControllerGetBarbershopsTest {
 
     @Autowired

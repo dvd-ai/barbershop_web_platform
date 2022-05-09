@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.format.DateTimeFormatter;
@@ -32,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(BarbershopController.class)
 @DisplayName("Testing PUT: " + BARBERSHOPS_URL)
 @ExtendWith(MockitoExtension.class)
+@MockBean(AuthenticationProvider.class)
 class BarbershopControllerUpdateBarbershopTest {
 
     @Autowired

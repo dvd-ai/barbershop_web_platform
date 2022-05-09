@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.*;
@@ -20,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(WorkspaceController.class)
 @DisplayName("Testing DELETE: " + WORKSPACES_URL + "{workspaceId}")
+@MockBean(AuthenticationProvider.class)
 class WorkspaceControllerDeleteByIdTest {
 
     @Autowired

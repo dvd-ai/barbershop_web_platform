@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.order.crud.constants.OrderMetadata__TestConstants.*;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(OrderController.class)
 @DisplayName("Testing DELETE: " + ORDERS_URL + "{orderId}")
 @ExtendWith(MockitoExtension.class)
+@MockBean(AuthenticationProvider.class)
 class OrderControllerDeleteTest {
 
     @Autowired
