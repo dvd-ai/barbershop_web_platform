@@ -13,7 +13,7 @@ public record UserRegistrationDto (
         @NotBlank
         String phoneNumber,
         @Email
-        @NotNull
+        @NotBlank
         String email,
         @NotBlank
         String username,

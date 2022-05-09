@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.sql.DataSource;
 
 import static com.app.barbershopweb.user.crud.constants.UserMetadata__TestConstants.USERS_URL;
 import static com.app.barbershopweb.user.registration.constants.UserRegistrationErrorMessage_Dto__TestConstants.*;
@@ -20,13 +21,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserRegistrationController.class)
+@MockBean(AuthenticationProvider.class)
 class UserRegistrationDtoTest {
 
     @MockBean
     UserRegistrationService userRegistrationService;
-
-    @MockBean
-    DataSource dataSource;
 
     @Autowired
     MockMvc mockMvc;
@@ -34,6 +33,7 @@ class UserRegistrationDtoTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @WithMockUser
     @Test
     void register_InvalidDto() throws Exception {
         String json = objectMapper.writeValueAsString(

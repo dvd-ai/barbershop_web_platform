@@ -3,6 +3,7 @@ package com.app.barbershopweb.user.credentials;
 import com.app.barbershopweb.exception.DbUniqueConstraintsViolationException;
 import com.app.barbershopweb.exception.NotFoundException;
 import com.app.barbershopweb.user.crud.repository.UserRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -14,6 +15,7 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 public class UserCredentialsRepository {
@@ -50,6 +52,29 @@ public class UserCredentialsRepository {
         namedParameterJdbcTemplate.update(sql, sqlParameterSource, keyHolder);
         return Long.valueOf((Integer) keyHolder.getKeys().get("user_id"));
     }
+
+    public Optional<UserCredentials> findByUsername(String username) {
+        Optional<UserCredentials> userCredentialsOptional;
+
+        String sql =
+                "SELECT user_id, username, password, enabled " +
+                        "FROM user_credentials " +
+                        "WHERE username = :username;";
+
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("username", username);
+
+        try {
+            userCredentialsOptional = Optional.ofNullable(
+                    namedParameterJdbcTemplate.queryForObject(sql, sqlParameterSource, new UserCredentialsRowMapper())
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+
+        return userCredentialsOptional;
+    }
+
 
     public boolean credentialsExistByUsername(String username) {
         String sql =
