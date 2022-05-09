@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -46,6 +47,7 @@ class UserAvatarController__downloadAvatarTest {
 
     @Test
     @DisplayName("when there's no profile avatar returns 404 & error dto")
+    @WithMockUser
     void downloadAvatar__NoAvatar() throws Exception {
         NotFoundException notFoundException = new NotFoundException(
                 List.of(
@@ -66,6 +68,7 @@ class UserAvatarController__downloadAvatarTest {
 
     @Test
     @DisplayName("returns file")
+    @WithMockUser
     void downloadAvatar() throws Exception {
         when(avatarService.downloadProfileAvatar(USERS_VALID_USER_ID))
                 .thenReturn(USERS_AVATAR_IMAGE_MOCK.getBytes());
@@ -81,6 +84,7 @@ class UserAvatarController__downloadAvatarTest {
 
     @Test
     @DisplayName("when MinioClientException, returns 500 & error dto")
+    @WithMockUser
     void downloadAvatar__MinioClientException() throws Exception {
         when(avatarService.downloadProfileAvatar(USERS_VALID_USER_ID))
                 .thenThrow(

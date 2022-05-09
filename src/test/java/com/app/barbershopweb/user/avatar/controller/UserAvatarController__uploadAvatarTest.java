@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -41,6 +42,7 @@ class UserAvatarController__uploadAvatarTest {
 
     @Test
     @DisplayName("when MinioClientException, returns 500 & error dto")
+    @WithMockUser
     void uploadAvatar__MinioClientException() throws Exception {
         doThrow(new MinioClientException(""))
                 .when(avatarService).uploadProfileAvatar(USERS_VALID_USER_ID, USERS_AVATAR_IMAGE_MOCK);
@@ -57,6 +59,7 @@ class UserAvatarController__uploadAvatarTest {
 
     @Test
     @DisplayName("when upload size exceeds maximum - returns 400 and error dto")
+    @WithMockUser
     void uploadAvatar__uploadLimitExceeded() throws Exception {
         ValidationException validationException = new ValidationException(
                 List.of(
@@ -79,6 +82,7 @@ class UserAvatarController__uploadAvatarTest {
 
     @Test
     @DisplayName("when invalid content type - returns 400 and error dto")
+    @WithMockUser
     void uploadAvatar__invalidContentType() throws Exception {
         ValidationException validationException = new ValidationException(
                 List.of(
@@ -100,6 +104,7 @@ class UserAvatarController__uploadAvatarTest {
 
     @Test
     @DisplayName("when no file content - returns 400 and error dto")
+    @WithMockUser
     void uploadAvatar__noFileContent() throws Exception {
         ValidationException validationException = new ValidationException(
                 List.of(
@@ -122,6 +127,7 @@ class UserAvatarController__uploadAvatarTest {
 
     @Test
     @DisplayName("uploads avatar")
+    @WithMockUser
     void uploadAvatar() throws Exception {
         mockMvc.perform(multipart(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID)
                         .file(USERS_AVATAR_IMAGE_MOCK))

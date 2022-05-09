@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.user.avatar.constants.UserAvatar_Metadata__TestConstants.USER_AVATARS_URL;
@@ -37,6 +38,7 @@ class UserAvatarController__deleteAvatarTest {
 
     @Test
     @DisplayName("when MinioClientException, returns 500 & error dto")
+    @WithMockUser
     void removeAvatar__MinioClientException() throws Exception {
         doThrow(new MinioClientException(""))
                 .when(avatarService).deleteProfileAvatar(USERS_VALID_USER_ID);
@@ -52,6 +54,7 @@ class UserAvatarController__deleteAvatarTest {
 
     @Test
     @DisplayName("removes avatar and returns 200")
+    @WithMockUser
     void removeAvatar() throws Exception {
         mockMvc.perform(delete(USER_AVATARS_URL + "/" + USERS_VALID_USER_ID))
                 .andDo(print())

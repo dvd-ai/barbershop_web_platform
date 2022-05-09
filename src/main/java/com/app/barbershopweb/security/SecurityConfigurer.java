@@ -29,15 +29,20 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 .mvcMatchers(SWAGGER_WHITELIST).permitAll()
+
                 .mvcMatchers(HttpMethod.POST, "/users").permitAll()
+                .mvcMatchers(HttpMethod.DELETE, "/users/avatars/**").authenticated()
                 .mvcMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+
                 .mvcMatchers(HttpMethod.DELETE, "/barbershops/**").hasRole("ADMIN")
                 .mvcMatchers(HttpMethod.POST, "/barbershops").hasRole("ADMIN")
+
                 .mvcMatchers(HttpMethod.POST, "/orders").hasAnyRole("BARBER", "ADMIN")
                 .mvcMatchers("/orders/reservations").authenticated()
                 .mvcMatchers(HttpMethod.DELETE, "/orders/**").hasAnyRole("BARBER", "ADMIN")
                 .mvcMatchers(HttpMethod.GET, "/orders").hasRole("ADMIN")
                 .mvcMatchers(HttpMethod.PUT, "/orders/**").hasAnyRole("BARBER", "ADMIN")
+
                 .anyRequest().authenticated()
                 .and().formLogin();
     }
