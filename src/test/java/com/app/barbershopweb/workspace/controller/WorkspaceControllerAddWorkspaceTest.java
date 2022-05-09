@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -51,10 +52,26 @@ class WorkspaceControllerAddWorkspaceTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @WithMockUser(roles = {"USER", "BARBER"})
+    @Test
+    void whenNotAdmin() throws Exception {
+        String json = objectMapper.writeValueAsString(
+                WORKSPACE_VALID_DTO
+        );
+
+        mockMvc
+                .perform(post(WORKSPACES_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isForbidden())
+        ;
+    }
+
 
     @DisplayName("when workspace dto violates db fk constraints " +
             "returns status code 404 & error dto")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void whenWorkspaceDtoViolatesDbFkConstraints() throws Exception {
         String json = objectMapper.writeValueAsString(
                 WORKSPACE_VALID_DTO
@@ -86,6 +103,7 @@ class WorkspaceControllerAddWorkspaceTest {
     @DisplayName("when workspace dto violates db uk constraints " +
             "returns status code 400 & error dto")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void whenWorkspaceDtoViolatesDbUkConstraints() throws Exception {
         String json = objectMapper.writeValueAsString(
                 WORKSPACE_VALID_DTO
@@ -113,6 +131,7 @@ class WorkspaceControllerAddWorkspaceTest {
 
     @DisplayName("after saving workspace entity returns its id and status code 201")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldAddWorkspace() throws Exception {
         String json = objectMapper.writeValueAsString(
                 WORKSPACE_VALID_DTO

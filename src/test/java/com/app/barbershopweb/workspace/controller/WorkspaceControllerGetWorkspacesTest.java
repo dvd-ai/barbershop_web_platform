@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
@@ -24,8 +25,7 @@ import java.util.Map;
 import static com.app.barbershopweb.barbershop.crud.constants.BarbershopList__TestConstants.BARBERSHOP_VALID_DTO_LIST;
 import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_DTO_LIST;
 import static com.app.barbershopweb.workspace.constants.WorkspaceList__TestConstants.WORKSPACE_VALID_ENTITY_LIST;
-import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.WORKSPACES_URL;
-import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.WORKSPACE_FIELD_AMOUNT;
+import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -48,9 +48,20 @@ class WorkspaceControllerGetWorkspacesTest {
     @MockBean
     WorkspaceConverter converter;
 
+    @WithMockUser(roles = {"USER", "BARBER"})
+    @Test
+    void whenNotAdmin() throws Exception {
+        mockMvc.
+                perform(get(WORKSPACES_URL)).
+                andExpect(status().isForbidden())
+        ;
+
+    }
+
 
     @DisplayName("gives empty Workspace List when they're no added workspaces yet")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnEmptyWorkspaceList() throws Exception {
 
         when(workspaceService.getWorkspaces()).thenReturn(Collections.emptyList());
@@ -65,6 +76,7 @@ class WorkspaceControllerGetWorkspacesTest {
 
     @DisplayName("gives all workspaces at once")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAllWorkspaces() throws Exception {
         when(workspaceService.getWorkspaces()).thenReturn(
                 WORKSPACE_VALID_ENTITY_LIST

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
@@ -21,6 +22,7 @@ import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestC
 import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMessage_PathVar__TestConstants.WORKSPACE_ERR_INVALID_PATH_VAR_WORKSPACE_ID;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -42,9 +44,20 @@ class WorkspaceControllerGetWorkspaceByIdTest {
     WorkspaceConverter workspaceConverter;
 
 
+    @WithMockUser(roles = {"USER", "BARBER"})
+    @Test
+    void whenNotAdmin() throws Exception {
+        mockMvc
+                .perform(get(WORKSPACES_URL + "/" + WORKSPACE_VALID_WORKSPACE_ID))
+                .andExpect(status().isForbidden())
+        ;
+    }
+
+
     @DisplayName("When path variable input 'workspaceId' isn't valid" +
             " returns status code 400 (BAD_REQUEST) & error dto")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void whenWorkspaceIdNotValid() throws Exception {
         mockMvc
                 .perform(get(WORKSPACES_URL + "/" + WORKSPACE_INVALID_WORKSPACE_ID))
@@ -59,6 +72,7 @@ class WorkspaceControllerGetWorkspaceByIdTest {
     @DisplayName("when there's no workspace with id 'workspaceId' " +
             "returns status code 404 & error dto")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void whenNotExistedWorkspaceId() throws Exception {
         mockMvc
                 .perform(get(WORKSPACES_URL + "/" + WORKSPACE_NOT_EXISTED_WORKSPACE_ID))
@@ -74,6 +88,7 @@ class WorkspaceControllerGetWorkspaceByIdTest {
 
     @DisplayName("returns corresponding workspace dto")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnWorkspace() throws Exception {
         when(workspaceService.findWorkspaceById(WORKSPACE_VALID_WORKSPACE_ID)).thenReturn(
                 Optional.of(WORKSPACE_VALID_ENTITY)

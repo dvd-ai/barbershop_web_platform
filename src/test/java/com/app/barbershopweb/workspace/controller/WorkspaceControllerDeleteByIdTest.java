@@ -8,13 +8,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.app.barbershopweb.workspace.constants.WorkspaceDto__TestConstants.WORKSPACE_VALID_DTO;
 import static com.app.barbershopweb.workspace.constants.WorkspaceMetadata__TestConstants.*;
 import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMessage_PathVar__TestConstants.WORKSPACE_ERR_INVALID_PATH_VAR_WORKSPACE_ID;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,9 +38,21 @@ class WorkspaceControllerDeleteByIdTest {
     WorkspaceConverter workspaceConverter;
 
 
+    @WithMockUser(roles = {"USER", "BARBER"})
+    @Test
+    void whenNotAdmin() throws Exception {
+        mockMvc
+                .perform(delete(WORKSPACES_URL + "/" + WORKSPACE_VALID_WORKSPACE_ID))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+        ;
+    }
+
+
     @DisplayName("When path variable input 'workspaceId' isn't valid" +
             " returns status code 400 (BAD_REQUEST) & error dto")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void whenWorkspaceIdNotValid() throws Exception {
 
 
@@ -53,6 +69,7 @@ class WorkspaceControllerDeleteByIdTest {
     @DisplayName("returns empty body, status code 200, " +
             "when: workspace with existing / not existing id was deleted")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDeleteWorkspaceById() throws Exception {
         mockMvc
                 .perform(delete(WORKSPACES_URL + "/" + WORKSPACE_VALID_WORKSPACE_ID))

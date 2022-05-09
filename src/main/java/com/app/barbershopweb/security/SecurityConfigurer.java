@@ -43,6 +43,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.GET, "/orders").hasRole("ADMIN")
                 .mvcMatchers(HttpMethod.PUT, "/orders/**").hasAnyRole("BARBER", "ADMIN")
 
+                .mvcMatchers("/workspaces/**").hasRole("ADMIN")
+
                 .anyRequest().authenticated()
                 .and().formLogin();
     }

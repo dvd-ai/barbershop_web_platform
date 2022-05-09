@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -31,6 +32,7 @@ import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMess
 import static com.app.barbershopweb.workspace.constants.error.WorkspaceErrorMessage_Uk__TestConstants.WORKSPACE_ERR_UK_USER_ID__BARBERSHOP_ID;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -54,9 +56,25 @@ class WorkspaceControllerUpdateWorkspaceTest {
     ObjectMapper objectMapper;
 
 
+    @WithMockUser(roles = {"USER", "BARBER"})
+    @Test
+    void whenNotAdmin() throws Exception {
+        String json = objectMapper.writeValueAsString(
+                WORKSPACE_VALID_DTO
+        );
+
+        mockMvc
+                .perform(put(WORKSPACES_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isForbidden())
+        ;
+    }
+
     @Test
     @DisplayName("when entity with 'id' in workspaceDto doesn't exist " +
             "returns status code 404 and error dto")
+    @WithMockUser(roles = "ADMIN")
     void whenNotFoundWorkspaceId() throws Exception {
         String json = objectMapper.writeValueAsString(
                 WORKSPACE_NOT_EXISTED_ID_DTO
@@ -84,6 +102,7 @@ class WorkspaceControllerUpdateWorkspaceTest {
     @DisplayName("when workspace dto violates db fk constraints " +
             "returns status code 404 & error dto")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void whenWorkspaceDtoViolatesDbFkConstraints() throws Exception {
         String json = objectMapper.writeValueAsString(
                 WORKSPACE_VALID_DTO
@@ -115,6 +134,7 @@ class WorkspaceControllerUpdateWorkspaceTest {
     @DisplayName("when workspace dto violates db uk constraints " +
             "returns status code 400 & error dto")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void whenWorkspaceDtoViolatesDbUkConstraints() throws Exception {
         String json = objectMapper.writeValueAsString(
                 WORKSPACE_VALID_DTO
@@ -141,6 +161,7 @@ class WorkspaceControllerUpdateWorkspaceTest {
 
     @Test
     @DisplayName("should return updated workspace (dto)")
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnUpdatedWorkspace() throws Exception {
         String json = objectMapper.writeValueAsString(
                 WORKSPACE_VALID_DTO
