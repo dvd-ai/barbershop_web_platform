@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
@@ -56,6 +57,7 @@ class OrderReservationController__getAvailableOrdersTest {
                     status code 200"
                     """
     )
+    @WithMockUser
     void shouldReturnEmptyUnreservedOrdersList() throws Exception {
         String json = objectMapper.writeValueAsString(
                 GET_OPEN_ORDERS__REQUEST_VALID_DTO
@@ -87,6 +89,7 @@ class OrderReservationController__getAvailableOrdersTest {
                     status code 200"
                     """
     )
+    @WithMockUser
     void shouldReturnUnreservedOrdersList() throws Exception {
         String json = objectMapper.writeValueAsString(
                 GET_OPEN_ORDERS__REQUEST_VALID_DTO

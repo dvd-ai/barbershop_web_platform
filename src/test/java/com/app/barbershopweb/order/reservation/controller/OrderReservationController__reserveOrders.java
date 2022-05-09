@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -62,6 +63,7 @@ class OrderReservationController__reserveOrders {
                     status code 404 and error dto
                     """
     )
+    @WithMockUser
     void whenCustomerDoesntExist() throws Exception {
         json = objectMapper.writeValueAsString(
                 ORDER_RESERVATION_VALID_DTO
@@ -98,6 +100,7 @@ class OrderReservationController__reserveOrders {
                     status code 404 and error dto"
                     """
     )
+    @WithMockUser
     void whenOrdersDontExist() throws Exception {
         json = objectMapper.writeValueAsString(
                 ORDER_RESERVATION_VALID_DTO
@@ -135,6 +138,7 @@ class OrderReservationController__reserveOrders {
                     status code 400 and error dto"
                     """
     )
+    @WithMockUser
     void whenUkViolation() throws Exception {
         json = objectMapper.writeValueAsString(
                 ORDER_RESERVATION_VALID_DTO
@@ -175,6 +179,7 @@ class OrderReservationController__reserveOrders {
                     status code 200
                     """
     )
+    @WithMockUser
     void reserveSuccessfully() throws Exception {
         json = objectMapper.writeValueAsString(
                 ORDER_RESERVATION_VALID_DTO
