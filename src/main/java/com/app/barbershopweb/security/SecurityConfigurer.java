@@ -30,8 +30,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
                 .mvcMatchers(SWAGGER_WHITELIST).permitAll()
                 .mvcMatchers(HttpMethod.POST, "/users").permitAll()
-                .mvcMatchers(HttpMethod.DELETE, "/users").hasRole("ADMIN")
-                .mvcMatchers(HttpMethod.DELETE, "/barbershops").hasRole("ADMIN")
+                .mvcMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+                .mvcMatchers(HttpMethod.DELETE, "/barbershops/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and().formLogin();
     }

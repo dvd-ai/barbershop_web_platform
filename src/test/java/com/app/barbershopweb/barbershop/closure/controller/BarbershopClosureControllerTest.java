@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -36,6 +37,15 @@ class BarbershopClosureControllerTest {
     MockMvc mockMvc;
 
     @Test
+    @WithMockUser(roles = {"USER", "BARBER"})
+    void whenNotAdmin() throws Exception {
+        mockMvc.perform(delete(BARBERSHOPS_URL + "/" + BARBERSHOP_VALID_BARBERSHOP_ID))
+                .andExpect(status().isForbidden())
+        ;
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
     void deleteBarbershop_barbershopNotExist() throws Exception {
         doThrow(
                 new NotFoundException(
@@ -55,6 +65,7 @@ class BarbershopClosureControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void deleteBarbershop_MailException() throws Exception {
         doThrow(
                 new MailException(
@@ -72,6 +83,7 @@ class BarbershopClosureControllerTest {
 
     @Test
     @DisplayName("deletes barbershop successfully")
+    @WithMockUser(roles = "ADMIN")
     void deleteBarbershop() throws Exception {
         mockMvc.perform(delete(BARBERSHOPS_URL + "/" + BARBERSHOP_VALID_BARBERSHOP_ID))
                 .andDo(print())

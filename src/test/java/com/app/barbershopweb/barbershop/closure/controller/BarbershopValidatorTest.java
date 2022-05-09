@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.app.barbershopweb.barbershop.crud.constants.BarbershopErrorMessage__TestConstants.BARBERSHOP_ERR_INVALID_PATH_VAR_BARBERSHOP_ID;
@@ -30,6 +31,7 @@ class BarbershopValidatorTest {
     MockMvc mockMvc;
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void deleteBarbershop_invalidId() throws Exception {
         mockMvc.perform(delete(BARBERSHOPS_URL + "/" + BARBERSHOP_INVALID_BARBERSHOP_ID))
                 .andDo(print())
