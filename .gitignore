@@ -7,6 +7,8 @@ build/
 /src/main/resources/db/init.sql
 
 
+*.log
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

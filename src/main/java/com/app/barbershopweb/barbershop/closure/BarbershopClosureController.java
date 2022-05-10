@@ -1,5 +1,8 @@
 package com.app.barbershopweb.barbershop.closure;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,7 @@ import javax.validation.constraints.Min;
 public class BarbershopClosureController {
 
     private final BarbershopClosureService barbershopClosureService;
+    private final Logger logger = LoggerFactory.getLogger(BarbershopClosureController.class);
 
     public BarbershopClosureController(BarbershopClosureService barbershopClosureService) {
         this.barbershopClosureService = barbershopClosureService;
@@ -24,6 +28,7 @@ public class BarbershopClosureController {
     @DeleteMapping("/{barbershopId}")
     public ResponseEntity<Object> deleteBarbershop(@PathVariable @Min(1) Long barbershopId) {
         barbershopClosureService.outOfBusiness(barbershopId);
+        logger.info("barbershop with id " + barbershopId + " was deleted.");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

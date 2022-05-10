@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{dd-MM-yyyy} %d{HH:mm:ss.SSS} %highlight(%-5level) %thread %cyan(%logger{25}) %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>log.%d{yyyy-MM-dd}%i.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+            <maxFileSize>3MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd-MM-yyyy} %d{HH:mm:ss.SSS} | %-5level | %thread | %logger{25} | %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="SENTRY" class="io.sentry.logback.SentryAppender">
+    </appender>
+
+    <logger name="com.app.barbershopweb.barbershop.closure.BarbershopClosureController" level="INFO">
+        <appender-ref ref="FILE"/>
+    </logger>
+</configuration>
