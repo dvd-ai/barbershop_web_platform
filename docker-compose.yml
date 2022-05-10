@@ -17,6 +17,7 @@ services:
       - MINIO_URL=http://minio:9000
       - MAILHOG_HOST=${MAILHOG_HOST}
       - MAILHOG_PORT=${MAILHOG_PORT}
+      - SENTRY_DSN=${SENTRY_DSN}
     depends_on:
       - db
       - minio
