@@ -29,6 +29,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 .mvcMatchers(SWAGGER_WHITELIST).permitAll()
+                .mvcMatchers("/actuator/**").permitAll()
+
 
                 .mvcMatchers(HttpMethod.POST, "/users").permitAll()
                 .mvcMatchers(HttpMethod.DELETE, "/users/avatars/**").authenticated()
