@@ -40,10 +40,10 @@
 - how to load flyway migrations
 - sending e-mails to users in spring framework
 - storing data in object storage systems like MinIO, AWS S3
-- how to protect the endpoints using spring security
+- the protection of endpoints using spring security
 - using dockerfile, docker compose to automate configuration, build, bootstrap of the app. 
-- how to keep track of the app health, using spring actuator, logback, sentry DSN
-- how to use testcontainers and to test service, controller, database layers 
+- keeping track of the app health, using spring actuator, logback, sentry DSN
+- using testcontainers and to test service, controller, database layers 
 - documenting rest-api, using Spring doc OpenAPI
 
 ## Prerequisites
