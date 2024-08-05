@@ -43,7 +43,7 @@
 - the protection of endpoints using spring security
 - using dockerfile, docker compose to automate configuration, build, bootstrap of the app. 
 - keeping track of the app health, using spring actuator, logback, sentry DSN
-- using testcontainers and to test service, controller, database layers 
+- using testcontainers to perform integration tests
 - documenting rest-api, using Spring doc OpenAPI
 
 ## Prerequisites
